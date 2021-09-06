@@ -457,7 +457,8 @@ function hmrAcceptRun(bundle, id) {
 },{}],"5MHlR":[function(require,module,exports) {
 var _mainPhotographers = require("./main-photographers");
 var _mainPhotographer = require("./main-photographer");
-_mainPhotographers.mainPhotographers(); // mainPhotographer();
+_mainPhotographers.mainPhotographers();
+_mainPhotographer.mainPhotographer();
 
 },{"./main-photographers":"5Yi1M","./main-photographer":"4UoAk"}],"5Yi1M":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -471,8 +472,7 @@ var _eventService = require("./EventService");
 var _eventServiceDefault = parcelHelpers.interopDefault(_eventService);
 var _photographerHtml = require("../../photographer.html");
 var _photographerHtmlDefault = parcelHelpers.interopDefault(_photographerHtml);
-const data = new _dataServiceDefault.default;
-// View
+const data = new _dataServiceDefault.default(); // View
 const displayNavTags = (tags)=>{
     // On affiche la nav avec les tags
     document.querySelector('header').innerHTML += `\n        <nav class="nav">\n            <ul class="tags">\n            ${tags.map((tag)=>`\n                <li class="tag" name="${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>\n                `
@@ -484,8 +484,7 @@ const displayPhotographers = (photographers = [])=>{
     section.innerHTML = `\n\n    <header>\n        <h1>Nos photographes</h1>\n    </header>\n        <div class="container">\n\n        ${photographers.map(({ portrait , name , city , country , tagline , price , tags  })=>`\n        <article class="article">\n            <a class="link-to-photographer" href="#" alt="" aria-label="Lien vers le photographe" focusable="true">\n                <div class="article__img" aria-label="Image">\n                    <img src="./assets/images/Sample Photos/Photographers ID Photos/${portrait}" alt="">\n                </div>\n                <h2 class="article__title title">${name}</h2>\n            </a>\n            <div class="details" aria-label="Détails concernant le photographe">\n                <p class="localisation" aria-label="Ville d'origine">${city}, ${country}</p>\n                <p class="description" aria-label="Description">${tagline}</p>\n                <p class="price" aria-label="Prix">${price}€/jour</p>\n            </div>\n            <div class="tags" aria-label="Liste de tags concernant le photographe">\n                <ul>\n                ${tags.map((tag)=>`<li class="tag" name="${tag}">#${tag}</li>`
         ).join("")}\n                </ul></div></article>\n        `
     ).join("")}\n        </div>\n        `;
-};
-// Scripts
+}; // Scripts
 /**
  * Fonction pour gérer l'événement clique des tags
  *
@@ -497,8 +496,7 @@ const displayPhotographers = (photographers = [])=>{
         const photographersByTags = dataService.getPhotographersByTags(nameAttributeOfTag);
         displayPhotographers(photographersByTags);
         putEventCickOnTags(dataService);
-        putEventCickOnPhotographerProfile(dataService);
-        // On ajoute le tag au titre
+        putEventCickOnPhotographerProfile(dataService); // On ajoute le tag au titre
         document.title = `Fisheye | ${nameAttributeOfTag.charAt(0).toUpperCase()}${nameAttributeOfTag.slice(1)}`;
     });
 }
@@ -528,27 +526,20 @@ const displayPhotographers = (photographers = [])=>{
         scrollToMainButtonElt.addEventListener('click', ()=>window.scrollTo(0, 0)
         );
     } else if (window.screenY === 0) scrollToMainButtonElt.classList.remove('display');
-}
+} // Controller
 const mainPhotographers = async ()=>{
     try {
-        const dataService = new _dataServiceDefault.default();
-        // On récupère l'ensemble des photographes du Json
-        dataService.loadPhotographers();
-        // On récupère l'ensemble des médias des photographes du Json
-        dataService.loadMedias();
-        // On affiche la nav en récupérant tous les tags utilisés (getTags())
-        displayNavTags(dataService.getTags());
-        // On affiche les photographes en commençant par récupérer un paramètre dans l'url:
+        const dataService = new _dataServiceDefault.default(); // On récupère l'ensemble des photographes du Json
+        dataService.loadPhotographers(); // On récupère l'ensemble des médias des photographes du Json
+        dataService.loadMedias(); // On affiche la nav en récupérant tous les tags utilisés (getTags())
+        displayNavTags(dataService.getTags()); // On affiche les photographes en commençant par récupérer un paramètre dans l'url:
         // s'il y a un tag dans l'url, alors on affiche une séléction par le tag transmis,
         // sinon tous les photographes sont affichés
         const params = new URLSearchParams(document.location.search.substring(1));
         const tag = params.get("tag");
-        displayPhotographers(dataService.getPhotographersByTags(tag));
-        // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
-        window.addEventListener('scroll', putEventClickToButtonIfScrolled);
-        // On ajoute l'événement "click" à l'élément "tag"
-        putEventCickOnTags(dataService);
-        // On ajoute l'événement "click" à chaque fiche de photographes
+        displayPhotographers(dataService.getPhotographersByTags(tag)); // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
+        window.addEventListener('scroll', putEventClickToButtonIfScrolled); // On ajoute l'événement "click" à l'élément "tag"
+        putEventCickOnTags(dataService); // On ajoute l'événement "click" à chaque fiche de photographes
         putEventCickOnPhotographerProfile(dataService);
     } catch (error) {
         console.error('Unable to load data :', error);
@@ -768,9 +759,8 @@ parcelHelpers.export(exports, "mainPhotographer", ()=>mainPhotographer
 // Model
 var _dataService = require("./DataService");
 var _dataServiceDefault = parcelHelpers.interopDefault(_dataService);
-var _eventService = require("./EventService");
+var _eventService = require("./EventService"); // View
 var _eventServiceDefault = parcelHelpers.interopDefault(_eventService);
-// View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
     headerPhotographerInfosElement.innerHTML = `\n        <div class="details">\n            <h1 class="title">${photographer.name}</h1>\n            <p class="localisation">${photographer.country}, ${photographer.city}</p>\n            <p class="tagline">${photographer.tagline}</p>\n            <div class="tags" aria-label="Liste de tags concernant le photographe">\n                <ul>\n                    ${photographer.tags.map((tag)=>`\n                    <a class="tag" name="${tag}" href="#" focusable="true">\n                        <li>#${tag}</li>\n                    </a>\n                `
@@ -796,8 +786,7 @@ const displayModalLightbox = (image, title, name, id)=>{
     div.className = 'lightbox-bg';
     div.innerHTML = `\n        <div class="lightbox">\n            <button class="close"></button>\n            <button class="lightbox__next"></button>\n            <button class="lightbox__prev"></button>\n            <div class="lightbox__container">\n                <figure>\n                    <div class="img">\n                        <img id="${id}" src="./public/images/Sample Photos/${name}/${image}" alt="">\n                    </div>\n                    <figcaption>${title}</figcaption>\n                </figure>\n            </div>\n        </div>`;
     document.getElementById('main').appendChild(div);
-};
-// Scripts
+}; // Scripts
 /**
  *
  *
@@ -860,8 +849,7 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
     const getMedia = medias.find((obj)=>{
         return obj.id === IdCurrentImage;
     });
-    displayModalLightbox(getMedia.image, getMedia.title, firstNameOfPhotographer, IdCurrentImage);
-    // Events sur les boutons de la modal lightbox
+    displayModalLightbox(getMedia.image, getMedia.title, firstNameOfPhotographer, IdCurrentImage); // Events sur les boutons de la modal lightbox
     const getIdCurrentImage = ()=>Number(document.querySelector('.lightbox img').getAttribute("id"))
     ;
     const indexOfCurrentElementInArray = ()=>medias.findIndex((element1)=>element1.id === getIdCurrentImage()
@@ -881,12 +869,10 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
  * @param {*} nameOfPhotographer
  */ function displayModalFormOnEvent(nameOfPhotographer) {
     document.querySelector('.bground') ? _eventServiceDefault.default.closeModal() : displayModalForm(nameOfPhotographer);
-    _eventServiceDefault.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground'));
-    // On vérifie les champs des formulaires
+    _eventServiceDefault.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // On vérifie les champs des formulaires
     _eventServiceDefault.default.handleInputsFormClick((e)=>checkField(e)
     );
-}
-// Modal Form
+} // Modal Form
 /**
  * Vérification des champs input de la fenêtre modale
  * de contact
@@ -909,44 +895,37 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
         if (!element.validity.valid) element.setAttribute("style", "border:2px solid red; outline:none");
         else element.removeAttribute("style");
     }
-}
+} // Controller
+console.log("test");
 const mainPhotographer = async ()=>{
-    const dataService = new _dataServiceDefault.default();
     try {
         // On récupère l'ensemble des photographes du Json
-        dataService.loadPhotographers();
-        // On récupère l'ensemble des médias des photographes du Json
-        dataService.loadMedias();
-        // On display le photographe avec ses infos grâce à son id récupéré dans l'url
-        const paramsFromUrl = new URLSearchParams(document.location.search.substring(1));
-        const idFromUrlParams = Number(paramsFromUrl.get("id"));
+        dataService.loadPhotographers(); // On récupère l'ensemble des médias des photographes du Json
+        dataService.loadMedias(); // On display le photographe avec ses infos grâce à son id récupéré dans l'url
         const nameOfPhotographer = dataService.getPhotographerById(idFromUrlParams).name;
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
-        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams));
-        // On ajoute les events sur les tags qui renvoients sur la page index
-        eventOnTags();
-        // Event sur bouton contact
+        const dataService = new _dataServiceDefault.default();
+        const paramsFromUrl = new URLSearchParams(document.location.search.substring(1));
+        const idFromUrlParams = Number(paramsFromUrl.get("id"));
+        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams)); // On ajoute les events sur les tags qui renvoients sur la page index
+        eventOnTags(); // Event sur bouton contact
         document.querySelector('.photographerHeader .button').addEventListener('click', ()=>displayModalFormOnEvent(nameOfPhotographer)
-        );
-        //On affiche le bouton de filtre
+        ); //On affiche le bouton de filtre
         displayFilterButton();
         const chevronElement = document.querySelector(".dropdown-toggle .fas");
-        _eventServiceDefault.default.toggleDropdownButton(chevronElement);
-        // Filtres
+        _eventServiceDefault.default.toggleDropdownButton(chevronElement); // Filtres
         _eventServiceDefault.default.handleMediasFilter((element)=>filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer)
-        );
-        //On affiche les médias du photographes
+        ); //On affiche les médias du photographes
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
-        displayPhotographerMedias(medias, firstNameOfPhotographer);
-        //On ajoute l'événement sur chaque image pour afficher la lightbox
+        displayPhotographerMedias(medias, firstNameOfPhotographer); //On ajoute l'événement sur chaque image pour afficher la lightbox
         _eventServiceDefault.default.handleImagesClick((element)=>lightbox(element, medias, firstNameOfPhotographer)
-        );
-        // On ajoute le nom du photographe au titre
+        ); // On ajoute le nom du photographe au titre
         document.title = `Fisheye | ${nameOfPhotographer}`;
     } catch (error) {
         console.error('Unable to load data :', error);
     }
 };
+mainPhotographer();
 
 },{"./DataService":"8pbgj","./EventService":"eSIhL","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}]},["2k6uF","5MHlR"], "5MHlR", "parcelRequire8288")
 

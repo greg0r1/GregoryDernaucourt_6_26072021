@@ -303,7 +303,7 @@ function checkField(element) {
 // Controller
 
 console.log("test");
-const mainPhotographer = async () => {
+export const mainPhotographer = async () => {
     try {
         // On récupère l'ensemble des photographes du Json
         dataService.loadPhotographers();
