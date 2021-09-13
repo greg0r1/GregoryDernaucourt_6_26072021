@@ -8,6 +8,11 @@
     height: 100%;
     overflow: auto;
     background-color: white;
+    transition: opacity .3s;
+
+    &.fadeout {
+        opacity: 0;
+    }
 
     .lightbox {
         position: relative;
@@ -21,9 +26,7 @@
         max-width: 1200px;
         overflow: hidden;
 
-        @include btn-close;
-
-        .close {
+        &__close {
             position: absolute;
             display: flex;
             align-items: center;
@@ -40,9 +43,22 @@
             border: none;
         }
 
-        .close:before,
-        .close:after {
+        &__close:before,
+        &__close:after {
             background-color: $color-primary-bg-dark;
+            position: absolute;
+            content: " ";
+            height: 33px;
+            width: 3px;
+            margin: 50%;
+        }
+
+        &__close:before {
+            transform: rotate(45deg);
+        }
+
+        &__close:after {
+            transform: rotate(-45deg);
         }
 
         &__next,
@@ -74,7 +90,7 @@
             justify-content: center;
         }
 
-        .img {
+        .media {
             display: flex;
             margin: auto;
             box-sizing: border-box;
@@ -82,7 +98,8 @@
             width: 100%;
             height: 100%;
 
-            img {
+            img,
+            video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;

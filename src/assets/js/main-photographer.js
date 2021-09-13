@@ -1,6 +1,8 @@
 // Model
-import DataService from './DataService';
-import EventService from './EventService';
+import DataService from './classes/DataService';
+import EventService from './classes/EventService';
+import ViewMedias from './classes/ViewMedias';
+import Lightbox from './classes/Lightbox-2';
 
 // View
 
@@ -34,7 +36,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <button class="btn">Contactez-moi</button>
         </div>
         <div class="img" aria-label="Image">
-            <img src="./public/images/Sample Photos/Photographers ID Photos/${photographer.portrait}" alt="">
+            <img src="./assets/images/Sample Photos/Photographers ID Photos/${photographer.portrait}" alt="">
         </div>
         `
 }
@@ -58,26 +60,6 @@ const displayFilterButton = () => {
                 <button class="dropdown-item" href="">Titre</button>
             </div>
         </div>
-    `
-}
-
-const displayPhotographerMedias = (medias, firstName) => {
-    const photographerMediasElement = document.querySelector('.medias');
-    photographerMediasElement.innerHTML = `
-        <div class="container">
-            ${medias.map(({ image, video, title, likes, id }) => `
-            <figure class="media">
-                <div class="image">
-                    <img id="${id}" src="./public/images/Sample Photos/${firstName}/${image}">
-                </div>
-            <figcaption>
-                <span>${title}</span>
-                <span>${likes} </span><span class="fas fa-heart"></span>
-            </figcaption>
-            </figure>
-        `).join("")}
-        </div>
-    </section>
     `
 }
 
@@ -122,32 +104,6 @@ const displayModalForm = (name) => {
     document.getElementById('main').appendChild(div);
 }
 
-const displayModalLightbox = (image, title, name, id) => {
-    const div = document.createElement('div');
-    div.className = 'lightbox-bg';
-    div.innerHTML = `
-        <div class="lightbox">
-            <button class="close"></button>
-            <button class="lightbox__next"></button>
-            <button class="lightbox__prev"></button>
-            <div class="lightbox__container">
-                <figure>
-                    <div class="img">
-                        <img id="${id}" src="./public/images/Sample Photos/${name}/${image}" alt="">
-                    </div>
-                    <figcaption>${title}</figcaption>
-                </figure>
-            </div>
-        </div>`;
-
-    document.getElementById('main').appendChild(div);
-
-}
-
-
-
-// Scripts
-
 /**
  *
  *
@@ -157,48 +113,9 @@ function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
     EventService.handleTagClick((element) => {
         const nameAttributeOfTag = element.getAttribute('name');
-        const url = new URL(`${indexPage}?tag=${nameAttributeOfTag}`, location);
+        const url = new URL(`/index.html?tag=${nameAttributeOfTag}`, location);
         element.setAttribute('href', url.href)
     });
-}
-
-/**
- * Fonction qui change l'image et le titre dans la lightbox
- * à l'aide des boutons
- *
- * @param {*} getMedias // Tableau contenant les objets des médias du photographe
- * @param {*} firstNameOfPhotographer // le prénom du photographe pour l'url de l'image
- * @param {*} indexOfElementImage // l'index de l'image dans le tableau "getMedias"
- */
-function nextImage(getMedias, firstNameOfPhotographer, indexOfElementImage) {
-    console.log(indexOfElementImage);
-    (indexOfElementImage === getMedias.length - 1) ? indexOfElementImage = - 1 : indexOfElementImage;
-    let nextImage = getMedias[indexOfElementImage + 1].image;
-    let nextTitle = getMedias[indexOfElementImage + 1].title;
-    let nextId = getMedias[indexOfElementImage + 1].id;
-
-    document.querySelector('.lightbox img').setAttribute('src', `./public/images/Sample Photos/${firstNameOfPhotographer}/${nextImage}`);
-    document.querySelector('.lightbox img').setAttribute('id', nextId);
-    document.querySelector('.lightbox figcaption').textContent = nextTitle;
-}
-
-/**
- * Fonction qui change l'image et le titre dans la lightbox
- * à l'aide des boutons
- *
- * @param {*} getMedias // Tableau contenant les objets des médias du photographe
- * @param {*} firstNameOfPhotographer // le prénom du photographe pour l'url de l'image
- * @param {*} indexOfElementImage // l'index de l'image dans le tableau "getMedias"
- */
-function prevImage(getMedias, firstNameOfPhotographer, indexOfElementImage) {
-    (indexOfElementImage === 0) ? indexOfElementImage = getMedias.length : indexOfElementImage;
-    let nextImage = getMedias[indexOfElementImage - 1].image;
-    let nextTitle = getMedias[indexOfElementImage - 1].title;
-    let nextId = getMedias[indexOfElementImage - 1].id;
-
-    document.querySelector('.lightbox img').setAttribute('src', `./public/images/Sample Photos/${firstNameOfPhotographer}/${nextImage}`);
-    document.querySelector('.lightbox img').setAttribute('id', nextId);
-    document.querySelector('.lightbox figcaption').textContent = nextTitle;
 }
 
 function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer) {
@@ -212,36 +129,6 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
     if (element.textContent.trim() === "Titre") {
         displayPhotographerMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer);
     }
-}
-
-/**
- * Affiche la lightbox
- *
- * @param {*} element // l'élément de l'event
- * @param {*} medias // tableau des medias
- * @param {*} firstNameOfPhotographer // nom du photographe
- */
-function lightbox(element, medias, firstNameOfPhotographer) {
-    // On affiche la lightbox avec l'image sur laquelle on acliqué
-    let IdCurrentImage = Number(element.querySelector('img').getAttribute("id"));
-    const getMedia = medias.find((obj) => {
-        return obj.id === IdCurrentImage
-    });
-    displayModalLightbox(getMedia.image, getMedia.title, firstNameOfPhotographer, IdCurrentImage);
-
-    // Events sur les boutons de la modal lightbox
-    const getIdCurrentImage = () => Number(document.querySelector('.lightbox img').getAttribute("id"));
-    const indexOfCurrentElementInArray = () => medias.findIndex((element) => element.id === getIdCurrentImage());
-    document.querySelector('.lightbox__next').addEventListener('click', () => {
-        nextImage(medias, firstNameOfPhotographer, indexOfCurrentElementInArray())
-    }
-    );
-    document.querySelector('.lightbox__prev').addEventListener('click', () => {
-        prevImage(medias, firstNameOfPhotographer, indexOfCurrentElementInArray())
-    }
-    );
-
-    EventService.closeModal(document.querySelector('.lightbox .close'), document.querySelector('.lightbox-bg'));
 }
 
 /**
@@ -302,21 +189,20 @@ function checkField(element) {
 
 // Controller
 
-console.log("test");
-export const mainPhotographer = async () => {
+const mainPhotographer = async () => {
     try {
+        const dataService = new DataService();
         // On récupère l'ensemble des photographes du Json
         dataService.loadPhotographers();
         // On récupère l'ensemble des médias des photographes du Json
         dataService.loadMedias();
 
         // On display le photographe avec ses infos grâce à son id récupéré dans l'url
-        const nameOfPhotographer = dataService.getPhotographerById(idFromUrlParams).name;
-        const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
-        const dataService = new DataService();
         const paramsFromUrl = new URLSearchParams(document.location.search.substring(1));
         const idFromUrlParams = Number(paramsFromUrl.get("id"));
-
+        const nameOfPhotographer = dataService.getPhotographerById(idFromUrlParams).name;
+        const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
+        const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
         displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams));
         // On ajoute les events sur les tags qui renvoients sur la page index
         eventOnTags();
@@ -329,11 +215,9 @@ export const mainPhotographer = async () => {
         // Filtres
         EventService.handleMediasFilter((element) => filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer));
         //On affiche les médias du photographes
-        const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
-        displayPhotographerMedias(medias, firstNameOfPhotographer);
-
+        document.querySelector(".medias").appendChild(new ViewMedias(medias, firstNameOfPhotographer).render());
         //On ajoute l'événement sur chaque image pour afficher la lightbox
-        EventService.handleImagesClick((element) => lightbox(element, medias, firstNameOfPhotographer))
+        Lightbox.init(medias, firstNameOfPhotographer);
 
         // On ajoute le nom du photographe au titre
         document.title = `Fisheye | ${nameOfPhotographer}`;
@@ -341,7 +225,7 @@ export const mainPhotographer = async () => {
 
     } catch (error) {
 
-        console.error('Unable to load data :', error)
+        console.error(error)
 
     }
 };

@@ -1,7 +1,6 @@
 // Model
-import DataService from './DataService';
-import EventService from './EventService';
-import photographerPage from '../../photographer.html';
+import DataService from './classes/DataService';
+import EventService from './classes/EventService';
 
 const data = new DataService;
 
@@ -33,7 +32,7 @@ const displayPhotographers = (photographers = []) => {
         <article class="article">
             <a class="link-to-photographer" href="#" alt="" aria-label="Lien vers le photographe" focusable="true">
                 <div class="article__img" aria-label="Image">
-                    <img src="./assets/images/Sample Photos/Photographers ID Photos/${portrait}" alt="">
+                    <img src="assets/images/Sample Photos/Photographers ID Photos/${portrait}" alt="">
                 </div>
                 <h2 class="article__title title">${name}</h2>
             </a>
@@ -87,7 +86,7 @@ function putEventCickOnPhotographerProfile(dataService) {
         const nameOfPhotographer = element.textContent.trim();
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
         const id = dataService.getPhotographerByName(nameOfPhotographer).id;
-        const url = new URL(`${photographerPage}?id=${id.toString()}&firstName=${firstNameOfPhotographer}`, location);
+        const url = new URL(`photographer.html?id=${id.toString()}&firstName=${firstNameOfPhotographer}`, location);
         element.setAttribute('href', url)
     });
 }
@@ -111,7 +110,7 @@ function putEventClickToButtonIfScrolled() {
 
 
 // Controller
-export const mainPhotographers = async () => {
+const mainPhotographers = async () => {
 
     try {
         const dataService = new DataService();
@@ -142,4 +141,5 @@ export const mainPhotographers = async () => {
     }
 
 };
+export default mainPhotographers();
 

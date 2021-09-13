@@ -2,12 +2,11 @@
   "name": "fisheye",
   "version": "1.0.0",
   "description": "Projet de formation \"Développeur Front-End\". \"Créez un site accessible pour une plateforme de photographes\" avec OpenClassrooms",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel src/index.html",
-    "start": "parcel src/index.html src/photographer.html",
-    "build": "parcel build src/index.html src/photographer.html"
+    "dev": "parcel index.html",
+    "start": "parcel index.html photographer.html",
+    "build": "parcel build index.html photographer.html"
   },
   "repository": {
     "type": "git",
@@ -21,12 +20,21 @@
   },
   "homepage": "https://github.com/greg0r1/GregoryDernaucourt_6_26072021#readme",
   "dependencies": {
-    "@babel/preset-react": "^7.14.5",
-    "core-js": "^3.16.2"
+    "@babel/preset-env": "^7.15.6",
+    "@babel/runtime": "^7.15.4",
+    "autoprefixer": "^10.3.4",
+    "core-js": "^3.17.3",
+    "postcss-modules": "^4.2.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.15.6",
     "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "@start/plugin-lib-babel": "^3.0.0",
     "parcel": "^2.0.0-rc.0",
+    "parcel-plugin-bundle-manifest": "^0.2.0",
     "sharp": "^0.29.0"
-  }
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
 }
