@@ -1,7 +1,9 @@
 .lightbox-bg {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 1;
-    padding-top: 100px;
     left: 0;
     top: 0;
     width: 100%;
@@ -21,10 +23,14 @@
         background-color: #fefefe;
         margin: auto;
         padding: 1rem;
-        width: 80%;
-        height: 80%;
-        max-width: 1200px;
+        max-width: 900px;
         overflow: hidden;
+
+        @include mobile-only {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
 
         &__close {
             position: absolute;
@@ -41,6 +47,11 @@
             z-index: 10;
             background: transparent;
             border: none;
+
+            @include mobile-only {
+                right: -20px;
+                top: .5rem;
+            }
         }
 
         &__close:before,
@@ -70,15 +81,28 @@
             padding: 16px;
             background: url("data:image/svg+xml,%3Csvg width='30' height='48' viewBox='0 0 30 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.360108 5.64L18.6801 24L0.360107 42.36L6.00011 48L30.0001 24L6.00011 3.88195e-06L0.360108 5.64Z' fill='%23911C1C'/%3E%3C/svg%3E%0A") no-repeat center;
             border: none;
+
+            @include mobile-only {
+                background: url("data:image/svg+xml,%3Csvg width='15' height='48' viewBox='0 0 30 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.360108 5.64L18.6801 24L0.360107 42.36L6.00011 48L30.0001 24L6.00011 3.88195e-06L0.360108 5.64Z' fill='%23911C1C'/%3E%3C/svg%3E%0A") no-repeat center;
+
+            }
         }
 
         &__next {
             right: 0;
+
+            @include mobile-only {
+                right: -20px;
+            }
         }
 
         &__prev {
             left: 0;
             transform: rotate(180deg);
+
+            @include mobile-only {
+                left: -20px;
+            }
         }
 
         &__container {
@@ -88,6 +112,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
+            @include mobile-only {
+                padding: 1rem;
+            }
         }
 
         .media {
@@ -95,25 +123,32 @@
             margin: auto;
             box-sizing: border-box;
             overflow: hidden;
-            width: 100%;
-            height: 100%;
+            aspect-ratio: 1/1;
 
             img,
             video {
                 width: 100%;
                 height: 100%;
+                border-radius: 5px;
+            }
+
+            img {
                 object-fit: cover;
+            }
+
+            video {
+                object-fit: scale-down;
+                background: #000;
             }
         }
 
         figure {
-            width: 90%;
-            height: 90%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             margin: 0;
+            padding: 2rem;
         }
 
         figcaption {
@@ -121,7 +156,7 @@
             padding: 2px 16px;
             color: $color-primary-bg-dark;
             margin-right: auto;
-            padding: 1rem 0px;
+            padding: .5rem 0;
         }
     }
 }

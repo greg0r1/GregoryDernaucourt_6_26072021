@@ -4,4 +4,8 @@
 
 #logo {
     padding: 20px;
+
+    @include mobile-only {
+        padding: 1.5rem 0.5rem;
+    }
 }

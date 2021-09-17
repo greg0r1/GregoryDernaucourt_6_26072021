@@ -29,10 +29,20 @@
     box-sizing: border-box;
     align-items: center;
 
+    @include mobile-only {
+        width: 120px;
+        height: 120px;
+        margin: 0 0 auto 0;
+    }
+
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+
+        @include mobile-only {
+            width: -webkit-fill-available;
+        }
     }
 }
 
@@ -64,6 +74,10 @@
     border-radius: 5px;
     color: #FFF;
     background: $color-primary-bg-dark;
+
+    @include mobile-only {
+        letter-spacing: 2px;
+    }
 }
 
 @mixin btn-close {

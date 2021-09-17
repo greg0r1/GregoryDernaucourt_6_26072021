@@ -7,6 +7,10 @@
         h1 {
             margin: -5.8rem 0 3rem;
             padding: 20px 0;
+
+            @include mobile-only {
+                display: none;
+            }
         }
 
 

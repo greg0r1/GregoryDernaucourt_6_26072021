@@ -5,4 +5,8 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
+
+    @include mobile-only {
+        padding: 0;
+    }
 }

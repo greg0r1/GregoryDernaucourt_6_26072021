@@ -1,76 +1,94 @@
+import MediaFactory from './MediaFactory';
+
+/**
+ * @property {HTMLElement} element
+ * @property {string} imageTitle
+ * @property {string[]} images
+ * @property {string} url Current image displayed
+ * @export
+ * @class Lightbox
+ */
 export default class Lightbox {
-    constructor(element, medias, firstNameOfPhotographer) {
-        this.element = element;
-        this.medias = medias;
-        this.firstNameOfPhotographer = firstNameOfPhotographer;
-        this.media = medias.find((obj) => {
-            return obj.id === Number(this.element.getAttribute("id"))
-        });
-        this.getIdCurrentImage = this.getIdCurrentImage.bind(this)
+    constructor(medias, firstNameOfPhotographer) {
+        this.medias = medias
+        this.path = firstNameOfPhotographer
+        this.index = 0
+        document.addEventListener('keyup', this.onKeyUp)
+        this.current = this.getCurrentMedia()
     }
 
-    getIdCurrentImage() {
-        return Number(this.element.getAttribute("id"))
+    open(key) {
+        this.index = key
+        this.display()
     }
 
-    static nextImage(getMedias, firstNameOfPhotographer, indexOfElementImage) {
-
-        // const indexOfNewCurrentElementInArray = () => medias.findIndex((element) => element.id === Number(currentElement.getAttribute("id")));
-        // (indexOfCurrentElementInArray === medias.length - 1) ? indexOfCurrentElementInArray = - 1 : indexOfCurrentElementInArray;
-        // let nextImage = medias[indexOfNewCurrentElementInArray() + 1].image;
-        // let nextTitle = medias[indexOfNewCurrentElementInArray() + 1].title;
-        // let nextId = medias[indexOfNewCurrentElementInArray() + 1].id;
-
-        // console.log(nextImage);
-        // document.querySelector('.lightbox .img').setAttribute('src', `./public/images/Sample Photos/${firstNameOfPhotographer}/${nextImage}`);
-        // document.querySelector('.lightbox .img').setAttribute('id', nextId);
-        // document.querySelector('.lightbox figcaption').textContent = nextTitle;
-
-
-
-        (indexOfElementImage === getMedias.length - 1) ? indexOfElementImage = - 1 : indexOfElementImage;
-        let nextImage = getMedias[indexOfElementImage + 1].image;
-        let nextTitle = getMedias[indexOfElementImage + 1].title;
-        let nextId = getMedias[indexOfElementImage + 1].id;
-
-        document.querySelector('.lightbox img').setAttribute('src', `./public/images/Sample Photos/${firstNameOfPhotographer}/${nextImage}`);
-        document.querySelector('.lightbox img').setAttribute('id', nextId);
-        document.querySelector('.lightbox figcaption').textContent = nextTitle;
+    close() {
+        document.querySelector('.lightbox-bg').classList.add('fadeout')
+        window.setTimeout(() => {
+            document.querySelector('.lightbox-bg').remove()
+        }, 500)
     }
 
-    static prevImage() {
-        (this.getIndexOfCurrentElementInArray() === 0) ? this.getIndexOfCurrentElementInArray() = this.medias.length : this.getIndexOfCurrentElementInArray();
-
-        let nextImage = this.medias[this.getIndexOfCurrentElementInArray() + 1].image;
-        let nextTitle = this.medias[this.getIndexOfCurrentElementInArray() + 1].title;
-        let nextId = this.medias[this.getIndexOfCurrentElementInArray() + 1].id;
-
-        this.element.setAttribute('src', `./public/images/Sample Photos/${this.firstNameOfPhotographer}/${nextImage}`);
-        this.element.setAttribute('id', nextId);
-        document.querySelector('.lightbox figcaption').textContent = nextTitle;
+    next() {
+        this.index += 1
+        if (this.index === this.medias.length) {
+            this.index = 0
+        }
+        this.display()
     }
 
-    render() {
-        const element = document.createElement("div");
-        element.classList.add('lightbox-bg')
-        element.innerHTML = this.toString();
-        return element;
+    prev() {
+        this.index -= 1
+        if (this.index === -1) {
+            this.index = this.medias.length - 1
+        }
+        this.display()
     }
 
-    toString() {
-        return `
+    getCurrentMedia() {
+        return this.medias[this.index]
+    }
+
+
+    display() {
+        const current = this.getCurrentMedia()
+        let element = document.querySelector('.lightbox-bg')
+        if (!element) {
+            element = document.createElement('div')
+            element.classList.add('lightbox-bg')
+            document.body.appendChild(element)
+            document.body.addEventListener('keyup', (evt) => {
+                if (evt.key === 'ArrowRight') {
+                    this.next()
+                }
+            })
+            document.body.addEventListener('keyup', (evt) => {
+                if (evt.key === 'ArrowLeft') {
+                    this.prev()
+                }
+            })
+        }
+        element.innerHTML = `
         <div class="lightbox">
-        <button class="close"></button>
-        <button class="lightbox__next"></button>
-        <button class="lightbox__prev"></button>
-        <div class="lightbox__container">
-            <figure>
-                <div class="img">
-                    <img id="${this.media.id}" src="./assets/images/Sample Photos/${this.firstNameOfPhotographer}/${this.media.image}" alt="">
-                </div>
-                <figcaption>${this.media.title}</figcaption>
-            </figure>
-        </div>
-    </div>`
+            <button class="lightbox__close"></button>
+            <button class="lightbox__next"></button>
+            <button class="lightbox__prev"></button>
+            <div class="lightbox__container">
+                <figure>
+                    <div class="media">
+                    ${new MediaFactory(current, this.path).create().toString()}
+                    </div>
+                    <figcaption>${current.title}</figcaption>
+                </figure>
+            </div>
+        </div >`
+
+        element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this))
+        element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this))
+        element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this))
+
+        //Set height of lightbox
+        element.setAttribute('height', window.innerHeight)
+
     }
 }

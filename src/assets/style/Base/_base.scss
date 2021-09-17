@@ -44,4 +44,15 @@ body {
     padding: 10px;
     width: auto;
     max-width: 1024px;
+
+    @include mobile-only {
+        padding: 0 .9rem;
+        position: relative;
+    }
+
+    @include tablet-only {
+        padding: 0;
+        position: relative;
+    }
+
 }

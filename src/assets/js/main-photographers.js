@@ -1,6 +1,7 @@
 // Model
 import DataService from './classes/DataService';
 import EventService from './classes/EventService';
+import EventScrollToTop from './classes/EventScrollToTop'
 
 const data = new DataService;
 
@@ -91,22 +92,6 @@ function putEventCickOnPhotographerProfile(dataService) {
     });
 }
 
-/**
- * Fonction qui affiche le bouton scroll to top
- * si on scroll vers le bas
- *
- */
-function putEventClickToButtonIfScrolled() {
-    const scrollToMainButtonElt = document.querySelector('.scrollToMainButton');
-    if (window.scrollY) {
-        scrollToMainButtonElt.classList.add('display');
-        scrollToMainButtonElt.addEventListener('click', () => window.scrollTo(0, 0));
-    } else if (window.screenY === 0) {
-        scrollToMainButtonElt.classList.remove('display')
-    }
-
-}
-
 
 
 // Controller
@@ -127,7 +112,7 @@ const mainPhotographers = async () => {
         const tag = params.get("tag");
         displayPhotographers(dataService.getPhotographersByTags(tag));
         // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
-        window.addEventListener('scroll', putEventClickToButtonIfScrolled);
+        window.addEventListener('scroll', () => EventScrollToTop.scrollToTop(document.querySelector('.scrollToMainButton')));
         // On ajoute l'événement "click" à l'élément "tag"
         putEventCickOnTags(dataService);
         // On ajoute l'événement "click" à chaque fiche de photographes
@@ -136,7 +121,7 @@ const mainPhotographers = async () => {
 
     } catch (error) {
 
-        console.error('Unable to load data :', error)
+        console.error(error)
 
     }
 

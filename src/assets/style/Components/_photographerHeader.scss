@@ -9,6 +9,12 @@
     box-sizing: border-box;
     overflow: hidden;
 
+    @include mobile-only {
+        background: none;
+        padding: 0;
+        justify-content: center;
+    }
+
 
     .details {
         align-items: flex-start;
@@ -42,6 +48,11 @@
         .tagline,
         .tags {
             margin: .6rem 0;
+
+            @include mobile-only {
+                margin: 0;
+                padding: 2px 0;
+            }
         }
 
     }
@@ -51,7 +62,15 @@
         margin: 1rem 2rem;
 
         @include mobile-only {
-            position: absolute;
+            position: fixed;
+            bottom: 1.5rem;
+            left: 10%;
+            right: 10%;
+            text-align: center;
+        }
+
+        @include tablet-only {
+            position: fixed;
             bottom: 1rem;
             left: 25%;
             right: 25%;
@@ -60,7 +79,11 @@
 
         .btn {
             padding: 1rem .5rem;
-            @include btn
+            @include btn;
+
+            @include mobile-only {
+                padding: 0.5rem;
+            }
         }
     }
 
@@ -78,6 +101,16 @@
         background: $color-secondary-bg-dark;
         border-radius: 5px 5px 0 0;
         cursor: initial;
+
+        @include mobile-only {
+            position: absolute;
+            padding: 0.5rem;
+            font-size: 95%;
+        }
+
+        @include tablet-only {
+            position: absolute;
+        }
 
         .price {
             margin: 0 10px 0 20px;

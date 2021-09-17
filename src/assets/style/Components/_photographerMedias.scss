@@ -8,10 +8,29 @@
         flex-wrap: wrap;
         flex-direction: row;
 
+        @include mobile-only {
+            padding: 1.5rem 0 2.9rem 0;
+            width: 100%;
+        }
+
+        @include tablet-only {
+            padding: 0 0 2rem 0;
+            width: 100%;
+        }
+
         .content-media {
             color: $color-primary-bg-dark;
             margin: 1.5rem auto;
             padding: .5rem;
+
+            @include mobile-only {
+                margin: 0;
+                width: 100%;
+            }
+
+            @include tablet-only {
+                margin: 1.5rem 0;
+            }
 
             &__media {
                 border-radius: 5px;
@@ -27,11 +46,24 @@
                 overflow: hidden;
                 cursor: pointer;
 
+                @include mobile-only {
+                    width: auto;
+                    height: 80%;
+                }
+
                 .image,
                 .video {
                     width: 100%;
                     height: 100%;
+                }
+
+                .image {
                     object-fit: cover;
+                }
+
+                .video {
+                    object-fit: scale-down;
+                    background: #000;
                 }
             }
 

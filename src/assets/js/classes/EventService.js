@@ -1,3 +1,9 @@
+/**
+ * Handle events
+ *
+ * @export
+ * @class EventService
+ */
 export default class EventService {
 
     constructor() {

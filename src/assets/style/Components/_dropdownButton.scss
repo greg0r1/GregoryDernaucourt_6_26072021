@@ -7,6 +7,10 @@
     display: flex;
     align-items: center;
 
+    @include mobile-only {
+        display: none;
+    }
+
 
     span {
         font-weight: 900;

@@ -460,13 +460,15 @@ require("core-js/modules/es.array.iterator.js");
 require("core-js/modules/web.dom-collections.iterator.js");
 require("core-js/modules/web.url.js");
 require("core-js/modules/es.string.trim.js");
+require("core-js/modules/web.dom-collections.for-each.js");
 require("core-js/modules/es.promise.js");
 require("core-js/modules/es.regexp.exec.js");
 require("core-js/modules/es.string.search.js");
 var _DataService = _interopRequireDefault(require("./classes/DataService"));
 var _EventService = _interopRequireDefault(require("./classes/EventService"));
 var _ViewMedias = _interopRequireDefault(require("./classes/ViewMedias"));
-var _Lightbox = _interopRequireDefault(require("./classes/Lightbox-2"));
+var _Lightbox = _interopRequireDefault(require("./classes/Lightbox"));
+var _EventScrollToTop = _interopRequireDefault(require("./classes/EventScrollToTop"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -486,8 +488,10 @@ const displayFilterButton = ()=>{
 const displayModalForm = (name)=>{
     const div = document.createElement('div');
     div.className = 'bground';
-    div.innerHTML = "\n      <div class=\"modalContent\">\n        <span class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1>Contactez-moi</br>\n            ".concat(name, "</h1>\n          <form id=\"validate\" name=\"reserve\" action=\"index.html\" method=\"get\">\n            <div class=\"formData\">\n              <label for=\"first\">Pr\xE9nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"last\">Nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"email\">E-mail</label><br>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"message\">Votre message</label><br>\n              <textarea class=\"text-control\" type=\"date\" id=\"message\" name=\"birthdate\">\n              </textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" />\n          </form>\n        </div>\n    </div>");
+    div.innerHTML = "\n      <div class=\"modalContent\">\n        <span class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1>Contactez-moi</br>\n            ".concat(name, "</h1>\n          <form id=\"contact\" action=\"\" method=\"get\">\n            <div class=\"formData\">\n              <label for=\"first\">Pr\xE9nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"last\">Nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"email\">E-mail</label><br>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"message\">Votre message</label><br>\n              <textarea class=\"text-control\" type=\"text\" id=\"message\" name=\"message\"></textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"submit\">\n                <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" />\n            </div>\n          </form>\n        </div>\n    </div>");
     document.getElementById('main').appendChild(div);
+    document.querySelector('form#contact input[type=submit]').addEventListener('click', (e)=>getValuesForm(e)
+    );
 };
 /**
  *
@@ -501,20 +505,46 @@ const displayModalForm = (name)=>{
         element.setAttribute('href', url.href);
     });
 }
-function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer) {
-    if (element.textContent.trim() === "Popularité") displayPhotographerMedias(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer);
-    if (element.textContent.trim() === "Date") displayPhotographerMedias(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer);
-    if (element.textContent.trim() === "Titre") displayPhotographerMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer);
+function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias) {
+    document.querySelector(".medias").innerHTML = '';
+    if (element.textContent.trim() === "Popularité") {
+        document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer).render());
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer);
+    }
+    if (element.textContent.trim() === "Date") {
+        document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer).render());
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer);
+    }
+    if (element.textContent.trim() === "Titre") {
+        document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer).render());
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer);
+    }
+}
+function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
+    const lightbox = new _Lightbox.default(medias, firstNameOfPhotographer);
+    const mediasElements = Array.from(document.querySelectorAll('.video.media, .image.media'));
+    mediasElements.forEach((element)=>element.addEventListener('click', (e)=>{
+            e.preventDefault();
+            const key = medias.findIndex((element1)=>element1.id == e.currentTarget.getAttribute('id')
+            );
+            lightbox.open(key);
+        })
+    );
 }
 /**
  * Fonction qui affiche le formulaire de contact
  *
  * @param {*} nameOfPhotographer
- */ function displayModalFormOnEvent(nameOfPhotographer) {
+ */ function displayModalFormEvent(nameOfPhotographer) {
     document.querySelector('.bground') ? _EventService.default.closeModal() : displayModalForm(nameOfPhotographer);
     _EventService.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // On vérifie les champs des formulaires
     _EventService.default.handleInputsFormClick((e)=>checkField(e)
     );
+}
+function getValuesForm(e) {
+    e.preventDefault();
+    for(let i = 0; i < document.forms[0].length - 1; i++)console.log(document.forms[0][i].value);
+    document.querySelector('.bground').remove();
 } // Modal Form
 /**
  * Vérification des champs input de la fenêtre modale
@@ -551,15 +581,17 @@ const mainPhotographer = async ()=>{
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
         displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams)); // On ajoute les events sur les tags qui renvoients sur la page index
         eventOnTags(); // Event sur bouton contact
-        document.querySelector('.photographerHeader .button').addEventListener('click', ()=>displayModalFormOnEvent(nameOfPhotographer)
+        document.querySelector('.photographerHeader .button').addEventListener('click', ()=>displayModalFormEvent(nameOfPhotographer)
         ); //On affiche le bouton de filtre
         displayFilterButton();
         const chevronElement = document.querySelector(".dropdown-toggle .fas");
         _EventService.default.toggleDropdownButton(chevronElement); // Filtres
-        _EventService.default.handleMediasFilter((element)=>filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer)
+        _EventService.default.handleMediasFilter((element)=>filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias)
         ); //On affiche les médias du photographes
         document.querySelector(".medias").appendChild(new _ViewMedias.default(medias, firstNameOfPhotographer).render()); //On ajoute l'événement sur chaque image pour afficher la lightbox
-        _Lightbox.default.init(medias, firstNameOfPhotographer); // On ajoute le nom du photographe au titre
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
+        window.addEventListener('scroll', ()=>_EventScrollToTop.default.scrollToTop(document.querySelector('.scrollToMainButton'))
+        ); // On ajoute le nom du photographe au titre
         document.title = "Fisheye | ".concat(nameOfPhotographer);
     } catch (error) {
         console.error(error);
@@ -567,7 +599,7 @@ const mainPhotographer = async ()=>{
 };
 mainPhotographer();
 
-},{"core-js/modules/es.array.iterator.js":"8YPvt","core-js/modules/web.dom-collections.iterator.js":"gC8gE","core-js/modules/web.url.js":"c61iN","core-js/modules/es.string.trim.js":"1UwM0","core-js/modules/es.promise.js":"kYha9","core-js/modules/es.regexp.exec.js":"lySIs","core-js/modules/es.string.search.js":"9LcVn","./classes/DataService":"dBgMJ","./classes/EventService":"bmzaC","./classes/ViewMedias":"kj83z","./classes/Lightbox-2":"l3zEO"}],"8YPvt":[function(require,module,exports) {
+},{"core-js/modules/es.array.iterator.js":"8YPvt","core-js/modules/web.dom-collections.iterator.js":"gC8gE","core-js/modules/web.url.js":"c61iN","core-js/modules/es.string.trim.js":"1UwM0","core-js/modules/es.promise.js":"kYha9","core-js/modules/es.regexp.exec.js":"lySIs","core-js/modules/es.string.search.js":"9LcVn","core-js/modules/web.dom-collections.for-each.js":"917na","./classes/DataService":"dBgMJ","./classes/EventService":"bmzaC","./classes/ViewMedias":"kj83z","./classes/Lightbox":"guRfF","./classes/EventScrollToTop":"8nT7Q"}],"8YPvt":[function(require,module,exports) {
 'use strict';
 var toIndexedObject = require('../internals/to-indexed-object');
 var addToUnscopables = require('../internals/add-to-unscopables');
@@ -4676,7 +4708,165 @@ module.exports = function(R, S) {
     return regexpExec.call(R, S);
 };
 
-},{"./classof-raw":"8F0bi","./regexp-exec":"daEEr"}],"dBgMJ":[function(require,module,exports) {
+},{"./classof-raw":"8F0bi","./regexp-exec":"daEEr"}],"917na":[function(require,module,exports) {
+var global = require('../internals/global');
+var DOMIterables = require('../internals/dom-iterables');
+var DOMTokenListPrototype = require('../internals/dom-token-list-prototype');
+var forEach = require('../internals/array-for-each');
+var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
+var handlePrototype = function(CollectionPrototype) {
+    // some Chrome versions have non-configurable methods on DOMTokenList
+    if (CollectionPrototype && CollectionPrototype.forEach !== forEach) try {
+        createNonEnumerableProperty(CollectionPrototype, 'forEach', forEach);
+    } catch (error) {
+        CollectionPrototype.forEach = forEach;
+    }
+};
+for(var COLLECTION_NAME in DOMIterables)handlePrototype(global[COLLECTION_NAME] && global[COLLECTION_NAME].prototype);
+handlePrototype(DOMTokenListPrototype);
+
+},{"../internals/global":"a4GR8","../internals/dom-iterables":"2Umkc","../internals/dom-token-list-prototype":"gLY6L","../internals/array-for-each":"dwspA","../internals/create-non-enumerable-property":"73EkF"}],"dwspA":[function(require,module,exports) {
+'use strict';
+var $forEach = require('../internals/array-iteration').forEach;
+var arrayMethodIsStrict = require('../internals/array-method-is-strict');
+var STRICT_METHOD = arrayMethodIsStrict('forEach');
+// `Array.prototype.forEach` method implementation
+// https://tc39.es/ecma262/#sec-array.prototype.foreach
+module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */ ) {
+    return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
+} : [].forEach;
+
+},{"../internals/array-iteration":"ciNJ0","../internals/array-method-is-strict":"2hfFU"}],"ciNJ0":[function(require,module,exports) {
+var bind = require('../internals/function-bind-context');
+var IndexedObject = require('../internals/indexed-object');
+var toObject = require('../internals/to-object');
+var toLength = require('../internals/to-length');
+var arraySpeciesCreate = require('../internals/array-species-create');
+var push = [].push;
+// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterReject }` methods implementation
+var createMethod = function(TYPE) {
+    var IS_MAP = TYPE == 1;
+    var IS_FILTER = TYPE == 2;
+    var IS_SOME = TYPE == 3;
+    var IS_EVERY = TYPE == 4;
+    var IS_FIND_INDEX = TYPE == 6;
+    var IS_FILTER_REJECT = TYPE == 7;
+    var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+    return function($this, callbackfn, that, specificCreate) {
+        var O = toObject($this);
+        var self = IndexedObject(O);
+        var boundFunction = bind(callbackfn, that, 3);
+        var length = toLength(self.length);
+        var index = 0;
+        var create = specificCreate || arraySpeciesCreate;
+        var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
+        var value, result;
+        for(; length > index; index++)if (NO_HOLES || index in self) {
+            value = self[index];
+            result = boundFunction(value, index, O);
+            if (TYPE) {
+                if (IS_MAP) target[index] = result; // map
+                else if (result) switch(TYPE){
+                    case 3:
+                        return true; // some
+                    case 5:
+                        return value; // find
+                    case 6:
+                        return index; // findIndex
+                    case 2:
+                        push.call(target, value); // filter
+                }
+                else switch(TYPE){
+                    case 4:
+                        return false; // every
+                    case 7:
+                        push.call(target, value); // filterReject
+                }
+            }
+        }
+        return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
+    };
+};
+module.exports = {
+    // `Array.prototype.forEach` method
+    // https://tc39.es/ecma262/#sec-array.prototype.foreach
+    forEach: createMethod(0),
+    // `Array.prototype.map` method
+    // https://tc39.es/ecma262/#sec-array.prototype.map
+    map: createMethod(1),
+    // `Array.prototype.filter` method
+    // https://tc39.es/ecma262/#sec-array.prototype.filter
+    filter: createMethod(2),
+    // `Array.prototype.some` method
+    // https://tc39.es/ecma262/#sec-array.prototype.some
+    some: createMethod(3),
+    // `Array.prototype.every` method
+    // https://tc39.es/ecma262/#sec-array.prototype.every
+    every: createMethod(4),
+    // `Array.prototype.find` method
+    // https://tc39.es/ecma262/#sec-array.prototype.find
+    find: createMethod(5),
+    // `Array.prototype.findIndex` method
+    // https://tc39.es/ecma262/#sec-array.prototype.findIndex
+    findIndex: createMethod(6),
+    // `Array.prototype.filterReject` method
+    // https://github.com/tc39/proposal-array-filtering
+    filterReject: createMethod(7)
+};
+
+},{"../internals/function-bind-context":"1epb9","../internals/indexed-object":"1hg9G","../internals/to-object":"ghTKi","../internals/to-length":"coWuj","../internals/array-species-create":"beybx"}],"beybx":[function(require,module,exports) {
+var arraySpeciesConstructor = require('../internals/array-species-constructor');
+// `ArraySpeciesCreate` abstract operation
+// https://tc39.es/ecma262/#sec-arrayspeciescreate
+module.exports = function(originalArray, length) {
+    return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
+};
+
+},{"../internals/array-species-constructor":"ipwOm"}],"ipwOm":[function(require,module,exports) {
+var isObject = require('../internals/is-object');
+var isArray = require('../internals/is-array');
+var wellKnownSymbol = require('../internals/well-known-symbol');
+var SPECIES = wellKnownSymbol('species');
+// a part of `ArraySpeciesCreate` abstract operation
+// https://tc39.es/ecma262/#sec-arrayspeciescreate
+module.exports = function(originalArray) {
+    var C;
+    if (isArray(originalArray)) {
+        C = originalArray.constructor;
+        // cross-realm fallback
+        if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+        else if (isObject(C)) {
+            C = C[SPECIES];
+            if (C === null) C = undefined;
+        }
+    }
+    return C === undefined ? Array : C;
+};
+
+},{"../internals/is-object":"d60Kc","../internals/is-array":"kiY2Q","../internals/well-known-symbol":"6sZ59"}],"kiY2Q":[function(require,module,exports) {
+var classof = require('../internals/classof-raw');
+// `IsArray` abstract operation
+// https://tc39.es/ecma262/#sec-isarray
+// eslint-disable-next-line es/no-array-isarray -- safe
+module.exports = Array.isArray || function isArray(arg) {
+    return classof(arg) == 'Array';
+};
+
+},{"../internals/classof-raw":"8F0bi"}],"2hfFU":[function(require,module,exports) {
+'use strict';
+var fails = require('../internals/fails');
+module.exports = function(METHOD_NAME, argument) {
+    var method = [][METHOD_NAME];
+    return !!method && fails(function() {
+        // eslint-disable-next-line no-useless-call,no-throw-literal -- required for testing
+        method.call(null, argument || function() {
+            throw 1;
+        }, 1);
+    });
+};
+
+},{"../internals/fails":"byxLb"}],"dBgMJ":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4886,20 +5076,7 @@ module.exports = {
     right: createMethod(true)
 };
 
-},{"../internals/a-function":"43ldr","../internals/to-object":"ghTKi","../internals/indexed-object":"1hg9G","../internals/to-length":"coWuj"}],"2hfFU":[function(require,module,exports) {
-'use strict';
-var fails = require('../internals/fails');
-module.exports = function(METHOD_NAME, argument) {
-    var method = [][METHOD_NAME];
-    return !!method && fails(function() {
-        // eslint-disable-next-line no-useless-call,no-throw-literal -- required for testing
-        method.call(null, argument || function() {
-            throw 1;
-        }, 1);
-    });
-};
-
-},{"../internals/fails":"byxLb"}],"6yoc0":[function(require,module,exports) {
+},{"../internals/a-function":"43ldr","../internals/to-object":"ghTKi","../internals/indexed-object":"1hg9G","../internals/to-length":"coWuj"}],"6yoc0":[function(require,module,exports) {
 'use strict';
 var $ = require('../internals/export');
 var aFunction = require('../internals/a-function');
@@ -5045,7 +5222,7 @@ module.exports = !!webkit && +webkit[1];
 
 },{"../internals/engine-user-agent":"ihes9"}],"w7Zwh":[function(require,module,exports) {
 "use strict";
-module.exports = JSON.parse("{\"photographers\":[{\"name\":\"Mimi Keel\",\"id\":243,\"city\":\"London\",\"country\":\"UK\",\"tags\":[\"portrait\",\"events\",\"travel\",\"animals\"],\"tagline\":\"Voir le beau dans le quotidien\",\"price\":400,\"portrait\":\"MimiKeel.jpg\"},{\"name\":\"Ellie-Rose Wilkens\",\"id\":930,\"city\":\"Paris\",\"country\":\"France\",\"tags\":[\"sports\",\"architecture\"],\"tagline\":\"Capturer des compositions complexes\",\"price\":250,\"portrait\":\"EllieRoseWilkens.jpg\"},{\"name\":\"Tracy Galindo\",\"id\":82,\"city\":\"Montreal\",\"country\":\"Canada\",\"tags\":[\"art\",\"fashion\",\"events\"],\"tagline\":\"Photographe freelance\",\"price\":500,\"portrait\":\"TracyGalindo.jpg\"},{\"name\":\"Nabeel Bradford\",\"id\":527,\"city\":\"Mexico City\",\"country\":\"Mexico\",\"tags\":[\"travel\",\"portrait\"],\"tagline\":\"Toujours aller de l'avant\",\"price\":350,\"portrait\":\"NabeelBradford.jpg\"},{\"name\":\"Rhode Dubois\",\"id\":925,\"city\":\"Barcelona\",\"country\":\"Spain\",\"tags\":[\"sport\",\"fashion\",\"events\",\"animals\"],\"tagline\":\"Je crée des souvenirs\",\"price\":275,\"portrait\":\"RhodeDubois.jpg\"},{\"name\":\"Marcel Nikolic\",\"id\":195,\"city\":\"Berlin\",\"country\":\"Germany\",\"tags\":[\"travel\",\"architecture\"],\"tagline\":\"Toujours à la recherche de LA photo\",\"price\":300,\"portrait\":\"MarcelNikolic.jpg\"}],\"media\":[{\"id\":342550,\"photographerId\":82,\"title\":\"Fashion Yellow Beach\",\"image\":\"Fashion_Yellow_Beach.jpg\",\"tags\":[\"fashion\"],\"likes\":62,\"date\":\"2011-12-08\",\"price\":55},{\"id\":8520927,\"photographerId\":82,\"title\":\"Fashion Urban Jungle\",\"image\":\"Fashion_Urban_Jungle.jpg\",\"tags\":[\"fashion\"],\"likes\":11,\"date\":\"2011-11-06\",\"price\":55},{\"id\":9025895,\"photographerId\":82,\"title\":\"Fashion Pattern on a Pattern\",\"image\":\"Fashion_Pattern_on_Pattern.jpg\",\"tags\":[\"fashion\"],\"likes\":72,\"date\":\"2013-08-12\",\"price\":55},{\"id\":9275938,\"photographerId\":82,\"title\":\"Wedding Gazebo\",\"image\":\"Event-_WeddingGazebo.jpg\",\"tags\":[\"events\"],\"likes\":69,\"date\":\"2018-02-22\",\"price\":55},{\"id\":2053494,\"photographerId\":82,\"title\":\"Sparkles\",\"image\":\"Event_Sparklers.jpg\",\"tags\":[\"events\"],\"likes\":2,\"date\":\"2020-05-25\",\"price\":55},{\"id\":7324238,\"photographerId\":82,\"title\":\"18th Anniversary\",\"image\":\"Event_18thAnniversary.jpg\",\"tags\":[\"events\"],\"likes\":33,\"date\":\"2019-06-12\",\"price\":55},{\"id\":8328953,\"photographerId\":82,\"title\":\"Wooden Horse Sculpture\",\"video\":\"Art_Wooden_Horse_Sculpture.mp4\",\"tags\":[\"art\"],\"likes\":24,\"date\":\"2011-12-08\",\"price\":100},{\"id\":7502053,\"photographerId\":82,\"title\":\"Triangle Man\",\"image\":\"Art_Triangle_Man.jpg\",\"tags\":[\"art\"],\"likes\":88,\"date\":\"2007-05-07\",\"price\":55},{\"id\":8523492,\"photographerId\":82,\"title\":\"Purple Tunnel\",\"image\":\"Art_Purple_light.jpg\",\"tags\":[\"art\"],\"likes\":24,\"date\":\"2018-05-05\",\"price\":55},{\"id\":75902334,\"photographerId\":82,\"title\":\"Art Mine\",\"image\":\"Art_Mine.jpg\",\"tags\":[\"art\"],\"likes\":75,\"date\":\"2019-11-25\",\"price\":55},{\"id\":73852953,\"photographerId\":925,\"title\":\"8 Rows\",\"image\":\"Sport_2000_with_8.jpg\",\"tags\":[\"sport\"],\"likes\":52,\"date\":\"2013-02-30\",\"price\":70},{\"id\":92758372,\"photographerId\":925,\"title\":\"Fashion Wings\",\"image\":\"Fashion_Wings.jpg\",\"tags\":[\"fashion\"],\"likes\":58,\"date\":\"2018-07-17\",\"price\":70},{\"id\":32958383,\"photographerId\":925,\"title\":\"Melody Red on Stripes\",\"image\":\"Fashion_Melody_Red_on_Stripes.jpg\",\"tags\":[\"fashion\"],\"likes\":11,\"date\":\"2019-08-12\",\"price\":70},{\"id\":928587383,\"photographerId\":925,\"title\":\"Venture Conference\",\"image\":\"Event_VentureConference.jpg\",\"tags\":[\"events\"],\"likes\":2,\"date\":\"2019-01-02\",\"price\":70},{\"id\":725639493,\"photographerId\":925,\"title\":\"Product Pitch\",\"image\":\"Event_ProductPitch.jpg\",\"tags\":[\"events\"],\"likes\":3,\"date\":\"2019-05-20\",\"price\":70},{\"id\":23394384,\"photographerId\":925,\"title\":\"Musical Festival Keyboard\",\"image\":\"Event_KeyboardCheck.jpg\",\"tags\":[\"events\"],\"likes\":52,\"date\":\"2019-07-18\",\"price\":70},{\"id\":87367293,\"photographerId\":925,\"title\":\"Musical Festival Singer\",\"image\":\"Event_Emcee.jpg\",\"tags\":[\"events\"],\"likes\":23,\"date\":\"2018-02-22\",\"price\":70},{\"id\":593834784,\"photographerId\":925,\"title\":\"Animal Majesty\",\"image\":\"Animals_Majesty.jpg\",\"tags\":[\"animals\"],\"likes\":52,\"date\":\"2017-03-13\",\"price\":70},{\"id\":83958935,\"photographerId\":925,\"title\":\"Cute Puppy on Sunset\",\"video\":\"Animals_Puppiness.mp4\",\"tags\":[\"animals\"],\"likes\":52,\"date\":\"2016-06-12\",\"price\":70},{\"id\":394583434,\"photographerId\":527,\"title\":\"Rock Mountains\",\"video\":\"Travel_Rock_Mountains.mp4\",\"tags\":[\"travel\"],\"likes\":23,\"date\":\"2017-03-18\",\"price\":45},{\"id\":343423425,\"photographerId\":527,\"title\":\"Outdoor Baths\",\"image\":\"Travel_Outdoor_Baths.jpg\",\"tags\":[\"travel\"],\"likes\":101,\"date\":\"2017-04-03\",\"price\":45},{\"id\":73434243,\"photographerId\":527,\"title\":\"Road into the Hill\",\"image\":\"Travel_Road_into_Hill.jpg\",\"tags\":[\"travel\"],\"likes\":99,\"date\":\"2018-04-30\",\"price\":45},{\"id\":23425523,\"photographerId\":527,\"title\":\"Bridge into the Forest\",\"image\":\"Travel_Bridge_into_Forest.jpg\",\"tags\":[\"travel\"],\"likes\":34,\"date\":\"2016-04-05\",\"price\":45},{\"id\":23134513,\"photographerId\":527,\"title\":\"Boat Wonderer\",\"image\":\"Travel_Boat_Wanderer.jpg\",\"tags\":[\"travel\"],\"likes\":23,\"date\":\"2017-03-18\",\"price\":45},{\"id\":92352352,\"photographerId\":527,\"title\":\"Portrait Sunkiss\",\"image\":\"Portrait_Sunkissed.jpg\",\"tags\":[\"portrait\"],\"likes\":66,\"date\":\"2018-05-24\",\"price\":45},{\"id\":34513453,\"photographerId\":527,\"title\":\"Shaw Potrait\",\"image\":\"Portrait_Shaw.jpg\",\"tags\":[\"portait\"],\"likes\":52,\"date\":\"2017-04-21\",\"price\":45},{\"id\":23523533,\"photographerId\":527,\"title\":\"Alexandra\",\"image\":\"Portrait_Alexandra.jpg\",\"tags\":[\"portait\"],\"likes\":95,\"date\":\"2018-11-02\",\"price\":45},{\"id\":525834234,\"photographerId\":527,\"title\":\"Afternoon Break\",\"image\":\"Portrait_AfternoonBreak.jpg\",\"tags\":[\"portait\"],\"likes\":25,\"date\":\"2019-01-02\",\"price\":45},{\"id\":623534343,\"photographerId\":243,\"title\":\"Lonesome\",\"image\":\"Travel_Lonesome.jpg\",\"tags\":[\"travel\"],\"likes\":88,\"date\":\"2019-02-03\",\"price\":45},{\"id\":625025343,\"photographerId\":243,\"title\":\"Hillside Color\",\"image\":\"Travel_HillsideColor.jpg\",\"tags\":[\"travel\"],\"likes\":85,\"date\":\"2019-04-03\",\"price\":45},{\"id\":2525345343,\"photographerId\":243,\"title\":\"Wednesday Potrait\",\"image\":\"Portrait_Wednesday.jpg\",\"tags\":[\"portait\"],\"likes\":34,\"date\":\"2019-04-07\",\"price\":45},{\"id\":2523434634,\"photographerId\":243,\"title\":\"Nora Portrait\",\"image\":\"Portrait_Nora.jpg\",\"tags\":[\"portait\"],\"likes\":63,\"date\":\"2019-04-07\",\"price\":45},{\"id\":398847109,\"photographerId\":243,\"title\":\"Raw Black Portrait\",\"image\":\"Portrait_Background.jpg\",\"tags\":[\"portait\"],\"likes\":55,\"date\":\"2019-06-20\",\"price\":45},{\"id\":2534342,\"photographerId\":243,\"title\":\"Seaside Wedding\",\"image\":\"Event_SeasideWedding.jpg\",\"tags\":[\"events\"],\"likes\":25,\"date\":\"2019-06-21\",\"price\":45},{\"id\":65235234,\"photographerId\":243,\"title\":\"Boulder Wedding\",\"image\":\"Event_PintoWedding.jpg\",\"tags\":[\"events\"],\"likes\":52,\"date\":\"2019-06-25\",\"price\":45},{\"id\":23523434,\"photographerId\":243,\"title\":\"Benevides Wedding\",\"image\":\"Event_BenevidesWedding.jpg\",\"tags\":[\"events\"],\"likes\":77,\"date\":\"2019-06-28\",\"price\":45},{\"id\":5234343,\"photographerId\":243,\"title\":\"Wild Horses in the Mountains\",\"video\":\"Animals_Wild_Horses_in_the_mountains.mp4\",\"tags\":[\"animals\"],\"likes\":142,\"date\":\"2019-08-23\",\"price\":60},{\"id\":95234343,\"photographerId\":243,\"title\":\"Rainbow Bird\",\"image\":\"Animals_Rainbow.jpg\",\"tags\":[\"animals\"],\"likes\":59,\"date\":\"2019-07-02\",\"price\":60},{\"id\":52343416,\"photographerId\":195,\"title\":\"Japanese Tower, Kyoto\",\"image\":\"Travel_Tower.jpg\",\"tags\":[\"travel\"],\"likes\":25,\"date\":\"2019-04-03\",\"price\":60},{\"id\":2523434,\"photographerId\":195,\"title\":\"Senset on Canals, Venice\",\"image\":\"Travel_SunsetonCanals.jpg\",\"tags\":[\"travel\"],\"likes\":53,\"date\":\"2019-05-06\",\"price\":60},{\"id\":95293534,\"photographerId\":195,\"title\":\"Mountain and Lake\",\"image\":\"Travel_OpenMountain.jpg\",\"tags\":[\"travel\"],\"likes\":33,\"date\":\"2019-05-12\",\"price\":60},{\"id\":356234343,\"photographerId\":195,\"title\":\"City Bike and Stair, Paris\",\"image\":\"Travel_Bike_and_Stair.jpg\",\"tags\":[\"travel\"],\"likes\":53,\"date\":\"2019-06-20\",\"price\":60},{\"id\":235234343,\"photographerId\":195,\"title\":\"Adventure Door, India\",\"image\":\"Travel_Adventure_Door.jpg\",\"tags\":[\"travel\"],\"likes\":63,\"date\":\"2019-06-26\",\"price\":60},{\"id\":6234234343,\"photographerId\":195,\"title\":\"Contrast, St Petersburg\",\"image\":\"Architecture_Contrast.jpg\",\"tags\":[\"architecture\"],\"likes\":52,\"date\":\"2019-06-30\",\"price\":60},{\"id\":6525666253,\"photographerId\":195,\"title\":\"On a Hill, Tibet\",\"image\":\"Architecture_On_a_hill.jpg\",\"tags\":[\"architecture\"],\"likes\":63,\"date\":\"2019-07-20\",\"price\":60},{\"id\":98252523433,\"photographerId\":195,\"title\":\"Leaning Tower, Pisa\",\"image\":\"Architecture_Dome.jpg\",\"tags\":[\"architecture\"],\"likes\":88,\"date\":\"2020-01-05\",\"price\":60},{\"id\":9259398453,\"photographerId\":195,\"title\":\"Circle Highways, Buenos Aires\",\"video\":\"Architecture_coverr_circle_empty_highway_in_buenos_aires_587740985637.mp4\",\"tags\":[\"architecture\"],\"likes\":57,\"date\":\"2020-01-20\",\"price\":65},{\"id\":3523523534,\"photographerId\":195,\"title\":\"Corner Building and Blue Sky\",\"image\":\"Architecture_Corner_Room.jpg\",\"tags\":[\"architecture\"],\"likes\":54,\"date\":\"2020-05-05\",\"price\":60},{\"id\":952343423,\"photographerId\":930,\"title\":\"Tricks in the Air\",\"video\":\"Sport_Tricks_in_the_air.mp4\",\"tags\":[\"sport\"],\"likes\":150,\"date\":\"2018-02-30\",\"price\":70},{\"id\":235234343,\"photographerId\":930,\"title\":\"Climber\",\"image\":\"Sport_Next_Hold.jpg\",\"tags\":[\"sport\"],\"likes\":101,\"date\":\"2018-03-05\",\"price\":65},{\"id\":235343222,\"photographerId\":930,\"title\":\"Surfer\",\"image\":\"sport_water_tunnel.jpg\",\"tags\":[\"sport\"],\"likes\":103,\"date\":\"2018-03-10\",\"price\":70},{\"id\":7775342343,\"photographerId\":930,\"title\":\"Skier\",\"image\":\"Sport_Sky_Cross.jpg\",\"tags\":[\"sport\"],\"likes\":77,\"date\":\"2018-04-16\",\"price\":50},{\"id\":9253445784,\"photographerId\":930,\"title\":\"Race End\",\"image\":\"Sport_Race_End.jpg\",\"tags\":[\"sport\"],\"likes\":88,\"date\":\"2018-04-22\",\"price\":65},{\"id\":22299394,\"photographerId\":930,\"title\":\"Jump!\",\"image\":\"Sport_Jump.jpg\",\"tags\":[\"sport\"],\"likes\":95,\"date\":\"2018-04-27\",\"price\":70},{\"id\":3452342633,\"photographerId\":930,\"title\":\"White Light\",\"image\":\"Architecture_White_Light.jpg\",\"tags\":[\"architecture\"],\"likes\":52,\"date\":\"2018-05-03\",\"price\":75},{\"id\":939234243,\"photographerId\":930,\"title\":\"Water on Modern Building\",\"image\":\"Architecture_Water_on_Modern.jpg\",\"tags\":[\"architecture\"],\"likes\":55,\"date\":\"2018-05-10\",\"price\":72},{\"id\":222959233,\"photographerId\":930,\"title\":\"Horseshoe\",\"image\":\"Architecture_Horseshoe.jpg\",\"tags\":[\"architecture\"],\"likes\":85,\"date\":\"2018-05-15\",\"price\":71},{\"id\":965933434,\"photographerId\":930,\"title\":\"Cross Bar\",\"image\":\"Architecture_Cross_Bar.jpg\",\"tags\":[\"architecture\"],\"likes\":66,\"date\":\"2018-05-20\",\"price\":58},{\"id\":777723343,\"photographerId\":930,\"title\":\"Connected Curves\",\"image\":\"Architecture_Connected_Curves.jpg\",\"tags\":[\"architecture\"],\"likes\":79,\"date\":\"2018-05-21\",\"price\":80}]}");
+module.exports = JSON.parse("{\"photographers\":[{\"name\":\"Mimi Keel\",\"id\":243,\"city\":\"London\",\"country\":\"UK\",\"tags\":[\"portrait\",\"events\",\"travel\",\"animals\"],\"tagline\":\"Voir le beau dans le quotidien\",\"price\":400,\"portrait\":\"MimiKeel.jpg\"},{\"name\":\"Ellie-Rose Wilkens\",\"id\":930,\"city\":\"Paris\",\"country\":\"France\",\"tags\":[\"sports\",\"architecture\"],\"tagline\":\"Capturer des compositions complexes\",\"price\":250,\"portrait\":\"EllieRoseWilkens.jpg\"},{\"name\":\"Tracy Galindo\",\"id\":82,\"city\":\"Montreal\",\"country\":\"Canada\",\"tags\":[\"art\",\"fashion\",\"events\"],\"tagline\":\"Photographe freelance\",\"price\":500,\"portrait\":\"TracyGalindo.jpg\"},{\"name\":\"Nabeel Bradford\",\"id\":527,\"city\":\"Mexico City\",\"country\":\"Mexico\",\"tags\":[\"travel\",\"portrait\"],\"tagline\":\"Toujours aller de l'avant\",\"price\":350,\"portrait\":\"NabeelBradford.jpg\"},{\"name\":\"Rhode Dubois\",\"id\":925,\"city\":\"Barcelona\",\"country\":\"Spain\",\"tags\":[\"sport\",\"fashion\",\"events\",\"animals\"],\"tagline\":\"Je crée des souvenirs\",\"price\":275,\"portrait\":\"RhodeDubois.jpg\"},{\"name\":\"Marcel Nikolic\",\"id\":195,\"city\":\"Berlin\",\"country\":\"Germany\",\"tags\":[\"travel\",\"architecture\"],\"tagline\":\"Toujours à la recherche de LA photo\",\"price\":300,\"portrait\":\"MarcelNikolic.jpg\"}],\"media\":[{\"id\":342550,\"photographerId\":82,\"title\":\"Fashion Yellow Beach\",\"image\":\"Fashion_Yellow_Beach.jpg\",\"tags\":[\"fashion\"],\"likes\":62,\"date\":\"2011-12-08\",\"price\":55},{\"id\":8520927,\"photographerId\":82,\"title\":\"Fashion Urban Jungle\",\"image\":\"Fashion_Urban_Jungle.jpg\",\"tags\":[\"fashion\"],\"likes\":11,\"date\":\"2011-11-06\",\"price\":55},{\"id\":9025895,\"photographerId\":82,\"title\":\"Fashion Pattern on a Pattern\",\"image\":\"Fashion_Pattern_on_Pattern.jpg\",\"tags\":[\"fashion\"],\"likes\":72,\"date\":\"2013-08-12\",\"price\":55},{\"id\":9275938,\"photographerId\":82,\"title\":\"Wedding Gazebo\",\"image\":\"Event_WeddingGazebo.jpg\",\"tags\":[\"events\"],\"likes\":69,\"date\":\"2018-02-22\",\"price\":55},{\"id\":2053494,\"photographerId\":82,\"title\":\"Sparkles\",\"image\":\"Event_Sparklers.jpg\",\"tags\":[\"events\"],\"likes\":2,\"date\":\"2020-05-25\",\"price\":55},{\"id\":7324238,\"photographerId\":82,\"title\":\"18th Anniversary\",\"image\":\"Event_18thAnniversary.jpg\",\"tags\":[\"events\"],\"likes\":33,\"date\":\"2019-06-12\",\"price\":55},{\"id\":8328953,\"photographerId\":82,\"title\":\"Wooden Horse Sculpture\",\"video\":\"Art_Wooden_Horse_Sculpture.mp4\",\"tags\":[\"art\"],\"likes\":24,\"date\":\"2011-12-08\",\"price\":100},{\"id\":7502053,\"photographerId\":82,\"title\":\"Triangle Man\",\"image\":\"Art_Triangle_Man.jpg\",\"tags\":[\"art\"],\"likes\":88,\"date\":\"2007-05-07\",\"price\":55},{\"id\":8523492,\"photographerId\":82,\"title\":\"Purple Tunnel\",\"image\":\"Art_Purple_light.jpg\",\"tags\":[\"art\"],\"likes\":24,\"date\":\"2018-05-05\",\"price\":55},{\"id\":75902334,\"photographerId\":82,\"title\":\"Art Mine\",\"image\":\"Art_Mine.jpg\",\"tags\":[\"art\"],\"likes\":75,\"date\":\"2019-11-25\",\"price\":55},{\"id\":73852953,\"photographerId\":925,\"title\":\"8 Rows\",\"image\":\"Sport_2000_with_8.jpg\",\"tags\":[\"sport\"],\"likes\":52,\"date\":\"2013-02-30\",\"price\":70},{\"id\":92758372,\"photographerId\":925,\"title\":\"Fashion Wings\",\"image\":\"Fashion_Wings.jpg\",\"tags\":[\"fashion\"],\"likes\":58,\"date\":\"2018-07-17\",\"price\":70},{\"id\":32958383,\"photographerId\":925,\"title\":\"Melody Red on Stripes\",\"image\":\"Fashion_Melody_Red_on_Stripes.jpg\",\"tags\":[\"fashion\"],\"likes\":11,\"date\":\"2019-08-12\",\"price\":70},{\"id\":928587383,\"photographerId\":925,\"title\":\"Venture Conference\",\"image\":\"Event_VentureConference.jpg\",\"tags\":[\"events\"],\"likes\":2,\"date\":\"2019-01-02\",\"price\":70},{\"id\":725639493,\"photographerId\":925,\"title\":\"Product Pitch\",\"image\":\"Event_ProductPitch.jpg\",\"tags\":[\"events\"],\"likes\":3,\"date\":\"2019-05-20\",\"price\":70},{\"id\":23394384,\"photographerId\":925,\"title\":\"Musical Festival Keyboard\",\"image\":\"Event_KeyboardCheck.jpg\",\"tags\":[\"events\"],\"likes\":52,\"date\":\"2019-07-18\",\"price\":70},{\"id\":87367293,\"photographerId\":925,\"title\":\"Musical Festival Singer\",\"image\":\"Event_Emcee.jpg\",\"tags\":[\"events\"],\"likes\":23,\"date\":\"2018-02-22\",\"price\":70},{\"id\":593834784,\"photographerId\":925,\"title\":\"Animal Majesty\",\"image\":\"Animals_Majesty.jpg\",\"tags\":[\"animals\"],\"likes\":52,\"date\":\"2017-03-13\",\"price\":70},{\"id\":83958935,\"photographerId\":925,\"title\":\"Cute Puppy on Sunset\",\"video\":\"Animals_Puppiness.mp4\",\"tags\":[\"animals\"],\"likes\":52,\"date\":\"2016-06-12\",\"price\":70},{\"id\":394583434,\"photographerId\":527,\"title\":\"Rock Mountains\",\"video\":\"Travel_Rock_Mountains.mp4\",\"tags\":[\"travel\"],\"likes\":23,\"date\":\"2017-03-18\",\"price\":45},{\"id\":343423425,\"photographerId\":527,\"title\":\"Outdoor Baths\",\"image\":\"Travel_Outdoor_Baths.jpg\",\"tags\":[\"travel\"],\"likes\":101,\"date\":\"2017-04-03\",\"price\":45},{\"id\":73434243,\"photographerId\":527,\"title\":\"Road into the Hill\",\"image\":\"Travel_Road_into_Hill.jpg\",\"tags\":[\"travel\"],\"likes\":99,\"date\":\"2018-04-30\",\"price\":45},{\"id\":23425523,\"photographerId\":527,\"title\":\"Bridge into the Forest\",\"image\":\"Travel_Bridge_into_Forest.jpg\",\"tags\":[\"travel\"],\"likes\":34,\"date\":\"2016-04-05\",\"price\":45},{\"id\":23134513,\"photographerId\":527,\"title\":\"Boat Wonderer\",\"image\":\"Travel_Boat_Wanderer.jpg\",\"tags\":[\"travel\"],\"likes\":23,\"date\":\"2017-03-18\",\"price\":45},{\"id\":92352352,\"photographerId\":527,\"title\":\"Portrait Sunkiss\",\"image\":\"Portrait_Sunkissed.jpg\",\"tags\":[\"portrait\"],\"likes\":66,\"date\":\"2018-05-24\",\"price\":45},{\"id\":34513453,\"photographerId\":527,\"title\":\"Shaw Potrait\",\"image\":\"Portrait_Shaw.jpg\",\"tags\":[\"portait\"],\"likes\":52,\"date\":\"2017-04-21\",\"price\":45},{\"id\":23523533,\"photographerId\":527,\"title\":\"Alexandra\",\"image\":\"Portrait_Alexandra.jpg\",\"tags\":[\"portait\"],\"likes\":95,\"date\":\"2018-11-02\",\"price\":45},{\"id\":525834234,\"photographerId\":527,\"title\":\"Afternoon Break\",\"image\":\"Portrait_AfternoonBreak.jpg\",\"tags\":[\"portait\"],\"likes\":25,\"date\":\"2019-01-02\",\"price\":45},{\"id\":623534343,\"photographerId\":243,\"title\":\"Lonesome\",\"image\":\"Travel_Lonesome.jpg\",\"tags\":[\"travel\"],\"likes\":88,\"date\":\"2019-02-03\",\"price\":45},{\"id\":625025343,\"photographerId\":243,\"title\":\"Hillside Color\",\"image\":\"Travel_HillsideColor.jpg\",\"tags\":[\"travel\"],\"likes\":85,\"date\":\"2019-04-03\",\"price\":45},{\"id\":2525345343,\"photographerId\":243,\"title\":\"Wednesday Potrait\",\"image\":\"Portrait_Wednesday.jpg\",\"tags\":[\"portait\"],\"likes\":34,\"date\":\"2019-04-07\",\"price\":45},{\"id\":2523434634,\"photographerId\":243,\"title\":\"Nora Portrait\",\"image\":\"Portrait_Nora.jpg\",\"tags\":[\"portait\"],\"likes\":63,\"date\":\"2019-04-07\",\"price\":45},{\"id\":398847109,\"photographerId\":243,\"title\":\"Raw Black Portrait\",\"image\":\"Portrait_Background.jpg\",\"tags\":[\"portait\"],\"likes\":55,\"date\":\"2019-06-20\",\"price\":45},{\"id\":2534342,\"photographerId\":243,\"title\":\"Seaside Wedding\",\"image\":\"Event_SeasideWedding.jpg\",\"tags\":[\"events\"],\"likes\":25,\"date\":\"2019-06-21\",\"price\":45},{\"id\":65235234,\"photographerId\":243,\"title\":\"Boulder Wedding\",\"image\":\"Event_PintoWedding.jpg\",\"tags\":[\"events\"],\"likes\":52,\"date\":\"2019-06-25\",\"price\":45},{\"id\":23523434,\"photographerId\":243,\"title\":\"Benevides Wedding\",\"image\":\"Event_BenevidesWedding.jpg\",\"tags\":[\"events\"],\"likes\":77,\"date\":\"2019-06-28\",\"price\":45},{\"id\":5234343,\"photographerId\":243,\"title\":\"Wild Horses in the Mountains\",\"video\":\"Animals_Wild_Horses_in_the_mountains.mp4\",\"tags\":[\"animals\"],\"likes\":142,\"date\":\"2019-08-23\",\"price\":60},{\"id\":95234343,\"photographerId\":243,\"title\":\"Rainbow Bird\",\"image\":\"Animals_Rainbow.jpg\",\"tags\":[\"animals\"],\"likes\":59,\"date\":\"2019-07-02\",\"price\":60},{\"id\":52343416,\"photographerId\":195,\"title\":\"Japanese Tower, Kyoto\",\"image\":\"Travel_Tower.jpg\",\"tags\":[\"travel\"],\"likes\":25,\"date\":\"2019-04-03\",\"price\":60},{\"id\":2523434,\"photographerId\":195,\"title\":\"Senset on Canals, Venice\",\"image\":\"Travel_SunsetonCanals.jpg\",\"tags\":[\"travel\"],\"likes\":53,\"date\":\"2019-05-06\",\"price\":60},{\"id\":95293534,\"photographerId\":195,\"title\":\"Mountain and Lake\",\"image\":\"Travel_OpenMountain.jpg\",\"tags\":[\"travel\"],\"likes\":33,\"date\":\"2019-05-12\",\"price\":60},{\"id\":356234343,\"photographerId\":195,\"title\":\"City Bike and Stair, Paris\",\"image\":\"Travel_Bike_and_Stair.jpg\",\"tags\":[\"travel\"],\"likes\":53,\"date\":\"2019-06-20\",\"price\":60},{\"id\":235234343,\"photographerId\":195,\"title\":\"Adventure Door, India\",\"image\":\"Travel_Adventure_Door.jpg\",\"tags\":[\"travel\"],\"likes\":63,\"date\":\"2019-06-26\",\"price\":60},{\"id\":6234234343,\"photographerId\":195,\"title\":\"Contrast, St Petersburg\",\"image\":\"Architecture_Contrast.jpg\",\"tags\":[\"architecture\"],\"likes\":52,\"date\":\"2019-06-30\",\"price\":60},{\"id\":6525666253,\"photographerId\":195,\"title\":\"On a Hill, Tibet\",\"image\":\"Architecture_On_a_hill.jpg\",\"tags\":[\"architecture\"],\"likes\":63,\"date\":\"2019-07-20\",\"price\":60},{\"id\":98252523433,\"photographerId\":195,\"title\":\"Leaning Tower, Pisa\",\"image\":\"Architecture_Dome.jpg\",\"tags\":[\"architecture\"],\"likes\":88,\"date\":\"2020-01-05\",\"price\":60},{\"id\":9259398453,\"photographerId\":195,\"title\":\"Circle Highways, Buenos Aires\",\"video\":\"Architecture_coverr_circle_empty_highway_in_buenos_aires_587740985637.mp4\",\"tags\":[\"architecture\"],\"likes\":57,\"date\":\"2020-01-20\",\"price\":65},{\"id\":3523523534,\"photographerId\":195,\"title\":\"Corner Building and Blue Sky\",\"image\":\"Architecture_Corner_Room.jpg\",\"tags\":[\"architecture\"],\"likes\":54,\"date\":\"2020-05-05\",\"price\":60},{\"id\":952343423,\"photographerId\":930,\"title\":\"Tricks in the Air\",\"video\":\"Sport_Tricks_in_the_air.mp4\",\"tags\":[\"sport\"],\"likes\":150,\"date\":\"2018-02-30\",\"price\":70},{\"id\":235234343,\"photographerId\":930,\"title\":\"Climber\",\"image\":\"Sport_Next_Hold.jpg\",\"tags\":[\"sport\"],\"likes\":101,\"date\":\"2018-03-05\",\"price\":65},{\"id\":235343222,\"photographerId\":930,\"title\":\"Surfer\",\"image\":\"sport_water_tunnel.jpg\",\"tags\":[\"sport\"],\"likes\":103,\"date\":\"2018-03-10\",\"price\":70},{\"id\":7775342343,\"photographerId\":930,\"title\":\"Skier\",\"image\":\"Sport_Sky_Cross.jpg\",\"tags\":[\"sport\"],\"likes\":77,\"date\":\"2018-04-16\",\"price\":50},{\"id\":9253445784,\"photographerId\":930,\"title\":\"Race End\",\"image\":\"Sport_Race_End.jpg\",\"tags\":[\"sport\"],\"likes\":88,\"date\":\"2018-04-22\",\"price\":65},{\"id\":22299394,\"photographerId\":930,\"title\":\"Jump!\",\"image\":\"Sport_Jump.jpg\",\"tags\":[\"sport\"],\"likes\":95,\"date\":\"2018-04-27\",\"price\":70},{\"id\":3452342633,\"photographerId\":930,\"title\":\"White Light\",\"image\":\"Architecture_White_Light.jpg\",\"tags\":[\"architecture\"],\"likes\":52,\"date\":\"2018-05-03\",\"price\":75},{\"id\":939234243,\"photographerId\":930,\"title\":\"Water on Modern Building\",\"image\":\"Architecture_Water_on_Modern.jpg\",\"tags\":[\"architecture\"],\"likes\":55,\"date\":\"2018-05-10\",\"price\":72},{\"id\":222959233,\"photographerId\":930,\"title\":\"Horseshoe\",\"image\":\"Architecture_Horseshoe.jpg\",\"tags\":[\"architecture\"],\"likes\":85,\"date\":\"2018-05-15\",\"price\":71},{\"id\":965933434,\"photographerId\":930,\"title\":\"Cross Bar\",\"image\":\"Architecture_Cross_Bar.jpg\",\"tags\":[\"architecture\"],\"likes\":66,\"date\":\"2018-05-20\",\"price\":58},{\"id\":777723343,\"photographerId\":930,\"title\":\"Connected Curves\",\"image\":\"Architecture_Connected_Curves.jpg\",\"tags\":[\"architecture\"],\"likes\":79,\"date\":\"2018-05-21\",\"price\":80}]}");
 
 },{}],"bmzaC":[function(require,module,exports) {
 "use strict";
@@ -5054,7 +5231,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 require("core-js/modules/web.dom-collections.for-each.js");
-class EventService {
+/**
+ * Handle events
+ *
+ * @export
+ * @class EventService
+ */ class EventService {
     constructor(){
         document.addEventListener('keyup', this.onKeyUp);
     }
@@ -5104,152 +5286,7 @@ class EventService {
 }
 exports.default = EventService;
 
-},{"core-js/modules/web.dom-collections.for-each.js":"917na"}],"917na":[function(require,module,exports) {
-var global = require('../internals/global');
-var DOMIterables = require('../internals/dom-iterables');
-var DOMTokenListPrototype = require('../internals/dom-token-list-prototype');
-var forEach = require('../internals/array-for-each');
-var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
-var handlePrototype = function(CollectionPrototype) {
-    // some Chrome versions have non-configurable methods on DOMTokenList
-    if (CollectionPrototype && CollectionPrototype.forEach !== forEach) try {
-        createNonEnumerableProperty(CollectionPrototype, 'forEach', forEach);
-    } catch (error) {
-        CollectionPrototype.forEach = forEach;
-    }
-};
-for(var COLLECTION_NAME in DOMIterables)handlePrototype(global[COLLECTION_NAME] && global[COLLECTION_NAME].prototype);
-handlePrototype(DOMTokenListPrototype);
-
-},{"../internals/global":"a4GR8","../internals/dom-iterables":"2Umkc","../internals/dom-token-list-prototype":"gLY6L","../internals/array-for-each":"dwspA","../internals/create-non-enumerable-property":"73EkF"}],"dwspA":[function(require,module,exports) {
-'use strict';
-var $forEach = require('../internals/array-iteration').forEach;
-var arrayMethodIsStrict = require('../internals/array-method-is-strict');
-var STRICT_METHOD = arrayMethodIsStrict('forEach');
-// `Array.prototype.forEach` method implementation
-// https://tc39.es/ecma262/#sec-array.prototype.foreach
-module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */ ) {
-    return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-// eslint-disable-next-line es/no-array-prototype-foreach -- safe
-} : [].forEach;
-
-},{"../internals/array-iteration":"ciNJ0","../internals/array-method-is-strict":"2hfFU"}],"ciNJ0":[function(require,module,exports) {
-var bind = require('../internals/function-bind-context');
-var IndexedObject = require('../internals/indexed-object');
-var toObject = require('../internals/to-object');
-var toLength = require('../internals/to-length');
-var arraySpeciesCreate = require('../internals/array-species-create');
-var push = [].push;
-// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterReject }` methods implementation
-var createMethod = function(TYPE) {
-    var IS_MAP = TYPE == 1;
-    var IS_FILTER = TYPE == 2;
-    var IS_SOME = TYPE == 3;
-    var IS_EVERY = TYPE == 4;
-    var IS_FIND_INDEX = TYPE == 6;
-    var IS_FILTER_REJECT = TYPE == 7;
-    var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
-    return function($this, callbackfn, that, specificCreate) {
-        var O = toObject($this);
-        var self = IndexedObject(O);
-        var boundFunction = bind(callbackfn, that, 3);
-        var length = toLength(self.length);
-        var index = 0;
-        var create = specificCreate || arraySpeciesCreate;
-        var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
-        var value, result;
-        for(; length > index; index++)if (NO_HOLES || index in self) {
-            value = self[index];
-            result = boundFunction(value, index, O);
-            if (TYPE) {
-                if (IS_MAP) target[index] = result; // map
-                else if (result) switch(TYPE){
-                    case 3:
-                        return true; // some
-                    case 5:
-                        return value; // find
-                    case 6:
-                        return index; // findIndex
-                    case 2:
-                        push.call(target, value); // filter
-                }
-                else switch(TYPE){
-                    case 4:
-                        return false; // every
-                    case 7:
-                        push.call(target, value); // filterReject
-                }
-            }
-        }
-        return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
-    };
-};
-module.exports = {
-    // `Array.prototype.forEach` method
-    // https://tc39.es/ecma262/#sec-array.prototype.foreach
-    forEach: createMethod(0),
-    // `Array.prototype.map` method
-    // https://tc39.es/ecma262/#sec-array.prototype.map
-    map: createMethod(1),
-    // `Array.prototype.filter` method
-    // https://tc39.es/ecma262/#sec-array.prototype.filter
-    filter: createMethod(2),
-    // `Array.prototype.some` method
-    // https://tc39.es/ecma262/#sec-array.prototype.some
-    some: createMethod(3),
-    // `Array.prototype.every` method
-    // https://tc39.es/ecma262/#sec-array.prototype.every
-    every: createMethod(4),
-    // `Array.prototype.find` method
-    // https://tc39.es/ecma262/#sec-array.prototype.find
-    find: createMethod(5),
-    // `Array.prototype.findIndex` method
-    // https://tc39.es/ecma262/#sec-array.prototype.findIndex
-    findIndex: createMethod(6),
-    // `Array.prototype.filterReject` method
-    // https://github.com/tc39/proposal-array-filtering
-    filterReject: createMethod(7)
-};
-
-},{"../internals/function-bind-context":"1epb9","../internals/indexed-object":"1hg9G","../internals/to-object":"ghTKi","../internals/to-length":"coWuj","../internals/array-species-create":"beybx"}],"beybx":[function(require,module,exports) {
-var arraySpeciesConstructor = require('../internals/array-species-constructor');
-// `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function(originalArray, length) {
-    return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
-};
-
-},{"../internals/array-species-constructor":"ipwOm"}],"ipwOm":[function(require,module,exports) {
-var isObject = require('../internals/is-object');
-var isArray = require('../internals/is-array');
-var wellKnownSymbol = require('../internals/well-known-symbol');
-var SPECIES = wellKnownSymbol('species');
-// a part of `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function(originalArray) {
-    var C;
-    if (isArray(originalArray)) {
-        C = originalArray.constructor;
-        // cross-realm fallback
-        if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
-        else if (isObject(C)) {
-            C = C[SPECIES];
-            if (C === null) C = undefined;
-        }
-    }
-    return C === undefined ? Array : C;
-};
-
-},{"../internals/is-object":"d60Kc","../internals/is-array":"kiY2Q","../internals/well-known-symbol":"6sZ59"}],"kiY2Q":[function(require,module,exports) {
-var classof = require('../internals/classof-raw');
-// `IsArray` abstract operation
-// https://tc39.es/ecma262/#sec-isarray
-// eslint-disable-next-line es/no-array-isarray -- safe
-module.exports = Array.isArray || function isArray(arg) {
-    return classof(arg) == 'Array';
-};
-
-},{"../internals/classof-raw":"8F0bi"}],"kj83z":[function(require,module,exports) {
+},{"core-js/modules/web.dom-collections.for-each.js":"917na"}],"kj83z":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5358,13 +5395,12 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _ViewMedias = _interopRequireDefault(require("./ViewMedias"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-class ViewVideo {
+/**
+ *
+ *
+ * @export
+ * @class ViewVideo
+ */ class ViewVideo {
     constructor(_ref){
         let { name , id , firstName , title  } = _ref;
         this.id = id;
@@ -5373,12 +5409,12 @@ class ViewVideo {
         this.title = title;
     }
     toString() {
-        return "\n        <video id=\"".concat(this.id, "\" alt\"").concat(this.id, "\"\" class=\"video media\" src=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\"></video>");
+        return "\n        <video controls id=\"".concat(this.id, "\" class=\"video media\">\n            <source src=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
     }
 }
 exports.default = ViewVideo;
 
-},{"./ViewMedias":"kj83z"}],"9ssES":[function(require,module,exports) {
+},{}],"9ssES":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5404,14 +5440,19 @@ class ViewPictures {
 }
 exports.default = ViewPictures;
 
-},{"./ViewMedias":"kj83z"}],"l3zEO":[function(require,module,exports) {
+},{"./ViewMedias":"kj83z"}],"guRfF":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-require("core-js/modules/web.dom-collections.for-each.js");
-var _bodyScrollLock = require("../body-scroll-lock");
+require("core-js/modules/es.regexp.to-string.js");
+var _MediaFactory = _interopRequireDefault(require("./MediaFactory"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 /**
  * @property {HTMLElement} element
  * @property {string} imageTitle
@@ -5420,306 +5461,81 @@ var _bodyScrollLock = require("../body-scroll-lock");
  * @export
  * @class Lightbox
  */ class Lightbox {
-    static init(medias, firstNameOfPhotographer) {
-        const mediasElements = Array.from(document.querySelectorAll('.video.media, .image.media'));
-        mediasElements.forEach((link)=>link.addEventListener('click', (e)=>{
-                e.preventDefault();
-                new Lightbox(e.currentTarget.getAttribute('src'), e.currentTarget.getAttribute('alt'), e.currentTarget.getAttribute('id'), medias, firstNameOfPhotographer);
-            })
-        );
-    }
-    /**
-   *Creates an instance of Lightbox.
-   * @param {string} url Image url
-   * @param {string} title Image title
-   * @param {string[]} imagesPaths Image paths
-   * @memberof Lightbox
-   */ constructor(url1, title1, id1, medias, firstNameOfPhotographer){
-        this.element = this.buildDOM(url1, title1, id1);
+    constructor(medias, firstNameOfPhotographer){
         this.medias = medias;
-        this.url = url1;
-        this.title = title1;
-        this.id = id1;
-        this.firstNameOfPhotographer = firstNameOfPhotographer;
-        this.loadImage(url1, title1);
-        this.onKeyUp = this.onKeyUp.bind(this);
-        document.body.appendChild(this.element);
-        _bodyScrollLock.disableBodyScroll(this.element);
+        this.path = firstNameOfPhotographer;
+        this.index = 0;
         document.addEventListener('keyup', this.onKeyUp);
+        this.current = this.getCurrentMedia();
     }
-    /**
-   * Close the lighbox
-   * @param {MouseEvent|KeyboardEvent} e
-   * @memberof Lightbox
-   */ close(e) {
-        e.preventDefault();
-        this.element.classList.add('fadeout');
-        _bodyScrollLock.enableBodyScroll(this.element);
+    open(key) {
+        this.index = key;
+        this.display();
+    }
+    close() {
+        document.querySelector('.lightbox-bg').classList.add('fadeout');
         window.setTimeout(()=>{
-            this.element.parentElement.removeChild(this.element);
+            document.querySelector('.lightbox-bg').remove();
         }, 500);
-        document.removeEventListener('keyup', this.onKeyUp);
     }
-    /**
-   * 
-   * @param {MouseEvent|KeyboardEvent} e
-   * @memberof Lightbox
-   */ next(e) {
-        e.preventDefault();
-        const getIdCurrentImage = ()=>Number(document.querySelector('.lightbox .media').getAttribute("id"))
-        ;
-        const indexOfCurrentElementInArray = ()=>this.medias.findIndex((element)=>element.id === getIdCurrentImage()
-            )
-        ;
-        indexOfCurrentElementInArray() === this.medias.length - 1 ? indexOfCurrentElementInArray = -1 : indexOfCurrentElementInArray();
-        console.log(indexOfCurrentElementInArray());
-        this.url = this.medias[indexOfCurrentElementInArray() + 1].image;
-        this.title = this.medias[indexOfCurrentElementInArray() + 1].title;
-        this.id = this.medias[indexOfCurrentElementInArray() + 1].id;
-        this.loadImage(this.medias[indexOfCurrentElementInArray() + 1].image);
+    next() {
+        this.index += 1;
+        if (this.index === this.medias.length) this.index = 0;
+        this.display();
     }
-    /**
-   * 
-   * @param {MouseEvent|KeyboardEvent} e
-   * @memberof Lightbox
-   */ prev(e) {
-        e.preventDefault();
-        let i = this.images.findIndex((image)=>image === this.url
-        );
-        if (i === 0) i = this.images.length;
-        this.loadImage(this.images[i - 1]);
+    prev() {
+        this.index -= 1;
+        if (this.index === -1) this.index = this.medias.length - 1;
+        this.display();
     }
-    loadImage(url, title) {
-        console.log(url);
-        const container = this.element.querySelector('.lightbox-bg .media img');
-        container.setAttribute('src', url);
-        this.url = url;
-        this.element.querySelector('figcaption').innerText = title;
+    getCurrentMedia() {
+        return this.medias[this.index];
     }
-    /**
-   * @param {KeyboardEvent} e
-   * @memberof Lightbox
-   */ onKeyUp(e) {
-        if (e.key === 'Escape') this.close(e);
-        else if (e.key === 'ArrowLeft') this.prev(e);
-        else if (e.key === 'ArrowRight') this.next(e);
-    }
-    /**
-   * @param {*} url
-   * @memberof Lightbox
-   */ buildDOM(url, title, id) {
-        const dom = document.createElement('div');
-        dom.classList.add('lightbox-bg');
-        dom.innerHTML = "\n        <div class=\"lightbox\">\n            <button class=\"lightbox__close\"></button>\n            <button class=\"lightbox__next\"></button>\n            <button class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                        <img id=\"".concat(id, "\" src=\"").concat(url, "\" alt=\"").concat(title, "\">\n                    </div>\n                    <figcaption>").concat(title, "</figcaption>\n                </figure>\n            </div>\n        </div>\n        ");
-        dom.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this));
-        dom.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
-        dom.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this));
-        return dom;
+    display() {
+        const current = this.getCurrentMedia();
+        let element = document.querySelector('.lightbox-bg');
+        if (!element) {
+            element = document.createElement('div');
+            element.classList.add('lightbox-bg');
+            document.body.appendChild(element);
+            document.body.addEventListener('keyup', (evt)=>{
+                if (evt.key === 'ArrowRight') this.next();
+            });
+            document.body.addEventListener('keyup', (evt)=>{
+                if (evt.key === 'ArrowLeft') this.prev();
+            });
+        }
+        element.innerHTML = "\n        <div class=\"lightbox\">\n            <button class=\"lightbox__close\"></button>\n            <button class=\"lightbox__next\"></button>\n            <button class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                    </div>\n                    <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
+        element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
+        element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this));
+        element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this)); //Set height of lightbox
+        element.setAttribute('height', window.innerHeight);
     }
 }
 exports.default = Lightbox;
 
-},{"core-js/modules/web.dom-collections.for-each.js":"917na","../body-scroll-lock":"8B2Jk"}],"8B2Jk":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.to-string.js":"7sKSf","./MediaFactory":"fAw1k"}],"8nT7Q":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.enableBodyScroll = exports.clearAllBodyScrollLocks = exports.disableBodyScroll = void 0;
-require("core-js/modules/es.array.iterator.js");
-require("core-js/modules/web.dom-collections.iterator.js");
-require("core-js/modules/web.dom-collections.for-each.js");
-// Older browsers don't support event options, feature detect it.
-// Adopted and modified solution from Bohdan Didukh (2017)
-// https://stackoverflow.com/questions/41594997/ios-10-safari-prevent-scrolling-behind-a-fixed-overlay-and-maintain-scroll-posi
-let hasPassiveEvents = false;
-if (typeof window !== 'undefined') {
-    const passiveTestOptions = {
-        get passive () {
-            hasPassiveEvents = true;
-            return undefined;
-        }
-    };
-    window.addEventListener('testPassive', null, passiveTestOptions);
-    window.removeEventListener('testPassive', null, passiveTestOptions);
+exports.default = void 0;
+/**
+ *
+ *
+ * @export
+ * @class EventScrollToTop
+ */ class EventScrollToTop {
+    static scrollToTop(element) {
+        if (window.scrollY) {
+            element.classList.add('display');
+            element.addEventListener('click', ()=>window.scrollTo(0, 0)
+            );
+        } else if (window.screenY === 0) element.classList.remove('display');
+    }
 }
-const isIosDevice = typeof window !== 'undefined' && window.navigator && window.navigator.platform && (/iP(ad|hone|od)/.test(window.navigator.platform) || window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
-let locks = [];
-let documentListenerAdded = false;
-let initialClientY = -1;
-let previousBodyOverflowSetting;
-let previousBodyPosition;
-let previousBodyPaddingRight; // returns true if `el` should be allowed to receive touchmove events.
-const allowTouchMove = (el)=>locks.some((lock)=>{
-        if (lock.options.allowTouchMove && lock.options.allowTouchMove(el)) return true;
-        return false;
-    })
-;
-const preventDefault = (rawEvent)=>{
-    const e = rawEvent || window.event; // For the case whereby consumers adds a touchmove event listener to document.
-    // Recall that we do document.addEventListener('touchmove', preventDefault, { passive: false })
-    // in disableBodyScroll - so if we provide this opportunity to allowTouchMove, then
-    // the touchmove event on document will break.
-    if (allowTouchMove(e.target)) return true;
-     // Do not prevent if the event has more than one touch (usually meaning this is a multi touch gesture like pinch to zoom).
-    if (e.touches.length > 1) return true;
-    if (e.preventDefault) e.preventDefault();
-    return false;
-};
-const setOverflowHidden = (options)=>{
-    // If previousBodyPaddingRight is already set, don't set it again.
-    if (previousBodyPaddingRight === undefined) {
-        const reserveScrollBarGap = !!options && options.reserveScrollBarGap === true;
-        const scrollBarGap = window.innerWidth - document.documentElement.clientWidth;
-        if (reserveScrollBarGap && scrollBarGap > 0) {
-            const computedBodyPaddingRight = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'), 10);
-            previousBodyPaddingRight = document.body.style.paddingRight;
-            document.body.style.paddingRight = "".concat(computedBodyPaddingRight + scrollBarGap, "px");
-        }
-    } // If previousBodyOverflowSetting is already set, don't set it again.
-    if (previousBodyOverflowSetting === undefined) {
-        previousBodyOverflowSetting = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-    }
-};
-const restoreOverflowSetting = ()=>{
-    if (previousBodyPaddingRight !== undefined) {
-        document.body.style.paddingRight = previousBodyPaddingRight; // Restore previousBodyPaddingRight to undefined so setOverflowHidden knows it
-        // can be set again.
-        previousBodyPaddingRight = undefined;
-    }
-    if (previousBodyOverflowSetting !== undefined) {
-        document.body.style.overflow = previousBodyOverflowSetting; // Restore previousBodyOverflowSetting to undefined
-        // so setOverflowHidden knows it can be set again.
-        previousBodyOverflowSetting = undefined;
-    }
-};
-const setPositionFixed = ()=>window.requestAnimationFrame(()=>{
-        // If previousBodyPosition is already set, don't set it again.
-        if (previousBodyPosition === undefined) {
-            previousBodyPosition = {
-                position: document.body.style.position,
-                top: document.body.style.top,
-                left: document.body.style.left
-            }; // Update the dom inside an animation frame
-            const { scrollY , scrollX , innerHeight  } = window;
-            document.body.style.position = 'fixed';
-            document.body.style.top = "".concat(-scrollY, "px");
-            document.body.style.left = "".concat(-scrollX, "px");
-            setTimeout(()=>window.requestAnimationFrame(()=>{
-                    // Attempt to check if the bottom bar appeared due to the position change
-                    const bottomBarHeight = innerHeight - window.innerHeight;
-                    if (bottomBarHeight && scrollY >= innerHeight) // Move the content further up so that the bottom bar doesn't hide it
-                    document.body.style.top = -(scrollY + bottomBarHeight);
-                })
-            , 300);
-        }
-    })
-;
-const restorePositionSetting = ()=>{
-    if (previousBodyPosition !== undefined) {
-        // Convert the position from "px" to Int
-        const y = -parseInt(document.body.style.top, 10);
-        const x = -parseInt(document.body.style.left, 10); // Restore styles
-        document.body.style.position = previousBodyPosition.position;
-        document.body.style.top = previousBodyPosition.top;
-        document.body.style.left = previousBodyPosition.left; // Restore scroll
-        window.scrollTo(x, y);
-        previousBodyPosition = undefined;
-    }
-}; // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
-const isTargetElementTotallyScrolled = (targetElement)=>targetElement ? targetElement.scrollHeight - targetElement.scrollTop <= targetElement.clientHeight : false
-;
-const handleScroll = (event, targetElement)=>{
-    const clientY = event.targetTouches[0].clientY - initialClientY;
-    if (allowTouchMove(event.target)) return false;
-    if (targetElement && targetElement.scrollTop === 0 && clientY > 0) // element is at the top of its scroll.
-    return preventDefault(event);
-    if (isTargetElementTotallyScrolled(targetElement) && clientY < 0) // element is at the bottom of its scroll.
-    return preventDefault(event);
-    event.stopPropagation();
-    return true;
-};
-const disableBodyScroll = (targetElement, options)=>{
-    // targetElement must be provided
-    if (!targetElement) {
-        // eslint-disable-next-line no-console
-        console.error('disableBodyScroll unsuccessful - targetElement must be provided when calling disableBodyScroll on IOS devices.');
-        return;
-    } // disableBodyScroll must not have been called on this targetElement before
-    if (locks.some((lock)=>lock.targetElement === targetElement
-    )) return;
-    const lock = {
-        targetElement,
-        options: options || {
-        }
-    };
-    locks = [
-        ...locks,
-        lock
-    ];
-    if (isIosDevice) setPositionFixed();
-    else setOverflowHidden(options);
-    if (isIosDevice) {
-        targetElement.ontouchstart = (event)=>{
-            if (event.targetTouches.length === 1) // detect single touch.
-            initialClientY = event.targetTouches[0].clientY;
-        };
-        targetElement.ontouchmove = (event)=>{
-            if (event.targetTouches.length === 1) // detect single touch.
-            handleScroll(event, targetElement);
-        };
-        if (!documentListenerAdded) {
-            document.addEventListener('touchmove', preventDefault, hasPassiveEvents ? {
-                passive: false
-            } : undefined);
-            documentListenerAdded = true;
-        }
-    }
-};
-exports.disableBodyScroll = disableBodyScroll;
-const clearAllBodyScrollLocks = ()=>{
-    if (isIosDevice) {
-        // Clear all locks ontouchstart/ontouchmove handlers, and the references.
-        locks.forEach((lock)=>{
-            lock.targetElement.ontouchstart = null;
-            lock.targetElement.ontouchmove = null;
-        });
-        if (documentListenerAdded) {
-            document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? {
-                passive: false
-            } : undefined);
-            documentListenerAdded = false;
-        } // Reset initial clientY.
-        initialClientY = -1;
-    }
-    if (isIosDevice) restorePositionSetting();
-    else restoreOverflowSetting();
-    locks = [];
-};
-exports.clearAllBodyScrollLocks = clearAllBodyScrollLocks;
-const enableBodyScroll = (targetElement)=>{
-    if (!targetElement) {
-        // eslint-disable-next-line no-console
-        console.error('enableBodyScroll unsuccessful - targetElement must be provided when calling enableBodyScroll on IOS devices.');
-        return;
-    }
-    locks = locks.filter((lock)=>lock.targetElement !== targetElement
-    );
-    if (isIosDevice) {
-        targetElement.ontouchstart = null;
-        targetElement.ontouchmove = null;
-        if (documentListenerAdded && locks.length === 0) {
-            document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? {
-                passive: false
-            } : undefined);
-            documentListenerAdded = false;
-        }
-    }
-    if (isIosDevice) restorePositionSetting();
-    else restoreOverflowSetting();
-};
-exports.enableBodyScroll = enableBodyScroll;
+exports.default = EventScrollToTop;
 
-},{"core-js/modules/es.array.iterator.js":"8YPvt","core-js/modules/web.dom-collections.iterator.js":"gC8gE","core-js/modules/web.dom-collections.for-each.js":"917na"}]},["050sn","4UoAk"], "4UoAk", "parcelRequire8288")
+},{}]},["050sn","4UoAk"], "4UoAk", "parcelRequire8288")
 
 //# sourceMappingURL=photographer.36ff0b10.js.map

@@ -43,6 +43,18 @@ body {
   width: auto;
   max-width: 1024px;
 }
+@media screen and (max-width: 768px) {
+  body {
+    padding: 0 0.9rem;
+    position: relative;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  body {
+    padding: 0;
+    position: relative;
+  }
+}
 /*
 * _typography.scss
 */
@@ -61,6 +73,11 @@ body {
   display: flex;
   align-items: center;
 }
+@media screen and (max-width: 768px) {
+  .filter {
+    display: none;
+  }
+}
 .filter span {
   font-weight: 900;
 }
@@ -75,6 +92,11 @@ body {
   border-radius: 5px;
   color: #FFF;
   background: #901c1c;
+}
+@media screen and (max-width: 768px) {
+  .filter .dropdown button {
+    letter-spacing: 2px;
+  }
 }
 .filter .dropdown .btn-group {
   margin-left: 1.5rem;
@@ -147,6 +169,11 @@ body {
 #logo {
   padding: 20px;
 }
+@media screen and (max-width: 768px) {
+  #logo {
+    padding: 1.5rem 0.5rem;
+  }
+}
 .article {
   width: 300px;
   display: flex;
@@ -169,10 +196,22 @@ body {
   box-sizing: border-box;
   align-items: center;
 }
+@media screen and (max-width: 768px) {
+  .article__img {
+    width: 120px;
+    height: 120px;
+    margin: 0 0 auto 0;
+  }
+}
 .article__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+@media screen and (max-width: 768px) {
+  .article__img img {
+    width: -webkit-fill-available;
+  }
 }
 .article a {
   width: 100%;
@@ -246,6 +285,13 @@ body {
   box-sizing: border-box;
   overflow: hidden;
 }
+@media screen and (max-width: 768px) {
+  .photographerHeader {
+    background: none;
+    padding: 0;
+    justify-content: center;
+  }
+}
 .photographerHeader .details {
   align-items: flex-start;
   width: auto;
@@ -284,13 +330,31 @@ body {
 .photographerHeader .details .tags {
   margin: 0.6rem 0;
 }
+@media screen and (max-width: 768px) {
+  .photographerHeader .details .title,
+.photographerHeader .details .localisation,
+.photographerHeader .details .tagline,
+.photographerHeader .details .tags {
+    margin: 0;
+    padding: 2px 0;
+  }
+}
 .photographerHeader .button {
   align-self: flex-start;
   margin: 1rem 2rem;
 }
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 768px) {
   .photographerHeader .button {
-    position: absolute;
+    position: fixed;
+    bottom: 1.5rem;
+    left: 10%;
+    right: 10%;
+    text-align: center;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .photographerHeader .button {
+    position: fixed;
     bottom: 1rem;
     left: 25%;
     right: 25%;
@@ -305,6 +369,16 @@ body {
   color: #FFF;
   background: #901c1c;
 }
+@media screen and (max-width: 768px) {
+  .photographerHeader .button .btn {
+    letter-spacing: 2px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .photographerHeader .button .btn {
+    padding: 0.5rem;
+  }
+}
 .photographerHeader .img {
   margin-left: auto;
   width: 200px;
@@ -318,10 +392,22 @@ body {
   box-sizing: border-box;
   align-items: center;
 }
+@media screen and (max-width: 768px) {
+  .photographerHeader .img {
+    width: 120px;
+    height: 120px;
+    margin: 0 0 auto 0;
+  }
+}
 .photographerHeader .img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+@media screen and (max-width: 768px) {
+  .photographerHeader .img img {
+    width: -webkit-fill-available;
+  }
 }
 .photographerHeader .info {
   position: fixed;
@@ -332,6 +418,18 @@ body {
   background: #db8876;
   border-radius: 5px 5px 0 0;
   cursor: initial;
+}
+@media screen and (max-width: 768px) {
+  .photographerHeader .info {
+    position: absolute;
+    padding: 0.5rem;
+    font-size: 95%;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .photographerHeader .info {
+    position: absolute;
+  }
 }
 .photographerHeader .info .price {
   margin: 0 10px 0 20px;
@@ -352,10 +450,33 @@ body {
   flex-wrap: wrap;
   flex-direction: row;
 }
+@media screen and (max-width: 768px) {
+  .medias .container {
+    padding: 1.5rem 0 2.9rem 0;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .medias .container {
+    padding: 0 0 2rem 0;
+    width: 100%;
+  }
+}
 .medias .container .content-media {
   color: #901c1c;
   margin: 1.5rem auto;
   padding: 0.5rem;
+}
+@media screen and (max-width: 768px) {
+  .medias .container .content-media {
+    margin: 0;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .medias .container .content-media {
+    margin: 1.5rem 0;
+  }
 }
 .medias .container .content-media__media {
   border-radius: 5px;
@@ -371,11 +492,23 @@ body {
   overflow: hidden;
   cursor: pointer;
 }
+@media screen and (max-width: 768px) {
+  .medias .container .content-media__media {
+    width: auto;
+    height: 80%;
+  }
+}
 .medias .container .content-media__media .image,
 .medias .container .content-media__media .video {
   width: 100%;
   height: 100%;
+}
+.medias .container .content-media__media .image {
   object-fit: cover;
+}
+.medias .container .content-media__media .video {
+  object-fit: scale-down;
+  background: #000;
 }
 .medias .container .content-media__figcaption {
   display: flex;
@@ -417,6 +550,7 @@ body {
 }
 .bground h1 {
   color: initial;
+  margin: 0;
 }
 .bground .modalContent {
   position: absolute;
@@ -431,6 +565,7 @@ body {
   transform: translate(-50%, -50%);
   box-sizing: border-box;
   overflow: hidden;
+  margin: 0;
 }
 .bground .modalContent .close:before,
 .bground .modalContent .close:after {
@@ -446,6 +581,12 @@ body {
 }
 .bground .modalContent .close:after {
   transform: rotate(-45deg);
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent {
+    width: 100%;
+    height: 100%;
+  }
 }
 .bground .modalContent .close {
   position: absolute;
@@ -463,10 +604,34 @@ body {
   flex-direction: column;
 }
 .bground .modalContent .formData textarea {
-  height: 8rem;
+  height: 10rem;
+}
+.bground .modalContent div.submit {
+  display: flex;
+  justify-content: center;
+}
+.bground .modalContent div.submit .button {
+  padding: 1rem 4rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  color: #FFF;
+  background: #901c1c;
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent div.submit .button {
+    letter-spacing: 2px;
+  }
 }
 .bground .modalContent .modal-body {
   height: 100%;
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 }
 .bground .modalContent label {
   font-size: 1.5rem;
@@ -474,23 +639,17 @@ body {
   margin: -1rem 0;
 }
 .bground .modalContent .text-control {
-  width: 100%;
+  width: auto;
   height: 3rem;
   border: none;
   border-radius: 3px;
 }
-.bground .modalContent .button {
-  padding: 1.4rem 2.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  color: #FFF;
-  background: #901c1c;
-}
 .lightbox-bg {
   position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
-  padding-top: 100px;
   left: 0;
   top: 0;
   width: 100%;
@@ -509,10 +668,15 @@ body {
   background-color: #fefefe;
   margin: auto;
   padding: 1rem;
-  width: 80%;
-  height: 80%;
-  max-width: 1200px;
+  max-width: 900px;
   overflow: hidden;
+}
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
 }
 .lightbox-bg .lightbox__close {
   position: absolute;
@@ -529,6 +693,12 @@ body {
   z-index: 10;
   background: transparent;
   border: none;
+}
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__close {
+    right: -20px;
+    top: 0.5rem;
+  }
 }
 .lightbox-bg .lightbox__close:before, .lightbox-bg .lightbox__close:after {
   background-color: #901c1c;
@@ -553,12 +723,27 @@ body {
   background: url("data:image/svg+xml,%3Csvg width='30' height='48' viewBox='0 0 30 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.360108 5.64L18.6801 24L0.360107 42.36L6.00011 48L30.0001 24L6.00011 3.88195e-06L0.360108 5.64Z' fill='%23911C1C'/%3E%3C/svg%3E%0A") no-repeat center;
   border: none;
 }
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__next, .lightbox-bg .lightbox__prev {
+    background: url("data:image/svg+xml,%3Csvg width='15' height='48' viewBox='0 0 30 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.360108 5.64L18.6801 24L0.360107 42.36L6.00011 48L30.0001 24L6.00011 3.88195e-06L0.360108 5.64Z' fill='%23911C1C'/%3E%3C/svg%3E%0A") no-repeat center;
+  }
+}
 .lightbox-bg .lightbox__next {
   right: 0;
+}
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__next {
+    right: -20px;
+  }
 }
 .lightbox-bg .lightbox__prev {
   left: 0;
   transform: rotate(180deg);
+}
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__prev {
+    left: -20px;
+  }
 }
 .lightbox-bg .lightbox__container {
   width: 100%;
@@ -568,35 +753,45 @@ body {
   align-items: center;
   justify-content: center;
 }
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__container {
+    padding: 1rem;
+  }
+}
 .lightbox-bg .lightbox .media {
   display: flex;
   margin: auto;
   box-sizing: border-box;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  aspect-ratio: 1/1;
 }
 .lightbox-bg .lightbox .media img,
 .lightbox-bg .lightbox .media video {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
+}
+.lightbox-bg .lightbox .media img {
   object-fit: cover;
 }
+.lightbox-bg .lightbox .media video {
+  object-fit: scale-down;
+  background: #000;
+}
 .lightbox-bg .lightbox figure {
-  width: 90%;
-  height: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0;
+  padding: 2rem;
 }
 .lightbox-bg .lightbox figcaption {
   text-align: center;
   padding: 2px 16px;
   color: #901c1c;
   margin-right: auto;
-  padding: 1rem 0px;
+  padding: 0.5rem 0;
 }
 #header {
   display: flex;
@@ -606,15 +801,20 @@ body {
   justify-content: flex-start;
   align-items: center;
 }
+@media screen and (max-width: 768px) {
+  #header {
+    padding: 0;
+  }
+}
 /* 
 * Nav: with "tag" components
  */
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 768px) {
   .nav {
     margin: auto;
   }
 }
-@media screen and (min-width: 599px) and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
   .nav {
     margin: auto;
     width: 550px;
@@ -637,12 +837,17 @@ body {
   margin: -5.8rem 0 3rem;
   padding: 20px 0;
 }
-@media screen and (min-width: 599px) and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
+  .photographers header h1 {
+    display: none;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
   .photographers header h1 {
     margin-top: -1rem;
   }
 }
-@media screen and (max-width: 599px) {
+@media screen and (max-width: 768px) {
   .photographers header h1 {
     margin-top: -10.5rem;
   }
