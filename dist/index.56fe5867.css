@@ -529,13 +529,15 @@ body {
   top: 0.2rem;
   right: 50%;
   transform: translateX(50%);
-}
-.scrollToMainButton.display button {
+  color: inherit;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
   background: #d3573c;
   font-weight: 600;
+}
+.scrollToMainButton a:-webkit-any-link {
+  color: inherit;
 }
 /* Modal form */
 .bground {
@@ -636,7 +638,7 @@ body {
 .bground .modalContent label {
   font-size: 1.5rem;
   color: #525252;
-  margin: -1rem 0;
+  margin: 0 0 0.1rem 0;
 }
 .bground .modalContent .text-control {
   width: auto;

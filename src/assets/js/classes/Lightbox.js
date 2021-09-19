@@ -23,10 +23,13 @@ export default class Lightbox {
     }
 
     close() {
-        document.querySelector('.lightbox-bg').classList.add('fadeout')
-        window.setTimeout(() => {
-            document.querySelector('.lightbox-bg').remove()
-        }, 500)
+        const lightboxElement = document.querySelector('.lightbox-bg');
+        lightboxElement.classList.add('fadeout')
+        if (lightboxElement) {
+            window.setTimeout(() => {
+                lightboxElement.remove()
+            }, 500)
+        }
     }
 
     next() {
@@ -50,6 +53,8 @@ export default class Lightbox {
     }
 
 
+
+
     display() {
         const current = this.getCurrentMedia()
         let element = document.querySelector('.lightbox-bg')
@@ -65,6 +70,11 @@ export default class Lightbox {
             document.body.addEventListener('keyup', (evt) => {
                 if (evt.key === 'ArrowLeft') {
                     this.prev()
+                }
+            })
+            document.body.addEventListener('keyup', (evt) => {
+                if (evt.key === 'Escape') {
+                    this.close()
                 }
             })
         }

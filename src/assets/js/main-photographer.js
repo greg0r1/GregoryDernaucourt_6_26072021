@@ -18,7 +18,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <div class="tags" aria-label="Liste de tags concernant le photographe">
                 <ul>
                     ${photographer.tags.map((tag) => `
-                    <a class="tag" name="${tag}" href="#" focusable="true">
+                    <a class="tag" title="${tag}" href="#" tabindex="0">
                         <li>#${tag}</li>
                     </a>
                 `).join("")}
@@ -37,7 +37,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <button class="btn">Contactez-moi</button>
         </div>
         <div class="img" aria-label="Image">
-            <img src="./assets/images/Sample Photos/Photographers ID Photos/${photographer.portrait}" alt="">
+            <img src="./assets/images/Sample_Photos/Photographers_ID_Photos/${photographer.portrait}" alt=" alt="Portrait du photographe ${photographer.name}"">
         </div>
         `
 }
@@ -76,22 +76,22 @@ const displayModalForm = (name) => {
             ${name}</h1>
           <form id="contact" action="" method="get">
             <div class="formData">
-              <label for="first">Prénom</label><br>
+              <label for="first">Prénom</label>
               <input class="text-control" type="text" id="first" name="first" /><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="last">Nom</label><br>
+              <label for="last">Nom</label>
               <input class="text-control" type="text" id="last" name="last" /><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="email">E-mail</label><br>
+              <label for="email">E-mail</label>
               <input class="text-control" type="email" id="email" name="email" /><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="message">Votre message</label><br>
+              <label for="message">Votre message</label>
               <textarea class="text-control" type="text" id="message" name="message"></textarea>
               <br>
               <span class="error"></span>
@@ -115,7 +115,7 @@ const displayModalForm = (name) => {
 function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
     EventService.handleTagClick((element) => {
-        const nameAttributeOfTag = element.getAttribute('name');
+        const nameAttributeOfTag = element.getAttribute('title');
         const url = new URL(`/index.html?tag=${nameAttributeOfTag}`, location);
         element.setAttribute('href', url.href)
     });
@@ -144,11 +144,18 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     const lightbox = new Lightbox(medias, firstNameOfPhotographer);
     const mediasElements = Array.from(document.querySelectorAll('.video.media, .image.media'));
     mediasElements.forEach(element => element.addEventListener('click', e => {
-        e.preventDefault()
-        const key = medias.findIndex(element => element.id == e.currentTarget.getAttribute('id'))
-        lightbox.open(key)
+        e.preventDefault();
+        const key = medias.findIndex(element => element.id == e.currentTarget.getAttribute('id'));
+        lightbox.open(key);
     }
-    ))
+    ));
+    mediasElements.forEach(element => element.addEventListener('keypress', e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const key = medias.findIndex(element => element.id == e.currentTarget.getAttribute('id'));
+            lightbox.open(key);
+        }
+    }))
 }
 
 /**
@@ -156,7 +163,7 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
  *
  * @param {*} nameOfPhotographer
  */
-function displayModalFormEvent(nameOfPhotographer) {
+function eventDisplayModalForm(nameOfPhotographer) {
 
     (document.querySelector('.bground')) ? EventService.closeModal() : displayModalForm(nameOfPhotographer);
     EventService.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground'));
@@ -235,7 +242,7 @@ const mainPhotographer = async () => {
         // On ajoute les events sur les tags qui renvoients sur la page index
         eventOnTags();
         // Event sur bouton contact
-        document.querySelector('.photographerHeader .button').addEventListener('click', () => displayModalFormEvent(nameOfPhotographer));
+        document.querySelector('.photographerHeader .button').addEventListener('click', () => eventDisplayModalForm(nameOfPhotographer));
         //On affiche le bouton de filtre
         displayFilterButton();
         const chevronElement = document.querySelector(".dropdown-toggle .fas");

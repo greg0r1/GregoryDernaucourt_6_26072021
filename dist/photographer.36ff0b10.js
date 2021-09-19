@@ -478,8 +478,8 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <a class=\"tag\" name=\"".concat(tag, "\" href=\"#\" focusable=\"true\">\n                        <li>#").concat(tag, "</li>\n                    </a>\n                ")
-    ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\" aria-label=\"Image\">\n            <img src=\"./assets/images/Sample Photos/Photographers ID Photos/").concat(photographer.portrait, "\" alt=\"\">\n        </div>\n        ");
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <a class=\"tag\" title=\"".concat(tag, "\" href=\"#\" tabindex=\"0\">\n                        <li>#").concat(tag, "</li>\n                    </a>\n                ")
+    ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\" aria-label=\"Image\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\" alt=\"Portrait du photographe ").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
     const filterButtonElement = document.querySelector('.filter');
@@ -488,7 +488,7 @@ const displayFilterButton = ()=>{
 const displayModalForm = (name)=>{
     const div = document.createElement('div');
     div.className = 'bground';
-    div.innerHTML = "\n      <div class=\"modalContent\">\n        <span class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1>Contactez-moi</br>\n            ".concat(name, "</h1>\n          <form id=\"contact\" action=\"\" method=\"get\">\n            <div class=\"formData\">\n              <label for=\"first\">Pr\xE9nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"last\">Nom</label><br>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"email\">E-mail</label><br>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"message\">Votre message</label><br>\n              <textarea class=\"text-control\" type=\"text\" id=\"message\" name=\"message\"></textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"submit\">\n                <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" />\n            </div>\n          </form>\n        </div>\n    </div>");
+    div.innerHTML = "\n      <div class=\"modalContent\">\n        <span class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1>Contactez-moi</br>\n            ".concat(name, "</h1>\n          <form id=\"contact\" action=\"\" method=\"get\">\n            <div class=\"formData\">\n              <label for=\"first\">Pr\xE9nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"last\">Nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"email\">E-mail</label>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"message\">Votre message</label>\n              <textarea class=\"text-control\" type=\"text\" id=\"message\" name=\"message\"></textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"submit\">\n                <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" />\n            </div>\n          </form>\n        </div>\n    </div>");
     document.getElementById('main').appendChild(div);
     document.querySelector('form#contact input[type=submit]').addEventListener('click', (e)=>getValuesForm(e)
     );
@@ -500,7 +500,7 @@ const displayModalForm = (name)=>{
  */ function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
     _EventService.default.handleTagClick((element)=>{
-        const nameAttributeOfTag = element.getAttribute('name');
+        const nameAttributeOfTag = element.getAttribute('title');
         const url = new URL("/index.html?tag=".concat(nameAttributeOfTag), location);
         element.setAttribute('href', url.href);
     });
@@ -530,12 +530,21 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
             lightbox.open(key);
         })
     );
+    mediasElements.forEach((element)=>element.addEventListener('keypress', (e)=>{
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const key = medias.findIndex((element1)=>element1.id == e.currentTarget.getAttribute('id')
+                );
+                lightbox.open(key);
+            }
+        })
+    );
 }
 /**
  * Fonction qui affiche le formulaire de contact
  *
  * @param {*} nameOfPhotographer
- */ function displayModalFormEvent(nameOfPhotographer) {
+ */ function eventDisplayModalForm(nameOfPhotographer) {
     document.querySelector('.bground') ? _EventService.default.closeModal() : displayModalForm(nameOfPhotographer);
     _EventService.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // On vérifie les champs des formulaires
     _EventService.default.handleInputsFormClick((e)=>checkField(e)
@@ -581,7 +590,7 @@ const mainPhotographer = async ()=>{
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
         displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams)); // On ajoute les events sur les tags qui renvoients sur la page index
         eventOnTags(); // Event sur bouton contact
-        document.querySelector('.photographerHeader .button').addEventListener('click', ()=>displayModalFormEvent(nameOfPhotographer)
+        document.querySelector('.photographerHeader .button').addEventListener('click', ()=>eventDisplayModalForm(nameOfPhotographer)
         ); //On affiche le bouton de filtre
         displayFilterButton();
         const chevronElement = document.querySelector(".dropdown-toggle .fas");
@@ -599,7 +608,7 @@ const mainPhotographer = async ()=>{
 };
 mainPhotographer();
 
-},{"core-js/modules/es.array.iterator.js":"8YPvt","core-js/modules/web.dom-collections.iterator.js":"gC8gE","core-js/modules/web.url.js":"c61iN","core-js/modules/es.string.trim.js":"1UwM0","core-js/modules/es.promise.js":"kYha9","core-js/modules/es.regexp.exec.js":"lySIs","core-js/modules/es.string.search.js":"9LcVn","core-js/modules/web.dom-collections.for-each.js":"917na","./classes/DataService":"dBgMJ","./classes/EventService":"bmzaC","./classes/ViewMedias":"kj83z","./classes/Lightbox":"guRfF","./classes/EventScrollToTop":"8nT7Q"}],"8YPvt":[function(require,module,exports) {
+},{"core-js/modules/es.array.iterator.js":"8YPvt","core-js/modules/web.dom-collections.iterator.js":"gC8gE","core-js/modules/web.url.js":"c61iN","core-js/modules/es.string.trim.js":"1UwM0","core-js/modules/web.dom-collections.for-each.js":"917na","core-js/modules/es.promise.js":"kYha9","core-js/modules/es.regexp.exec.js":"lySIs","core-js/modules/es.string.search.js":"9LcVn","./classes/DataService":"dBgMJ","./classes/EventService":"bmzaC","./classes/ViewMedias":"kj83z","./classes/Lightbox":"guRfF","./classes/EventScrollToTop":"8nT7Q"}],"8YPvt":[function(require,module,exports) {
 'use strict';
 var toIndexedObject = require('../internals/to-indexed-object');
 var addToUnscopables = require('../internals/add-to-unscopables');
@@ -3644,7 +3653,165 @@ module.exports = function(METHOD_NAME) {
     });
 };
 
-},{"../internals/fails":"byxLb","../internals/whitespaces":"l0FoE"}],"kYha9":[function(require,module,exports) {
+},{"../internals/fails":"byxLb","../internals/whitespaces":"l0FoE"}],"917na":[function(require,module,exports) {
+var global = require('../internals/global');
+var DOMIterables = require('../internals/dom-iterables');
+var DOMTokenListPrototype = require('../internals/dom-token-list-prototype');
+var forEach = require('../internals/array-for-each');
+var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
+var handlePrototype = function(CollectionPrototype) {
+    // some Chrome versions have non-configurable methods on DOMTokenList
+    if (CollectionPrototype && CollectionPrototype.forEach !== forEach) try {
+        createNonEnumerableProperty(CollectionPrototype, 'forEach', forEach);
+    } catch (error) {
+        CollectionPrototype.forEach = forEach;
+    }
+};
+for(var COLLECTION_NAME in DOMIterables)handlePrototype(global[COLLECTION_NAME] && global[COLLECTION_NAME].prototype);
+handlePrototype(DOMTokenListPrototype);
+
+},{"../internals/global":"a4GR8","../internals/dom-iterables":"2Umkc","../internals/dom-token-list-prototype":"gLY6L","../internals/array-for-each":"dwspA","../internals/create-non-enumerable-property":"73EkF"}],"dwspA":[function(require,module,exports) {
+'use strict';
+var $forEach = require('../internals/array-iteration').forEach;
+var arrayMethodIsStrict = require('../internals/array-method-is-strict');
+var STRICT_METHOD = arrayMethodIsStrict('forEach');
+// `Array.prototype.forEach` method implementation
+// https://tc39.es/ecma262/#sec-array.prototype.foreach
+module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */ ) {
+    return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
+} : [].forEach;
+
+},{"../internals/array-iteration":"ciNJ0","../internals/array-method-is-strict":"2hfFU"}],"ciNJ0":[function(require,module,exports) {
+var bind = require('../internals/function-bind-context');
+var IndexedObject = require('../internals/indexed-object');
+var toObject = require('../internals/to-object');
+var toLength = require('../internals/to-length');
+var arraySpeciesCreate = require('../internals/array-species-create');
+var push = [].push;
+// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterReject }` methods implementation
+var createMethod = function(TYPE) {
+    var IS_MAP = TYPE == 1;
+    var IS_FILTER = TYPE == 2;
+    var IS_SOME = TYPE == 3;
+    var IS_EVERY = TYPE == 4;
+    var IS_FIND_INDEX = TYPE == 6;
+    var IS_FILTER_REJECT = TYPE == 7;
+    var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+    return function($this, callbackfn, that, specificCreate) {
+        var O = toObject($this);
+        var self = IndexedObject(O);
+        var boundFunction = bind(callbackfn, that, 3);
+        var length = toLength(self.length);
+        var index = 0;
+        var create = specificCreate || arraySpeciesCreate;
+        var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
+        var value, result;
+        for(; length > index; index++)if (NO_HOLES || index in self) {
+            value = self[index];
+            result = boundFunction(value, index, O);
+            if (TYPE) {
+                if (IS_MAP) target[index] = result; // map
+                else if (result) switch(TYPE){
+                    case 3:
+                        return true; // some
+                    case 5:
+                        return value; // find
+                    case 6:
+                        return index; // findIndex
+                    case 2:
+                        push.call(target, value); // filter
+                }
+                else switch(TYPE){
+                    case 4:
+                        return false; // every
+                    case 7:
+                        push.call(target, value); // filterReject
+                }
+            }
+        }
+        return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
+    };
+};
+module.exports = {
+    // `Array.prototype.forEach` method
+    // https://tc39.es/ecma262/#sec-array.prototype.foreach
+    forEach: createMethod(0),
+    // `Array.prototype.map` method
+    // https://tc39.es/ecma262/#sec-array.prototype.map
+    map: createMethod(1),
+    // `Array.prototype.filter` method
+    // https://tc39.es/ecma262/#sec-array.prototype.filter
+    filter: createMethod(2),
+    // `Array.prototype.some` method
+    // https://tc39.es/ecma262/#sec-array.prototype.some
+    some: createMethod(3),
+    // `Array.prototype.every` method
+    // https://tc39.es/ecma262/#sec-array.prototype.every
+    every: createMethod(4),
+    // `Array.prototype.find` method
+    // https://tc39.es/ecma262/#sec-array.prototype.find
+    find: createMethod(5),
+    // `Array.prototype.findIndex` method
+    // https://tc39.es/ecma262/#sec-array.prototype.findIndex
+    findIndex: createMethod(6),
+    // `Array.prototype.filterReject` method
+    // https://github.com/tc39/proposal-array-filtering
+    filterReject: createMethod(7)
+};
+
+},{"../internals/function-bind-context":"1epb9","../internals/indexed-object":"1hg9G","../internals/to-object":"ghTKi","../internals/to-length":"coWuj","../internals/array-species-create":"beybx"}],"beybx":[function(require,module,exports) {
+var arraySpeciesConstructor = require('../internals/array-species-constructor');
+// `ArraySpeciesCreate` abstract operation
+// https://tc39.es/ecma262/#sec-arrayspeciescreate
+module.exports = function(originalArray, length) {
+    return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
+};
+
+},{"../internals/array-species-constructor":"ipwOm"}],"ipwOm":[function(require,module,exports) {
+var isObject = require('../internals/is-object');
+var isArray = require('../internals/is-array');
+var wellKnownSymbol = require('../internals/well-known-symbol');
+var SPECIES = wellKnownSymbol('species');
+// a part of `ArraySpeciesCreate` abstract operation
+// https://tc39.es/ecma262/#sec-arrayspeciescreate
+module.exports = function(originalArray) {
+    var C;
+    if (isArray(originalArray)) {
+        C = originalArray.constructor;
+        // cross-realm fallback
+        if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+        else if (isObject(C)) {
+            C = C[SPECIES];
+            if (C === null) C = undefined;
+        }
+    }
+    return C === undefined ? Array : C;
+};
+
+},{"../internals/is-object":"d60Kc","../internals/is-array":"kiY2Q","../internals/well-known-symbol":"6sZ59"}],"kiY2Q":[function(require,module,exports) {
+var classof = require('../internals/classof-raw');
+// `IsArray` abstract operation
+// https://tc39.es/ecma262/#sec-isarray
+// eslint-disable-next-line es/no-array-isarray -- safe
+module.exports = Array.isArray || function isArray(arg) {
+    return classof(arg) == 'Array';
+};
+
+},{"../internals/classof-raw":"8F0bi"}],"2hfFU":[function(require,module,exports) {
+'use strict';
+var fails = require('../internals/fails');
+module.exports = function(METHOD_NAME, argument) {
+    var method = [][METHOD_NAME];
+    return !!method && fails(function() {
+        // eslint-disable-next-line no-useless-call,no-throw-literal -- required for testing
+        method.call(null, argument || function() {
+            throw 1;
+        }, 1);
+    });
+};
+
+},{"../internals/fails":"byxLb"}],"kYha9":[function(require,module,exports) {
 'use strict';
 var $ = require('../internals/export');
 var IS_PURE = require('../internals/is-pure');
@@ -4708,165 +4875,7 @@ module.exports = function(R, S) {
     return regexpExec.call(R, S);
 };
 
-},{"./classof-raw":"8F0bi","./regexp-exec":"daEEr"}],"917na":[function(require,module,exports) {
-var global = require('../internals/global');
-var DOMIterables = require('../internals/dom-iterables');
-var DOMTokenListPrototype = require('../internals/dom-token-list-prototype');
-var forEach = require('../internals/array-for-each');
-var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
-var handlePrototype = function(CollectionPrototype) {
-    // some Chrome versions have non-configurable methods on DOMTokenList
-    if (CollectionPrototype && CollectionPrototype.forEach !== forEach) try {
-        createNonEnumerableProperty(CollectionPrototype, 'forEach', forEach);
-    } catch (error) {
-        CollectionPrototype.forEach = forEach;
-    }
-};
-for(var COLLECTION_NAME in DOMIterables)handlePrototype(global[COLLECTION_NAME] && global[COLLECTION_NAME].prototype);
-handlePrototype(DOMTokenListPrototype);
-
-},{"../internals/global":"a4GR8","../internals/dom-iterables":"2Umkc","../internals/dom-token-list-prototype":"gLY6L","../internals/array-for-each":"dwspA","../internals/create-non-enumerable-property":"73EkF"}],"dwspA":[function(require,module,exports) {
-'use strict';
-var $forEach = require('../internals/array-iteration').forEach;
-var arrayMethodIsStrict = require('../internals/array-method-is-strict');
-var STRICT_METHOD = arrayMethodIsStrict('forEach');
-// `Array.prototype.forEach` method implementation
-// https://tc39.es/ecma262/#sec-array.prototype.foreach
-module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */ ) {
-    return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-// eslint-disable-next-line es/no-array-prototype-foreach -- safe
-} : [].forEach;
-
-},{"../internals/array-iteration":"ciNJ0","../internals/array-method-is-strict":"2hfFU"}],"ciNJ0":[function(require,module,exports) {
-var bind = require('../internals/function-bind-context');
-var IndexedObject = require('../internals/indexed-object');
-var toObject = require('../internals/to-object');
-var toLength = require('../internals/to-length');
-var arraySpeciesCreate = require('../internals/array-species-create');
-var push = [].push;
-// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterReject }` methods implementation
-var createMethod = function(TYPE) {
-    var IS_MAP = TYPE == 1;
-    var IS_FILTER = TYPE == 2;
-    var IS_SOME = TYPE == 3;
-    var IS_EVERY = TYPE == 4;
-    var IS_FIND_INDEX = TYPE == 6;
-    var IS_FILTER_REJECT = TYPE == 7;
-    var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
-    return function($this, callbackfn, that, specificCreate) {
-        var O = toObject($this);
-        var self = IndexedObject(O);
-        var boundFunction = bind(callbackfn, that, 3);
-        var length = toLength(self.length);
-        var index = 0;
-        var create = specificCreate || arraySpeciesCreate;
-        var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
-        var value, result;
-        for(; length > index; index++)if (NO_HOLES || index in self) {
-            value = self[index];
-            result = boundFunction(value, index, O);
-            if (TYPE) {
-                if (IS_MAP) target[index] = result; // map
-                else if (result) switch(TYPE){
-                    case 3:
-                        return true; // some
-                    case 5:
-                        return value; // find
-                    case 6:
-                        return index; // findIndex
-                    case 2:
-                        push.call(target, value); // filter
-                }
-                else switch(TYPE){
-                    case 4:
-                        return false; // every
-                    case 7:
-                        push.call(target, value); // filterReject
-                }
-            }
-        }
-        return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : target;
-    };
-};
-module.exports = {
-    // `Array.prototype.forEach` method
-    // https://tc39.es/ecma262/#sec-array.prototype.foreach
-    forEach: createMethod(0),
-    // `Array.prototype.map` method
-    // https://tc39.es/ecma262/#sec-array.prototype.map
-    map: createMethod(1),
-    // `Array.prototype.filter` method
-    // https://tc39.es/ecma262/#sec-array.prototype.filter
-    filter: createMethod(2),
-    // `Array.prototype.some` method
-    // https://tc39.es/ecma262/#sec-array.prototype.some
-    some: createMethod(3),
-    // `Array.prototype.every` method
-    // https://tc39.es/ecma262/#sec-array.prototype.every
-    every: createMethod(4),
-    // `Array.prototype.find` method
-    // https://tc39.es/ecma262/#sec-array.prototype.find
-    find: createMethod(5),
-    // `Array.prototype.findIndex` method
-    // https://tc39.es/ecma262/#sec-array.prototype.findIndex
-    findIndex: createMethod(6),
-    // `Array.prototype.filterReject` method
-    // https://github.com/tc39/proposal-array-filtering
-    filterReject: createMethod(7)
-};
-
-},{"../internals/function-bind-context":"1epb9","../internals/indexed-object":"1hg9G","../internals/to-object":"ghTKi","../internals/to-length":"coWuj","../internals/array-species-create":"beybx"}],"beybx":[function(require,module,exports) {
-var arraySpeciesConstructor = require('../internals/array-species-constructor');
-// `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function(originalArray, length) {
-    return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
-};
-
-},{"../internals/array-species-constructor":"ipwOm"}],"ipwOm":[function(require,module,exports) {
-var isObject = require('../internals/is-object');
-var isArray = require('../internals/is-array');
-var wellKnownSymbol = require('../internals/well-known-symbol');
-var SPECIES = wellKnownSymbol('species');
-// a part of `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function(originalArray) {
-    var C;
-    if (isArray(originalArray)) {
-        C = originalArray.constructor;
-        // cross-realm fallback
-        if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
-        else if (isObject(C)) {
-            C = C[SPECIES];
-            if (C === null) C = undefined;
-        }
-    }
-    return C === undefined ? Array : C;
-};
-
-},{"../internals/is-object":"d60Kc","../internals/is-array":"kiY2Q","../internals/well-known-symbol":"6sZ59"}],"kiY2Q":[function(require,module,exports) {
-var classof = require('../internals/classof-raw');
-// `IsArray` abstract operation
-// https://tc39.es/ecma262/#sec-isarray
-// eslint-disable-next-line es/no-array-isarray -- safe
-module.exports = Array.isArray || function isArray(arg) {
-    return classof(arg) == 'Array';
-};
-
-},{"../internals/classof-raw":"8F0bi"}],"2hfFU":[function(require,module,exports) {
-'use strict';
-var fails = require('../internals/fails');
-module.exports = function(METHOD_NAME, argument) {
-    var method = [][METHOD_NAME];
-    return !!method && fails(function() {
-        // eslint-disable-next-line no-useless-call,no-throw-literal -- required for testing
-        method.call(null, argument || function() {
-            throw 1;
-        }, 1);
-    });
-};
-
-},{"../internals/fails":"byxLb"}],"dBgMJ":[function(require,module,exports) {
+},{"./classof-raw":"8F0bi","./regexp-exec":"daEEr"}],"dBgMJ":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -5409,7 +5418,7 @@ exports.default = void 0;
         this.title = title;
     }
     toString() {
-        return "\n        <video controls id=\"".concat(this.id, "\" class=\"video media\">\n            <source src=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
+        return "\n        <video tabindex=\"0\" controls id=\"".concat(this.id, "\" class=\"video media\"alt=\"video du photographe ").concat(this.firstName, ", intitul\xE9e: ").concat(this.title, "\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
     }
 }
 exports.default = ViewVideo;
@@ -5435,7 +5444,7 @@ class ViewPictures {
         this.title = title;
     }
     toString() {
-        return "\n        <img id=\"".concat(this.id, "\" alt=\"").concat(this.title, "\" class=\"image media\" src=\"./assets/images/Sample Photos/").concat(this.firstName, "/").concat(this.name, "\">");
+        return "\n        <img tabindex=\"0\" id=\"".concat(this.id, "\" alt=\"image du photographe ").concat(this.firstName, ", intitul\xE9e: ").concat(this.title, "\" class=\"image media\" src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">");
     }
 }
 exports.default = ViewPictures;
@@ -5473,9 +5482,10 @@ function _interopRequireDefault(obj) {
         this.display();
     }
     close() {
-        document.querySelector('.lightbox-bg').classList.add('fadeout');
-        window.setTimeout(()=>{
-            document.querySelector('.lightbox-bg').remove();
+        const lightboxElement = document.querySelector('.lightbox-bg');
+        lightboxElement.classList.add('fadeout');
+        if (lightboxElement) window.setTimeout(()=>{
+            lightboxElement.remove();
         }, 500);
     }
     next() {
@@ -5504,6 +5514,9 @@ function _interopRequireDefault(obj) {
             document.body.addEventListener('keyup', (evt)=>{
                 if (evt.key === 'ArrowLeft') this.prev();
             });
+            document.body.addEventListener('keyup', (evt)=>{
+                if (evt.key === 'Escape') this.close();
+            });
         }
         element.innerHTML = "\n        <div class=\"lightbox\">\n            <button class=\"lightbox__close\"></button>\n            <button class=\"lightbox__next\"></button>\n            <button class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                    </div>\n                    <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
         element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
@@ -5527,11 +5540,8 @@ exports.default = void 0;
  * @class EventScrollToTop
  */ class EventScrollToTop {
     static scrollToTop(element) {
-        if (window.scrollY) {
-            element.classList.add('display');
-            element.addEventListener('click', ()=>window.scrollTo(0, 0)
-            );
-        } else if (window.screenY === 0) element.classList.remove('display');
+        if (window.scrollY) element.classList.add('display'); // element.addEventListener('click', () => window.scrollTo(0, 0))
+        else if (window.screenY === 0) element.classList.remove('display');
     }
 }
 exports.default = EventScrollToTop;

@@ -12,7 +12,7 @@ const displayNavTags = (tags) => {
         <nav class="nav">
             <ul class="tags">
             ${tags.map((tag) => `
-                <li class="tag" name="${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>
+                <li class="tag" title="${tag}" tabindex="0">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>
                 `).join("")}
             </ul></nav>`
 
@@ -30,21 +30,21 @@ const displayPhotographers = (photographers = []) => {
         <div class="container">
 
         ${photographers.map(({ portrait, name, city, country, tagline, price, tags }) => `
-        <article class="article">
-            <a class="link-to-photographer" href="#" alt="" aria-label="Lien vers le photographe" focusable="true">
-                <div class="article__img" aria-label="Image">
-                    <img src="assets/images/Sample Photos/Photographers ID Photos/${portrait}" alt="">
+        <article class="article" tabindex="0">
+            <a class="link-to-photographer">
+                <div class="article__img">
+                    <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
                 </div>
                 <h2 class="article__title title">${name}</h2>
             </a>
-            <div class="details" aria-label="Détails concernant le photographe">
-                <p class="localisation" aria-label="Ville d'origine">${city}, ${country}</p>
-                <p class="description" aria-label="Description">${tagline}</p>
-                <p class="price" aria-label="Prix">${price}€/jour</p>
+            <div class="details">
+                <p class="localisation">${city}, ${country}</p>
+                <p class="description">${tagline}</p>
+                <p class="price">${price}€/jour</p>
             </div>
-            <div class="tags" aria-label="Liste de tags concernant le photographe">
+            <div class="tags">
                 <ul>
-                ${tags.map((tag) => `<li class="tag" name="${tag}">#${tag}</li>`).join("")}
+                ${tags.map((tag) => `<li class="tag" tabindex="0" title="${tag}">#${tag}</li>`).join("")}
                 </ul></div></article>
         `
     ).join("")
@@ -62,13 +62,13 @@ const displayPhotographers = (photographers = []) => {
  *
  * @param {*} dataService
  */
-function putEventCickOnTags(dataService, tag) {
+function eventOnTags(dataService, tag) {
     // On ajoute l'événement "click" à l'élément "tag"
     EventService.handleTagClick((element) => {
-        const nameAttributeOfTag = element.getAttribute('name');
+        const nameAttributeOfTag = element.getAttribute('title');
         const photographersByTags = dataService.getPhotographersByTags(nameAttributeOfTag);
         displayPhotographers(photographersByTags);
-        putEventCickOnTags(dataService);
+        eventOnTags(dataService);
         putEventCickOnPhotographerProfile(dataService);
         // On ajoute le tag au titre
         document.title = `Fisheye | ${nameAttributeOfTag.charAt(0).toUpperCase()}${nameAttributeOfTag.slice(1)}`;
@@ -114,7 +114,7 @@ const mainPhotographers = async () => {
         // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
         window.addEventListener('scroll', () => EventScrollToTop.scrollToTop(document.querySelector('.scrollToMainButton')));
         // On ajoute l'événement "click" à l'élément "tag"
-        putEventCickOnTags(dataService);
+        eventOnTags(dataService);
         // On ajoute l'événement "click" à chaque fiche de photographes
         putEventCickOnPhotographerProfile(dataService);
 

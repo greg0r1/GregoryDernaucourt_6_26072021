@@ -1,6 +1,5 @@
 {
-  "photographers": [
-    {
+  "photographers": [{
       "name": "Mimi Keel",
       "id": 243,
       "city": "London",
@@ -61,8 +60,7 @@
       "portrait": "MarcelNikolic.jpg"
     }
   ],
-  "media": [
-    {
+  "media": [{
       "id": 342550,
       "photographerId": 82,
       "title": "Fashion Yellow Beach",
@@ -96,7 +94,7 @@
       "id": 9275938,
       "photographerId": 82,
       "title": "Wedding Gazebo",
-      "image": "Event-_WeddingGazebo.jpg",
+      "image": "Event_WeddingGazebo.jpg",
       "tags": ["events"],
       "likes": 69,
       "date": "2018-02-22",

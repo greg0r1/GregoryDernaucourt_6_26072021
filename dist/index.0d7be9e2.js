@@ -489,7 +489,7 @@ function _interopRequireDefault(obj) {
 const data = new _DataService.default(); // View
 const displayNavTags = (tags)=>{
     // On affiche la nav avec les tags
-    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <li class=\"tag\" name=\"".concat(tag, "\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</li>\n                ")
+    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <li class=\"tag\" title=\"".concat(tag, "\" tabindex=\"0\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</li>\n                ")
     ).join(""), "\n            </ul></nav>");
 };
 const displayPhotographers = function displayPhotographers1() {
@@ -498,7 +498,7 @@ const displayPhotographers = function displayPhotographers1() {
     section.classList = "photographers";
     section.innerHTML = "\n\n    <header>\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { portrait , name , city , country , tagline , price , tags  } = _ref;
-        return "\n        <article class=\"article\">\n            <a class=\"link-to-photographer\" href=\"#\" alt=\"\" aria-label=\"Lien vers le photographe\" focusable=\"true\">\n                <div class=\"article__img\" aria-label=\"Image\">\n                    <img src=\"assets/images/Sample Photos/Photographers ID Photos/".concat(portrait, "\" alt=\"\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\" aria-label=\"D\xE9tails concernant le photographe\">\n                <p class=\"localisation\" aria-label=\"Ville d'origine\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\" aria-label=\"Description\">").concat(tagline, "</p>\n                <p class=\"price\" aria-label=\"Prix\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                ").concat(tags.map((tag)=>"<li class=\"tag\" name=\"".concat(tag, "\">#").concat(tag, "</li>")
+        return "\n        <article class=\"article\" tabindex=\"0\">\n            <a class=\"link-to-photographer\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/".concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"<li class=\"tag\" tabindex=\"0\" title=\"".concat(tag, "\">#").concat(tag, "</li>")
         ).join(""), "\n                </ul></div></article>\n        ");
     }).join(""), "\n        </div>\n        ");
 }; // Scripts
@@ -506,13 +506,13 @@ const displayPhotographers = function displayPhotographers1() {
  * Fonction pour gérer l'événement clique des tags
  *
  * @param {*} dataService
- */ function putEventCickOnTags(dataService, tag) {
+ */ function eventOnTags(dataService, tag) {
     // On ajoute l'événement "click" à l'élément "tag"
     _EventService.default.handleTagClick((element)=>{
-        const nameAttributeOfTag = element.getAttribute('name');
+        const nameAttributeOfTag = element.getAttribute('title');
         const photographersByTags = dataService.getPhotographersByTags(nameAttributeOfTag);
         displayPhotographers(photographersByTags);
-        putEventCickOnTags(dataService);
+        eventOnTags(dataService);
         putEventCickOnPhotographerProfile(dataService); // On ajoute le tag au titre
         document.title = "Fisheye | ".concat(nameAttributeOfTag.charAt(0).toUpperCase()).concat(nameAttributeOfTag.slice(1));
     });
@@ -545,7 +545,7 @@ const mainPhotographers = async ()=>{
         displayPhotographers(dataService.getPhotographersByTags(tag)); // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
         window.addEventListener('scroll', ()=>_EventScrollToTop.default.scrollToTop(document.querySelector('.scrollToMainButton'))
         ); // On ajoute l'événement "click" à l'élément "tag"
-        putEventCickOnTags(dataService); // On ajoute l'événement "click" à chaque fiche de photographes
+        eventOnTags(dataService); // On ajoute l'événement "click" à chaque fiche de photographes
         putEventCickOnPhotographerProfile(dataService);
     } catch (error) {
         console.error(error);
@@ -5284,11 +5284,8 @@ exports.default = void 0;
  * @class EventScrollToTop
  */ class EventScrollToTop {
     static scrollToTop(element) {
-        if (window.scrollY) {
-            element.classList.add('display');
-            element.addEventListener('click', ()=>window.scrollTo(0, 0)
-            );
-        } else if (window.screenY === 0) element.classList.remove('display');
+        if (window.scrollY) element.classList.add('display'); // element.addEventListener('click', () => window.scrollTo(0, 0))
+        else if (window.screenY === 0) element.classList.remove('display');
     }
 }
 exports.default = EventScrollToTop;
