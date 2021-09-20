@@ -6,7 +6,9 @@ export default class EventService {
 
     static handleTagClick(call) {
         const array = Array.from(document.getElementsByClassName("tag")).forEach((element) => {
-            element.addEventListener("click", () => call(element));
+            element.addEventListener("click", () => {
+                call(element)
+            });
         });
     }
 
@@ -22,6 +24,15 @@ export default class EventService {
             let chevronElement = document.querySelector(".fa-chevron-down");
             dropdownElement.classList.toggle("show");
             chevronElement.classList.toggle("fa-chevron-up");
+        });
+        element.addEventListener("keypress", (e) => {
+            console.log(element);
+            if (e.key === 'Enter') {
+                let dropdownElement = document.querySelector(".dropdown");
+                let chevronElement = document.querySelector(".fa-chevron-down");
+                dropdownElement.classList.toggle("show");
+                chevronElement.classList.toggle("fa-chevron-up");
+            }
         });
     }
 

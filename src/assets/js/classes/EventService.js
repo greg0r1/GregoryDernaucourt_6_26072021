@@ -7,7 +7,6 @@
 export default class EventService {
 
     constructor() {
-        document.addEventListener('keyup', this.onKeyUp)
     }
 
     static handleTagClick(call) {
@@ -19,7 +18,7 @@ export default class EventService {
     static handlePhotographerSelection(call) {
         const array = Array.from(document.getElementsByClassName("link-to-photographer")).forEach((element) => {
             element.addEventListener("click", () => call(element));
-        });
+        })
     }
 
     static toggleDropdownButton(element) {
@@ -29,6 +28,14 @@ export default class EventService {
             dropdownElement.classList.toggle("show");
             chevronElement.classList.toggle("fa-chevron-up");
         });
+        document.getElementById('dropdownMenuLink').addEventListener('keypress', e => {
+            if (e.key === 'Enter') {
+                let dropdownElement = document.querySelector(".dropdown");
+                let chevronElement = document.querySelector(".fa-chevron-down");
+                dropdownElement.classList.toggle("show");
+                chevronElement.classList.toggle("fa-chevron-up");
+            }
+        })
     }
 
     static handleMediasFilter(call) {
@@ -38,8 +45,13 @@ export default class EventService {
     }
 
     static closeModal(selector, elementToRemove) {
-        selector.addEventListener("click", () => document.getElementById('main').removeChild(elementToRemove))
-        document.removeEventListener('keyup', this.onKeyUp)
+        console.log(selector);
+        selector.addEventListener("click", () => elementToRemove.remove())
+        elementToRemove.addEventListener("keyup", (e) => {
+            if (e.key === 'Escape') {
+                elementToRemove.remove()
+            }
+        })
     }
 
     static handleImagesClick(call) {

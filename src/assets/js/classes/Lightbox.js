@@ -52,9 +52,6 @@ export default class Lightbox {
         return this.medias[this.index]
     }
 
-
-
-
     display() {
         const current = this.getCurrentMedia()
         let element = document.querySelector('.lightbox-bg')
@@ -62,6 +59,7 @@ export default class Lightbox {
             element = document.createElement('div')
             element.classList.add('lightbox-bg')
             document.body.appendChild(element)
+            // Événements au clavier
             document.body.addEventListener('keyup', (evt) => {
                 if (evt.key === 'ArrowRight') {
                     this.next()

@@ -489,7 +489,7 @@ function _interopRequireDefault(obj) {
 const data = new _DataService.default(); // View
 const displayNavTags = (tags)=>{
     // On affiche la nav avec les tags
-    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <li class=\"tag\" title=\"".concat(tag, "\" tabindex=\"0\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</li>\n                ")
+    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <a class=\"tag\" title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">\n                    <li>#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</li>\n                </a>\n                ")
     ).join(""), "\n            </ul></nav>");
 };
 const displayPhotographers = function displayPhotographers1() {
@@ -498,12 +498,12 @@ const displayPhotographers = function displayPhotographers1() {
     section.classList = "photographers";
     section.innerHTML = "\n\n    <header>\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { portrait , name , city , country , tagline , price , tags  } = _ref;
-        return "\n        <article class=\"article\" tabindex=\"0\">\n            <a class=\"link-to-photographer\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/".concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"<li class=\"tag\" tabindex=\"0\" title=\"".concat(tag, "\">#").concat(tag, "</li>")
+        return "\n        <article class=\"article\" tabindex=\"0\">\n            <a class=\"link-to-photographer\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/".concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                <a class=\"tag\" title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">\n                <li>#").concat(tag, "</li></a>")
         ).join(""), "\n                </ul></div></article>\n        ");
     }).join(""), "\n        </div>\n        ");
 }; // Scripts
 /**
- * Fonction pour gérer l'événement clique des tags
+ * Fonction pour gérer l'événement des tags
  *
  * @param {*} dataService
  */ function eventOnTags(dataService, tag) {
@@ -512,8 +512,8 @@ const displayPhotographers = function displayPhotographers1() {
         const nameAttributeOfTag = element.getAttribute('title');
         const photographersByTags = dataService.getPhotographersByTags(nameAttributeOfTag);
         displayPhotographers(photographersByTags);
-        eventOnTags(dataService);
-        putEventCickOnPhotographerProfile(dataService); // On ajoute le tag au titre
+        eventOnTags(dataService); // eventOnTags(dataService);
+        eventCickOnPhotographerProfile(dataService); // On ajoute le tag au titre
         document.title = "Fisheye | ".concat(nameAttributeOfTag.charAt(0).toUpperCase()).concat(nameAttributeOfTag.slice(1));
     });
 }
@@ -522,8 +522,8 @@ const displayPhotographers = function displayPhotographers1() {
  * de photographess
  *
  * @param {*} dataService
- */ function putEventCickOnPhotographerProfile(dataService) {
-    // On ajoute l'événement "click" à chaque fiche de photographes
+ */ function eventCickOnPhotographerProfile(dataService) {
+    // On ajoute l'événement au "click" à chaque fiche de photographes
     _EventService.default.handlePhotographerSelection((element)=>{
         const nameOfPhotographer = element.textContent.trim();
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
@@ -546,7 +546,7 @@ const mainPhotographers = async ()=>{
         window.addEventListener('scroll', ()=>_EventScrollToTop.default.scrollToTop(document.querySelector('.scrollToMainButton'))
         ); // On ajoute l'événement "click" à l'élément "tag"
         eventOnTags(dataService); // On ajoute l'événement "click" à chaque fiche de photographes
-        putEventCickOnPhotographerProfile(dataService);
+        eventCickOnPhotographerProfile(dataService);
     } catch (error) {
         console.error(error);
     }
@@ -5078,7 +5078,6 @@ require("core-js/modules/web.dom-collections.for-each.js");
  * @class EventService
  */ class EventService {
     constructor(){
-        document.addEventListener('keyup', this.onKeyUp);
     }
     static handleTagClick(call) {
         const array = Array.from(document.getElementsByClassName("tag")).forEach((element)=>{
@@ -5099,6 +5098,14 @@ require("core-js/modules/web.dom-collections.for-each.js");
             dropdownElement.classList.toggle("show");
             chevronElement.classList.toggle("fa-chevron-up");
         });
+        document.getElementById('dropdownMenuLink').addEventListener('keypress', (e)=>{
+            if (e.key === 'Enter') {
+                let dropdownElement = document.querySelector(".dropdown");
+                let chevronElement = document.querySelector(".fa-chevron-down");
+                dropdownElement.classList.toggle("show");
+                chevronElement.classList.toggle("fa-chevron-up");
+            }
+        });
     }
     static handleMediasFilter(call) {
         const array = Array.from(document.querySelectorAll(".filter a, .dropdown-item")).forEach((element)=>{
@@ -5107,9 +5114,12 @@ require("core-js/modules/web.dom-collections.for-each.js");
         });
     }
     static closeModal(selector, elementToRemove) {
-        selector.addEventListener("click", ()=>document.getElementById('main').removeChild(elementToRemove)
+        console.log(selector);
+        selector.addEventListener("click", ()=>elementToRemove.remove()
         );
-        document.removeEventListener('keyup', this.onKeyUp);
+        elementToRemove.addEventListener("keyup", (e)=>{
+            if (e.key === 'Escape') elementToRemove.remove();
+        });
     }
     static handleImagesClick(call) {
         const array = Array.from(document.querySelectorAll(".medias .image")).forEach((element)=>{

@@ -195,6 +195,7 @@ body {
   flex-shrink: 0;
   box-sizing: border-box;
   align-items: center;
+  cursor: pointer;
 }
 @media screen and (max-width: 768px) {
   .article__img {
@@ -247,11 +248,22 @@ body {
   margin: 5px auto;
 }
 .article .tags ul {
-  margin: auto;
-  width: 100%;
-  padding: 0;
   display: flex;
   justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.article .tag {
+  color: #901c1c;
+  padding: 1px 5px;
+  margin: 2px;
+  list-style: none;
+  border: 1px solid #cccccc;
+  border-radius: 1rem;
+  width: fit-content;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 .article .description,
 .article .price {
@@ -391,6 +403,7 @@ body {
   flex-shrink: 0;
   box-sizing: border-box;
   align-items: center;
+  cursor: pointer;
 }
 @media screen and (max-width: 768px) {
   .photographerHeader .img {

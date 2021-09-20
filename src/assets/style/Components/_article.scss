@@ -37,14 +37,26 @@
     .tags {
         width: 100%;
         margin: 5px auto;
+
+        ul {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
     }
 
-    .tags ul {
-        margin: auto;
-        width: 100%;
-        padding: 0;
-        display: flex;
-        justify-content: center;
+    .tag {
+        color: $color-secondary-txt-dark;
+        padding: 1px 5px;
+        margin: 2px;
+        list-style: none;
+        border: 1px solid #cccccc;
+        border-radius: 1rem;
+        width: fit-content;
+        font-size: .7rem;
+        font-weight: 600;
+        cursor: pointer;
     }
 
     .description,

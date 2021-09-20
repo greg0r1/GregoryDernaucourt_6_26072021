@@ -12,7 +12,9 @@ const displayNavTags = (tags) => {
         <nav class="nav">
             <ul class="tags">
             ${tags.map((tag) => `
-                <li class="tag" title="${tag}" tabindex="0">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>
+                <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
+                    <li>#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>
+                </a>
                 `).join("")}
             </ul></nav>`
 
@@ -44,7 +46,9 @@ const displayPhotographers = (photographers = []) => {
             </div>
             <div class="tags">
                 <ul>
-                ${tags.map((tag) => `<li class="tag" tabindex="0" title="${tag}">#${tag}</li>`).join("")}
+                ${tags.map((tag) => `
+                <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
+                <li>#${tag}</li></a>`).join("")}
                 </ul></div></article>
         `
     ).join("")
@@ -58,7 +62,7 @@ const displayPhotographers = (photographers = []) => {
 // Scripts
 
 /**
- * Fonction pour gérer l'événement clique des tags
+ * Fonction pour gérer l'événement des tags
  *
  * @param {*} dataService
  */
@@ -69,7 +73,8 @@ function eventOnTags(dataService, tag) {
         const photographersByTags = dataService.getPhotographersByTags(nameAttributeOfTag);
         displayPhotographers(photographersByTags);
         eventOnTags(dataService);
-        putEventCickOnPhotographerProfile(dataService);
+        // eventOnTags(dataService);
+        eventCickOnPhotographerProfile(dataService);
         // On ajoute le tag au titre
         document.title = `Fisheye | ${nameAttributeOfTag.charAt(0).toUpperCase()}${nameAttributeOfTag.slice(1)}`;
     });
@@ -81,14 +86,14 @@ function eventOnTags(dataService, tag) {
  *
  * @param {*} dataService
  */
-function putEventCickOnPhotographerProfile(dataService) {
-    // On ajoute l'événement "click" à chaque fiche de photographes
+function eventCickOnPhotographerProfile(dataService) {
+    // On ajoute l'événement au "click" à chaque fiche de photographes
     EventService.handlePhotographerSelection((element) => {
         const nameOfPhotographer = element.textContent.trim();
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
         const id = dataService.getPhotographerByName(nameOfPhotographer).id;
         const url = new URL(`photographer.html?id=${id.toString()}&firstName=${firstNameOfPhotographer}`, location);
-        element.setAttribute('href', url)
+        element.setAttribute('href', url);
     });
 }
 
@@ -116,7 +121,7 @@ const mainPhotographers = async () => {
         // On ajoute l'événement "click" à l'élément "tag"
         eventOnTags(dataService);
         // On ajoute l'événement "click" à chaque fiche de photographes
-        putEventCickOnPhotographerProfile(dataService);
+        eventCickOnPhotographerProfile(dataService);
 
 
     } catch (error) {

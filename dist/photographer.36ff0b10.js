@@ -478,12 +478,12 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <a class=\"tag\" title=\"".concat(tag, "\" href=\"#\" tabindex=\"0\">\n                        <li>#").concat(tag, "</li>\n                    </a>\n                ")
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <a class=\"tag\" title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">\n                        <li>#").concat(tag, "</li>\n                    </a>\n                ")
     ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\" aria-label=\"Image\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\" alt=\"Portrait du photographe ").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
     const filterButtonElement = document.querySelector('.filter');
-    filterButtonElement.innerHTML = "        \n        <span>Trier par</span>\n        <div class=\"btn-group dropdown show\">\n            <button class=\"btn dropdown-toggle\"\n            id=\"dropdownMenuLink\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\">\n                <a>Popularit\xE9</a>\n                <span class=\"fas fa-chevron-down\"></span>\n            </button>\n            <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuLink\">\n                <div class=\"dropdown-divider\"></div>\n                <button class=\"dropdown-item\" href=\"\">Date</button>\n                <button class=\"dropdown-item\" href=\"\">Titre</button>\n            </div>\n        </div>\n    ";
+    filterButtonElement.innerHTML = "        \n        <span>Trier par</span>\n        <div class=\"btn-group dropdown show\">\n            <button class=\"btn dropdown-toggle\"\n            id=\"dropdownMenuLink\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\">\n                <a>Popularit\xE9</a>\n                <span class=\"fas fa-chevron-down\"></span>\n            </button>\n            <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuLink\">\n                <div class=\"dropdown-divider\"></div>\n                <button class=\"dropdown-item\">Date</button>\n                <button class=\"dropdown-item\">Titre</button>\n            </div>\n        </div>\n    ";
 };
 const displayModalForm = (name)=>{
     const div = document.createElement('div');
@@ -492,7 +492,8 @@ const displayModalForm = (name)=>{
     document.getElementById('main').appendChild(div);
     document.querySelector('form#contact input[type=submit]').addEventListener('click', (e)=>getValuesForm(e)
     );
-};
+    document.getElementById('first').focus();
+}; // Scripts
 /**
  *
  *
@@ -501,7 +502,7 @@ const displayModalForm = (name)=>{
     // On ajoute l'événement "click" à chaque élément "tag"
     _EventService.default.handleTagClick((element)=>{
         const nameAttributeOfTag = element.getAttribute('title');
-        const url = new URL("/index.html?tag=".concat(nameAttributeOfTag), location);
+        const url = new URL("index.html?tag=".concat(nameAttributeOfTag), window.location.href);
         element.setAttribute('href', url.href);
     });
 }
@@ -546,7 +547,7 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
  * @param {*} nameOfPhotographer
  */ function eventDisplayModalForm(nameOfPhotographer) {
     document.querySelector('.bground') ? _EventService.default.closeModal() : displayModalForm(nameOfPhotographer);
-    _EventService.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // On vérifie les champs des formulaires
+    _EventService.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // Events de vérification sur les champs des formulaires
     _EventService.default.handleInputsFormClick((e)=>checkField(e)
     );
 }
@@ -5247,7 +5248,6 @@ require("core-js/modules/web.dom-collections.for-each.js");
  * @class EventService
  */ class EventService {
     constructor(){
-        document.addEventListener('keyup', this.onKeyUp);
     }
     static handleTagClick(call) {
         const array = Array.from(document.getElementsByClassName("tag")).forEach((element)=>{
@@ -5268,6 +5268,14 @@ require("core-js/modules/web.dom-collections.for-each.js");
             dropdownElement.classList.toggle("show");
             chevronElement.classList.toggle("fa-chevron-up");
         });
+        document.getElementById('dropdownMenuLink').addEventListener('keypress', (e)=>{
+            if (e.key === 'Enter') {
+                let dropdownElement = document.querySelector(".dropdown");
+                let chevronElement = document.querySelector(".fa-chevron-down");
+                dropdownElement.classList.toggle("show");
+                chevronElement.classList.toggle("fa-chevron-up");
+            }
+        });
     }
     static handleMediasFilter(call) {
         const array = Array.from(document.querySelectorAll(".filter a, .dropdown-item")).forEach((element)=>{
@@ -5276,9 +5284,12 @@ require("core-js/modules/web.dom-collections.for-each.js");
         });
     }
     static closeModal(selector, elementToRemove) {
-        selector.addEventListener("click", ()=>document.getElementById('main').removeChild(elementToRemove)
+        console.log(selector);
+        selector.addEventListener("click", ()=>elementToRemove.remove()
         );
-        document.removeEventListener('keyup', this.onKeyUp);
+        elementToRemove.addEventListener("keyup", (e)=>{
+            if (e.key === 'Escape') elementToRemove.remove();
+        });
     }
     static handleImagesClick(call) {
         const array = Array.from(document.querySelectorAll(".medias .image")).forEach((element)=>{
@@ -5507,7 +5518,7 @@ function _interopRequireDefault(obj) {
         if (!element) {
             element = document.createElement('div');
             element.classList.add('lightbox-bg');
-            document.body.appendChild(element);
+            document.body.appendChild(element); // Événements au clavier
             document.body.addEventListener('keyup', (evt)=>{
                 if (evt.key === 'ArrowRight') this.next();
             });

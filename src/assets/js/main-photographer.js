@@ -18,7 +18,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <div class="tags" aria-label="Liste de tags concernant le photographe">
                 <ul>
                     ${photographer.tags.map((tag) => `
-                    <a class="tag" title="${tag}" href="#" tabindex="0">
+                    <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
                         <li>#${tag}</li>
                     </a>
                 `).join("")}
@@ -57,8 +57,8 @@ const displayFilterButton = () => {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item" href="">Date</button>
-                <button class="dropdown-item" href="">Titre</button>
+                <button class="dropdown-item">Date</button>
+                <button class="dropdown-item">Titre</button>
             </div>
         </div>
     `
@@ -103,10 +103,12 @@ const displayModalForm = (name) => {
         </div>
     </div>`;
     document.getElementById('main').appendChild(div);
-    document.querySelector('form#contact input[type=submit]').addEventListener('click', (e) => getValuesForm(e))
+    document.querySelector('form#contact input[type=submit]').addEventListener('click', (e) => getValuesForm(e));
+    document.getElementById('first').focus();
 }
 
 
+// Scripts
 /**
  *
  *
@@ -116,7 +118,7 @@ function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
     EventService.handleTagClick((element) => {
         const nameAttributeOfTag = element.getAttribute('title');
-        const url = new URL(`/index.html?tag=${nameAttributeOfTag}`, location);
+        const url = new URL(`index.html?tag=${nameAttributeOfTag}`, window.location.href);
         element.setAttribute('href', url.href)
     });
 }
@@ -167,7 +169,7 @@ function eventDisplayModalForm(nameOfPhotographer) {
 
     (document.querySelector('.bground')) ? EventService.closeModal() : displayModalForm(nameOfPhotographer);
     EventService.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground'));
-    // On vérifie les champs des formulaires
+    // Events de vérification sur les champs des formulaires
     EventService.handleInputsFormClick((e) => checkField(e))
 }
 
