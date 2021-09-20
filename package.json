@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html",
     "start": "parcel index.html photographer.html",
-    "build": "parcel build index.html photographer.html --public-url ./dist"
+    "build": "parcel build index.html photographer.html --dist-dir ./docs"
   },
   "repository": {
     "type": "git",
