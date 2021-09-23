@@ -24,7 +24,7 @@ const displayPhotographers = (photographers = []) => {
     section.classList = "photographers";
     // const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
     section.innerHTML = `
-    <header aria-label="Section header">>
+    <header aria-label="Section header">
         <h1>Nos photographes</h1>
     </header>
         <div class="container">
