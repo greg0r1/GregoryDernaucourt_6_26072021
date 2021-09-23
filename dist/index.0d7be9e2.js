@@ -469,10 +469,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
+require("core-js/modules/es.string.trim.js");
 require("core-js/modules/es.array.iterator.js");
 require("core-js/modules/web.dom-collections.iterator.js");
 require("core-js/modules/web.url.js");
-require("core-js/modules/es.string.trim.js");
 require("core-js/modules/es.regexp.to-string.js");
 require("core-js/modules/es.promise.js");
 require("core-js/modules/es.regexp.exec.js");
@@ -494,11 +494,10 @@ const displayNavTags = (tags)=>{
 const displayPhotographers = function displayPhotographers1() {
     let photographers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     const section = document.getElementById('section');
-    section.classList = "photographers";
-    const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
+    section.classList = "photographers"; // const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
     section.innerHTML = "\n    <header aria-label=\"Section header\">>\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { portrait , name , city , country , tagline , price , tags  } = _ref;
-        return "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img src=\"").concat(urlToPathImages + portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
+        return "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/").concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
         ).join(""), "\n                </ul>\n            </div>\n        </article>\n        ");
     }).join(""), "\n        </div>\n        ");
 }; // Scripts
