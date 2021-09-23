@@ -1,41 +1,39 @@
 // Model
 import DataService from './classes/DataService';
 import EventService from './classes/EventService';
-import EventScrollToTop from './classes/EventScrollToTop'
+import EventScrollToTop from './classes/EventScrollToTop';
 
 const data = new DataService;
 
 // View
 const displayNavTags = (tags) => {
-    // On affiche la nav avec les tags
     document.querySelector('header').innerHTML += `
-        <nav class="nav">
+        <nav class="nav" aria-label="Photographer categories">
             <ul class="tags">
             ${tags.map((tag) => `
-                <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
-                    <li>#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</li>
-                </a>
-                `).join("")}
-            </ul></nav>`
+                <li class="tag">
+                    <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
+                </li>`).join("")}
+            </ul>
+        </nav>`
 
 }
 
 const displayPhotographers = (photographers = []) => {
     const section = document.getElementById('section');
     section.classList = "photographers";
-
+    const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
     section.innerHTML = `
-
-    <header>
+    <header aria-label="Section header">>
         <h1>Nos photographes</h1>
     </header>
         <div class="container">
 
-        ${photographers.map(({ portrait, name, city, country, tagline, price, tags }) => `
-        <article class="article" tabindex="0">
-            <a class="link-to-photographer">
+        ${photographers.map(({ portrait, name, city, country, tagline, price, tags }) =>
+        `<article class="article">
+            <a class="link-to-photographer" tabindex="0" aria-label="${name}">
                 <div class="article__img">
-                    <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
+                    <img src="${urlToPathImages + portrait}" alt="Portrait du photographe ${name}">
                 </div>
                 <h2 class="article__title title">${name}</h2>
             </a>
@@ -47,9 +45,12 @@ const displayPhotographers = (photographers = []) => {
             <div class="tags">
                 <ul>
                 ${tags.map((tag) => `
-                <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
-                <li>#${tag}</li></a>`).join("")}
-                </ul></div></article>
+                    <li>
+                        <a class="tag" title="${tag}" href="index.html?tag=${tag}" tabindex="0">#${tag}</a>
+                    </li>`).join("")}
+                </ul>
+            </div>
+        </article>
         `
     ).join("")
         }

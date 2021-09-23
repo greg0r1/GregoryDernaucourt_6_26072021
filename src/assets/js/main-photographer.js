@@ -18,14 +18,14 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <div class="tags" aria-label="Liste de tags concernant le photographe">
                 <ul>
                     ${photographer.tags.map((tag) => `
-                    <a class="tag" title="${tag}" href="javascript:void(0);" tabindex="0">
-                        <li>#${tag}</li>
-                    </a>
+                    <li class="tag">
+                        <a title="${tag}" href="javascript:void(0);" tabindex="0">#${tag}</a>
+                    </li>
                 `).join("")}
                 </ul>
             </div>
             <div class="info">
-                <div class="likes">
+                <div class="likes" arial-label="Total number of photographer likes">
                     <span>${totalLikes}</span><span class="fas fa-heart"></span>
                 </div>
                 <div class="price">
@@ -45,20 +45,29 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
 const displayFilterButton = () => {
     const filterButtonElement = document.querySelector('.filter');
     filterButtonElement.innerHTML = `        
-        <span>Trier par</span>
-        <div class="btn-group dropdown show">
+        <p id="listbox1label" role="label">Trier par</p>
+        <div role="listbox" id="listbox1" class="btn-group dropdown show">
             <button class="btn dropdown-toggle"
             id="dropdownMenuLink"
+            aria-labelledby="listbox1label"
             data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-                <a>Popularité</a>
-                <span class="fas fa-chevron-down"></span>
+            aria-haspopup="listbox"
+            aria-activedescendant="listbox1-1"
+            aria-expanded="true">
+                <div role="option" id="listbox1-1">
+                    <a href="javascript:void(0);" role="listbox" id="listbox1-1" tabindex="0">Popularité</a>
+                </div>
+                <span class="fas fa-chevron-down" tabindex="0"></span>
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu"
+            aria-labelledby="dropdownMenuLink">
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item">Date</button>
-                <button class="dropdown-item">Titre</button>
+                <div role="option id="listbox1-2" class="dropdown-item"">
+                    <a href="javascript:void(0);" role="listbox" id="listbox1-2" tabindex="0">Date</a>
+                </div>
+                <div role="option id="listbox1-3" class="dropdown-item">
+                    <a href="javascript:void(0);" role="listbox" id="listbox1-3" tabindex="0">Titre</a>
+                </div>
             </div>
         </div>
     `
@@ -69,35 +78,37 @@ const displayModalForm = (name) => {
     div.className = 'bground';
 
     div.innerHTML = `
-      <div class="modalContent">
-        <span class="close"></span>
+      <div role="dialog" class="modalContent"
+      aria-labelledby="dialogTitle"
+      aria-modal="true">
+        <span role="button" aria-label="Close Contact form" class="close"></span>
         <div class="modal-body">
-            <h1>Contactez-moi</br>
+            <h1 id="dialogTitle" aria-label="Contact me ${name}" >Contactez-moi</br>
             ${name}</h1>
           <form id="contact" action="" method="get">
             <div class="formData">
-              <label for="first">Prénom</label>
-              <input class="text-control" type="text" id="first" name="first" /><br>
+              <label aria-label="First name" id="first" for="first">Prénom</label>
+              <input class="text-control" type="text" id="first" name="first" aria-labelledby="first"/><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="last">Nom</label>
-              <input class="text-control" type="text" id="last" name="last" /><br>
+              <label aria-label="Last name" id="last" for="last">Nom</label>
+              <input class="text-control" type="text" id="last" name="last" aria-labelledby="last"/><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="email">E-mail</label>
-              <input class="text-control" type="email" id="email" name="email" /><br>
+              <label aria-label="email" id="email" for="email">E-mail</label>
+              <input class="text-control" type="email" id="email" name="email" aria-labelledby="email"/><br>
               <span class="error"></span>
             </div>
             <div class="formData">
-              <label for="message">Votre message</label>
-              <textarea class="text-control" type="text" id="message" name="message"></textarea>
+              <label aria-label="Your message" id="message" for="message">Votre message</label>
+              <textarea class="text-control" type="text" id="message" name="message" aria-labelledby="message"></textarea>
               <br>
               <span class="error"></span>
             </div>
             <div class="submit">
-                <input class="btn-submit button" type="submit" value="Envoyer" />
+                <input class="btn-submit button" type="submit" value="Envoyer" aria-label="Send"/>
             </div>
           </form>
         </div>
@@ -128,17 +139,14 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
     if (element.textContent.trim() === "Popularité") {
         document.querySelector(".medias").appendChild(new ViewMedias(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer).render());
         eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)
-        // displayPhotographerMedias(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer);
     }
     if (element.textContent.trim() === "Date") {
         document.querySelector(".medias").appendChild(new ViewMedias(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer).render());
         eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)
-        // displayPhotographerMedias(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer);
     }
     if (element.textContent.trim() === "Titre") {
         document.querySelector(".medias").appendChild(new ViewMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer).render());
         eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)
-        // displayPhotographerMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer);
     }
 }
 
@@ -170,7 +178,9 @@ function eventDisplayModalForm(nameOfPhotographer) {
     (document.querySelector('.bground')) ? EventService.closeModal() : displayModalForm(nameOfPhotographer);
     EventService.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground'));
     // Events de vérification sur les champs des formulaires
-    EventService.handleInputsFormClick((e) => checkField(e))
+    EventService.handleInputsFormClick((e) => checkField(e));
+    //On rend les éléments en arrière-plan inaccessible pour les lecteurs d'écran
+    document.getElementById('section').setAttribute('aria-hidden', 'true')
 }
 
 function getValuesForm(e) {
@@ -219,9 +229,6 @@ function checkField(element) {
         }
     }
 }
-
-
-
 
 
 // Controller

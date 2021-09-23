@@ -478,17 +478,17 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <a class=\"tag\" title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">\n                        <li>#").concat(tag, "</li>\n                    </a>\n                ")
-    ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\" aria-label=\"Image\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\" alt=\"Portrait du photographe ").concat(photographer.name, "\"\">\n        </div>\n        ");
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>\n                ")
+    ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\" arial-label=\"Total number of photographer likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\" aria-label=\"Image\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\" alt=\"Portrait du photographe ").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
     const filterButtonElement = document.querySelector('.filter');
-    filterButtonElement.innerHTML = "        \n        <span>Trier par</span>\n        <div class=\"btn-group dropdown show\">\n            <button class=\"btn dropdown-toggle\"\n            id=\"dropdownMenuLink\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\">\n                <a>Popularit\xE9</a>\n                <span class=\"fas fa-chevron-down\"></span>\n            </button>\n            <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuLink\">\n                <div class=\"dropdown-divider\"></div>\n                <button class=\"dropdown-item\">Date</button>\n                <button class=\"dropdown-item\">Titre</button>\n            </div>\n        </div>\n    ";
+    filterButtonElement.innerHTML = "        \n        <p id=\"listbox1label\" role=\"label\">Trier par</p>\n        <div role=\"listbox\" id=\"listbox1\" class=\"btn-group dropdown show\">\n            <button class=\"btn dropdown-toggle\"\n            id=\"dropdownMenuLink\"\n            aria-labelledby=\"listbox1label\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"listbox\"\n            aria-activedescendant=\"listbox1-1\"\n            aria-expanded=\"true\">\n                <div role=\"option\" id=\"listbox1-1\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-1\" tabindex=\"0\">Popularit\xE9</a>\n                </div>\n                <span class=\"fas fa-chevron-down\" tabindex=\"0\"></span>\n            </button>\n            <div class=\"dropdown-menu\"\n            aria-labelledby=\"dropdownMenuLink\">\n                <div class=\"dropdown-divider\"></div>\n                <div role=\"option id=\"listbox1-2\" class=\"dropdown-item\"\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-2\" tabindex=\"0\">Date</a>\n                </div>\n                <div role=\"option id=\"listbox1-3\" class=\"dropdown-item\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-3\" tabindex=\"0\">Titre</a>\n                </div>\n            </div>\n        </div>\n    ";
 };
 const displayModalForm = (name)=>{
     const div = document.createElement('div');
     div.className = 'bground';
-    div.innerHTML = "\n      <div class=\"modalContent\">\n        <span class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1>Contactez-moi</br>\n            ".concat(name, "</h1>\n          <form id=\"contact\" action=\"\" method=\"get\">\n            <div class=\"formData\">\n              <label for=\"first\">Pr\xE9nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"last\">Nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"email\">E-mail</label>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" /><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label for=\"message\">Votre message</label>\n              <textarea class=\"text-control\" type=\"text\" id=\"message\" name=\"message\"></textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"submit\">\n                <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" />\n            </div>\n          </form>\n        </div>\n    </div>");
+    div.innerHTML = "\n      <div role=\"dialog\" class=\"modalContent\"\n      aria-labelledby=\"dialogTitle\"\n      aria-modal=\"true\">\n        <span role=\"button\" aria-label=\"Close Contact form\" class=\"close\"></span>\n        <div class=\"modal-body\">\n            <h1 id=\"dialogTitle\" aria-label=\"Contact me ".concat(name, "\" >Contactez-moi</br>\n            ").concat(name, "</h1>\n          <form id=\"contact\" action=\"\" method=\"get\">\n            <div class=\"formData\">\n              <label aria-label=\"First name\" id=\"first\" for=\"first\">Pr\xE9nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"first\" name=\"first\" aria-labelledby=\"first\"/><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label aria-label=\"Last name\" id=\"last\" for=\"last\">Nom</label>\n              <input class=\"text-control\" type=\"text\" id=\"last\" name=\"last\" aria-labelledby=\"last\"/><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label aria-label=\"email\" id=\"email\" for=\"email\">E-mail</label>\n              <input class=\"text-control\" type=\"email\" id=\"email\" name=\"email\" aria-labelledby=\"email\"/><br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"formData\">\n              <label aria-label=\"Your message\" id=\"message\" for=\"message\">Votre message</label>\n              <textarea class=\"text-control\" type=\"text\" id=\"message\" name=\"message\" aria-labelledby=\"message\"></textarea>\n              <br>\n              <span class=\"error\"></span>\n            </div>\n            <div class=\"submit\">\n                <input class=\"btn-submit button\" type=\"submit\" value=\"Envoyer\" aria-label=\"Send\"/>\n            </div>\n          </form>\n        </div>\n    </div>");
     document.getElementById('main').appendChild(div);
     document.querySelector('form#contact input[type=submit]').addEventListener('click', (e)=>getValuesForm(e)
     );
@@ -510,15 +510,15 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
     document.querySelector(".medias").innerHTML = '';
     if (element.textContent.trim() === "Popularité") {
         document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer).render());
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByPopularity(idFromUrlParams), firstNameOfPhotographer);
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer);
     }
     if (element.textContent.trim() === "Date") {
         document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer).render());
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByDate(idFromUrlParams), firstNameOfPhotographer);
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer);
     }
     if (element.textContent.trim() === "Titre") {
         document.querySelector(".medias").appendChild(new _ViewMedias.default(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer).render());
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // displayPhotographerMedias(dataService.getMediasPhotographerByTitle(idFromUrlParams), firstNameOfPhotographer);
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer);
     }
 }
 function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
@@ -549,7 +549,8 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     document.querySelector('.bground') ? _EventService.default.closeModal() : displayModalForm(nameOfPhotographer);
     _EventService.default.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground')); // Events de vérification sur les champs des formulaires
     _EventService.default.handleInputsFormClick((e)=>checkField(e)
-    );
+    ); //On rend les éléments en arrière-plan inaccessible pour les lecteurs d'écran
+    document.getElementById('section').setAttribute('aria-hidden', 'true');
 }
 function getValuesForm(e) {
     e.preventDefault();
@@ -5257,8 +5258,7 @@ require("core-js/modules/web.dom-collections.for-each.js");
     }
     static handlePhotographerSelection(call) {
         const array = Array.from(document.getElementsByClassName("link-to-photographer")).forEach((element)=>{
-            element.addEventListener("click", ()=>call(element)
-            );
+            call(element);
         });
     }
     static toggleDropdownButton(element) {
@@ -5429,7 +5429,7 @@ exports.default = void 0;
         this.title = title;
     }
     toString() {
-        return "\n        <video tabindex=\"0\" controls id=\"".concat(this.id, "\" class=\"video media\"alt=\"video du photographe ").concat(this.firstName, ", intitul\xE9e: ").concat(this.title, "\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
+        return "\n        <video tabindex=\"0\" controls id=\"".concat(this.id, "\" class=\"video media\" alt=\"").concat(this.title, "\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
     }
 }
 exports.default = ViewVideo;
@@ -5455,7 +5455,7 @@ class ViewPictures {
         this.title = title;
     }
     toString() {
-        return "\n        <img tabindex=\"0\" id=\"".concat(this.id, "\" alt=\"image du photographe ").concat(this.firstName, ", intitul\xE9e: ").concat(this.title, "\" class=\"image media\" src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">");
+        return "\n        <img tabindex=\"0\" id=\"".concat(this.id, "\" alt=\"").concat(this.title, "\" class=\"image media\" src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">");
     }
 }
 exports.default = ViewPictures;
@@ -5529,7 +5529,7 @@ function _interopRequireDefault(obj) {
                 if (evt.key === 'Escape') this.close();
             });
         }
-        element.innerHTML = "\n        <div class=\"lightbox\">\n            <button class=\"lightbox__close\"></button>\n            <button class=\"lightbox__next\"></button>\n            <button class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                    </div>\n                    <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
+        element.innerHTML = "\n        <div role=\"dialog\" class=\"lightbox\" aria-label=\"image closeup view\">\n            <button aria-label=\"Close dialog\" class=\"lightbox__close\"></button>\n            <button aria-label=\"Next image\" class=\"lightbox__next\"></button>\n            <button aria-label=\"Previous image\" class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                    </div>\n                    <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
         element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
         element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this));
         element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this)); //Set height of lightbox

@@ -33,6 +33,10 @@
 }
 :root a {
   text-decoration: none;
+  color: inherit;
+}
+:root li {
+  list-style: none;
 }
 h1 {
   color: #901c1c;
@@ -42,6 +46,7 @@ body {
   padding: 10px;
   width: auto;
   max-width: 1024px;
+  box-sizing: border-box;
 }
 @media screen and (max-width: 768px) {
   body {
@@ -103,6 +108,8 @@ body {
 }
 .filter .dropdown .btn.dropdown-toggle {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .filter .dropdown .btn {
   border-radius: 0.25rem;
@@ -112,7 +119,7 @@ body {
 .filter .dropdown .btn,
 .filter .dropdown .dropdown-item {
   color: #fff;
-  width: 100%;
+  width: -webkit-fill-available;
   font-weight: 400;
   text-align: center;
   vertical-align: middle;
@@ -138,9 +145,11 @@ body {
   text-align: start;
   width: 100%;
   padding: 0.8rem 1.2rem;
+  box-sizing: border-box;
 }
 .filter .dropdown .dropdown-item:last-child {
   box-shadow: 0px 4px 5px 0px #00000059;
+  border-radius: 5px;
 }
 .filter .dropdown .dropdown-item, .filter .dropdown .dropdown-divider {
   display: block;
@@ -279,7 +288,6 @@ body {
   color: #901c1c;
   padding: 1px 5px;
   margin: 2px;
-  list-style: none;
   border: 1px solid #cccccc;
   border-radius: 1rem;
   width: fit-content;
@@ -824,6 +832,9 @@ body {
 /* 
 * Nav: with "tag" components
  */
+.nav {
+  max-width: 510px;
+}
 @media screen and (max-width: 768px) {
   .nav {
     margin: auto;

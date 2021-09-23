@@ -3,6 +3,7 @@
  */
 
 .nav {
+    max-width: 510px;
 
     @include mobile-only {
         margin: auto;

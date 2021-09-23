@@ -9,6 +9,6 @@ export default class ViewPictures {
     }
     toString() {
         return `
-        <img tabindex="0" id="${this.id}" alt="image du photographe ${this.firstName}, intitulée: ${this.title}" class="image media" src="./assets/images/Sample_Photos/${this.firstName}/${this.name}">`
+        <img tabindex="0" id="${this.id}" alt="${this.title}" class="image media" src="./assets/images/Sample_Photos/${this.firstName}/${this.name}">`
     }
 }

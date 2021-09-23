@@ -45,6 +45,7 @@ export default class EventService {
     static closeModal(selector, elementToRemove) {
         selector.addEventListener("click", () => document.getElementById('main').removeChild(elementToRemove))
         document.removeEventListener('keyup', this.onKeyUp)
+        document.getElementById('section').removeAttribute('aria-hidden')
     }
 
     static handleImagesClick(call) {

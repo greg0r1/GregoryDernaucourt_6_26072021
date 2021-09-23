@@ -32,6 +32,11 @@
 
     a {
         text-decoration: none;
+        color: inherit;
+    }
+
+    li {
+        list-style: none;
     }
 }
 
@@ -44,6 +49,7 @@ body {
     padding: 10px;
     width: auto;
     max-width: 1024px;
+    box-sizing: border-box;
 
     @include mobile-only {
         padding: 0 .9rem;

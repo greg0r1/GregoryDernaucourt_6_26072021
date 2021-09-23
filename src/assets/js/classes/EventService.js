@@ -17,8 +17,8 @@ export default class EventService {
 
     static handlePhotographerSelection(call) {
         const array = Array.from(document.getElementsByClassName("link-to-photographer")).forEach((element) => {
-            element.addEventListener("click", () => call(element));
-        })
+            call(element)
+        });
     }
 
     static toggleDropdownButton(element) {

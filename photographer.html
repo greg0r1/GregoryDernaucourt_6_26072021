@@ -11,16 +11,17 @@
 </head>
 
 <body>
-    <header id="header">
-        <div class="scrollToMainButton">
-            <a href="#header">Passer au contenu</a>
-        </div>
-        <a id="logo" href="index.html" title="Lien du logo Fisheye vers la page d'accueil">
+    <div role="button" class="scrollToMainButton" aria-label="Button for scrolling to main content">
+        <a href="#main">Passer au contenu</a>
+    </div>
+    <header id="header" role="banner" aria-label="Section header of photographer profile">
+        <a id="logo" href="index.html" title="Fisheye Home page" alt="Fisheye Home page"
+            aria-label="Link to Fisheye Home page">
             <img src="src/assets/images/logo.svg" alt="">
         </a>
     </header>
-    <main id="main">
-        <section id="section" class="photographer">
+    <main id="main" role="main">
+        <section id="section" role="region" class="photographer" aria-label="Content oh photographer">
             <header class="photographerHeader"></header>
             <div class="filter"></div>
             <div class="medias"></div>

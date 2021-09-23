@@ -13,7 +13,7 @@ export default class ViewVideo {
     }
     toString() {
         return `
-        <video tabindex="0" controls id="${this.id}" class="video media"alt="video du photographe ${this.firstName}, intitulée: ${this.title}">
+        <video tabindex="0" controls id="${this.id}" class="video media" alt="${this.title}">
             <source src="./assets/images/Sample_Photos/${this.firstName}/${this.name}" type="video/mp4">
             <p>Votre navigateur ne supporte pas la vidéo HTML5. Voici à la place <a href="./assets/images/Sample_Photos/${this.firstName}/${this.name}">le lien vers la vidéo</a>.</p>
         </video>`
