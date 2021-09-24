@@ -28,7 +28,6 @@
     flex-shrink: 0;
     box-sizing: border-box;
     align-items: center;
-    cursor: pointer;
 
     @include mobile-only {
         width: 120px;

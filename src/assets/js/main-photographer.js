@@ -4,6 +4,7 @@ import EventService from './classes/EventService';
 import ViewMedias from './classes/ViewMedias';
 import Lightbox from './classes/Lightbox';
 import EventScrollToTop from './classes/EventScrollToTop'
+import ModalForm from './classes/ModalForm'
 
 // View
 
@@ -25,7 +26,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
                 </ul>
             </div>
             <div class="info">
-                <div class="likes" arial-label="Total number of photographer likes">
+                <div class="likes" arial-label="likes">
                     <span>${totalLikes}</span><span class="fas fa-heart"></span>
                 </div>
                 <div class="price">
@@ -37,7 +38,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
             <button class="btn">Contactez-moi</button>
         </div>
         <div class="img" aria-label="Image">
-            <img src="./assets/images/Sample_Photos/Photographers_ID_Photos/${photographer.portrait}" alt=" alt="Portrait du photographe ${photographer.name}"">
+            <img src="./assets/images/Sample_Photos/Photographers_ID_Photos/${photographer.portrait}" alt="${photographer.name}"">
         </div>
         `
 }
@@ -73,57 +74,12 @@ const displayFilterButton = () => {
     `
 }
 
-const displayModalForm = (name) => {
-    const div = document.createElement('div');
-    div.className = 'bground';
-
-    div.innerHTML = `
-      <div role="dialog" class="modalContent"
-      aria-labelledby="dialogTitle"
-      aria-modal="true">
-        <span role="button" aria-label="Close Contact form" class="close"></span>
-        <div class="modal-body">
-            <h1 id="dialogTitle" aria-label="Contact me ${name}" >Contactez-moi</br>
-            ${name}</h1>
-          <form id="contact" action="" method="get">
-            <div class="formData">
-              <label aria-label="First name" id="first" for="first">Prénom</label>
-              <input class="text-control" type="text" id="first" name="first" aria-labelledby="first"/><br>
-              <span class="error"></span>
-            </div>
-            <div class="formData">
-              <label aria-label="Last name" id="last" for="last">Nom</label>
-              <input class="text-control" type="text" id="last" name="last" aria-labelledby="last"/><br>
-              <span class="error"></span>
-            </div>
-            <div class="formData">
-              <label aria-label="email" id="email" for="email">E-mail</label>
-              <input class="text-control" type="email" id="email" name="email" aria-labelledby="email"/><br>
-              <span class="error"></span>
-            </div>
-            <div class="formData">
-              <label aria-label="Your message" id="message" for="message">Votre message</label>
-              <textarea class="text-control" type="text" id="message" name="message" aria-labelledby="message"></textarea>
-              <br>
-              <span class="error"></span>
-            </div>
-            <div class="submit">
-                <input class="btn-submit button" type="submit" value="Envoyer" aria-label="Send"/>
-            </div>
-          </form>
-        </div>
-    </div>`;
-    document.getElementById('main').appendChild(div);
-    document.querySelector('form#contact input[type=submit]').addEventListener('click', (e) => getValuesForm(e));
-    document.getElementById('first').focus();
-}
-
 
 // Scripts
+
 /**
+ * Ajoute un event au "click" à chaque "tag"
  *
- *
- * @param {*} data
  */
 function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
@@ -134,6 +90,15 @@ function eventOnTags() {
     });
 }
 
+/**
+ * Gestionnaire de filtres pour le bouton dropdown
+ *
+ * @param {*} element
+ * @param {*} dataService
+ * @param {*} idFromUrlParams
+ * @param {*} firstNameOfPhotographer
+ * @param {*} medias
+ */
 function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias) {
     document.querySelector(".medias").innerHTML = '';
     if (element.textContent.trim() === "Popularité") {
@@ -150,6 +115,12 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
     }
 }
 
+/**
+ * Ajoute un event sur chaque médias pour la lightbox
+ *
+ * @param {Array} medias
+ * @param {string} firstNameOfPhotographer
+ */
 function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     const lightbox = new Lightbox(medias, firstNameOfPhotographer);
     const mediasElements = Array.from(document.querySelectorAll('.video.media, .image.media'));
@@ -168,78 +139,14 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     }))
 }
 
-/**
- * Fonction qui affiche le formulaire de contact
- *
- * @param {*} nameOfPhotographer
- */
-function eventDisplayModalForm(nameOfPhotographer) {
-
-    (document.querySelector('.bground')) ? EventService.closeModal() : displayModalForm(nameOfPhotographer);
-    EventService.closeModal(document.querySelector('.bground .close'), document.querySelector('.bground'));
-    // Events de vérification sur les champs des formulaires
-    EventService.handleInputsFormClick((e) => checkField(e));
-    //On rend les éléments en arrière-plan inaccessible pour les lecteurs d'écran
-    document.getElementById('section').setAttribute('aria-hidden', 'true')
-}
-
-function getValuesForm(e) {
-    e.preventDefault();
-    for (let i = 0; i < document.forms[0].length - 1; i++) {
-        console.log(document.forms[0][i].value)
-    };
-    document.querySelector('.bground').remove()
-}
-
-// Modal Form
-/**
- * Vérification des champs input de la fenêtre modale
- * de contact
- *
- * @param {*} element
- */
-function checkField(element) {
-    const regExName = "[a-zA-Z-s\u00C0-\u024F\u1E00-\u1EFF]{3,}$"; // Regex qui vérifie si le champ a plus de 3 caractères, les accents, et espaces des noms composés
-
-    if (element.id === "first") {
-        element.pattern = regExName;
-        if (!element.validity.valid) {
-            element.setAttribute("style", "border:2px solid red; outline:none");
-
-        } else {
-            element.removeAttribute("style");
-        }
-    }
-    if (element.id === "last") {
-        element.pattern = regExName;
-        if (!element.validity.valid) {
-            element.setAttribute("style", "border:2px solid red; outline:none");
-
-        } else {
-            element.removeAttribute("style");
-        }
-    }
-    if (element.id === "email") {
-        element.pattern = "[a-z0-9-_]+[a-z0-9.-_]*@[a-z0-9-_]{2,}.[a-z.-_]+[a-z-_]+"; // Regex qui vérifie si le champ a un email valide
-        if (!element.validity.valid) {
-            element.setAttribute("style", "border:2px solid red; outline:none");
-
-        } else {
-            element.removeAttribute("style");
-        }
-    }
-}
-
 
 // Controller
 
 const mainPhotographer = async () => {
     try {
         const dataService = new DataService();
-        // On récupère l'ensemble des photographes du Json
-        dataService.loadPhotographers();
-        // On récupère l'ensemble des médias des photographes du Json
-        dataService.loadMedias();
+        dataService.loadPhotographers();// Récupération des photographes
+        dataService.loadMedias();// Récupération de l'ensemble des médias des photographes
 
         // On display le photographe avec ses infos grâce à son id récupéré dans l'url
         const paramsFromUrl = new URLSearchParams(document.location.search.substring(1));
@@ -248,25 +155,29 @@ const mainPhotographer = async () => {
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
         displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams));
-        // On ajoute les events sur les tags qui renvoients sur la page index
+
+        // On ajoute les events sur les tags (renvoient sur la page index avec le résultat)
         eventOnTags();
+
         // Event sur bouton contact
-        document.querySelector('.photographerHeader .button').addEventListener('click', () => eventDisplayModalForm(nameOfPhotographer));
-        //On affiche le bouton de filtre
+        document.querySelector('.photographerHeader .button').addEventListener('click', () => new ModalForm(nameOfPhotographer));
+
+        //On affiche le bouton de filtre, avec l'event toggle
         displayFilterButton();
         const chevronElement = document.querySelector(".dropdown-toggle .fas");
         EventService.toggleDropdownButton(chevronElement);
-        // Filtres
-        EventService.handleMediasFilter((element) => filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias));
+        EventService.handleMediasFilter((element) => filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias));// Gestionnaire de filtres des médias
+
         //On affiche les médias du photographes
         document.querySelector(".medias").appendChild(new ViewMedias(medias, firstNameOfPhotographer).render());
-        //On ajoute l'événement sur chaque image pour afficher la lightbox
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)
-        // On ajoute un événement au scroll de window pour afficher un bouton scroll to top
+
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)//Events sur chaque image pour afficher la lightbox
+
+        // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
         window.addEventListener('scroll', () => EventScrollToTop.scrollToTop(document.querySelector('.scrollToMainButton')));
+
         // On ajoute le nom du photographe au titre
         document.title = `Fisheye | ${nameOfPhotographer}`;
-
 
     } catch (error) {
 

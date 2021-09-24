@@ -204,7 +204,6 @@ body {
   flex-shrink: 0;
   box-sizing: border-box;
   align-items: center;
-  cursor: pointer;
 }
 @media screen and (max-width: 768px) {
   .article__img {
@@ -411,7 +410,6 @@ body {
   flex-shrink: 0;
   box-sizing: border-box;
   align-items: center;
-  cursor: pointer;
 }
 @media screen and (max-width: 768px) {
   .photographerHeader .img {
@@ -625,13 +623,23 @@ body {
 .bground .modalContent .formData {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 .bground .modalContent .formData textarea {
   height: 10rem;
 }
+.bground .modalContent .formData span.error {
+  padding: 2px 10px;
+  margin: 0 0 0 3px;
+  color: red;
+  background: #fff;
+  width: fit-content;
+  border-radius: 3px;
+}
 .bground .modalContent div.submit {
   display: flex;
   justify-content: center;
+  margin: 2rem 0;
 }
 .bground .modalContent div.submit .button {
   padding: 1rem 4rem;
