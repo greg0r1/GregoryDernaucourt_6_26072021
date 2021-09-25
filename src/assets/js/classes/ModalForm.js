@@ -84,11 +84,8 @@ export default class ModalForm {
         e.preventDefault();
         for (let i = 0; i < document.forms[0].length - 1; i++) {
             if (!document.forms[0][i].checkValidity() || document.forms[0][i].value === '') {
-<<<<<<< HEAD
                 e.preventDefault()
                 console.clear()
-=======
->>>>>>> 064bea9f235900e8b9ee97de72748b8f4c9368f9
                 let id = document.forms[0][i].getAttribute('id')
                 let nameId = document.querySelector(`.formData.${id} label`).getInnerHTML()
                 alert('Veuillez saisir un ' + nameId)
