@@ -494,7 +494,7 @@ const displayNavTags = (tags)=>{
 const displayPhotographers = function displayPhotographers1() {
     let photographers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     const section = document.getElementById('section');
-    section.classList = "photographers"; // const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
+    section.classList = "photographers";
     section.innerHTML = "\n    <header aria-label=\"Section header\">\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { portrait , name , city , country , tagline , price , tags  } = _ref;
         return "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/").concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
@@ -5112,7 +5112,6 @@ require("core-js/modules/web.dom-collections.for-each.js");
         });
     }
     static closeModal(selector, elementToRemove) {
-        console.log(selector);
         selector.addEventListener("click", ()=>elementToRemove.remove()
         );
         elementToRemove.addEventListener("keyup", (e)=>{
@@ -5292,7 +5291,7 @@ exports.default = void 0;
  * @class EventScrollToTop
  */ class EventScrollToTop {
     static scrollToTop(element) {
-        if (window.scrollY) element.classList.add('display'); // element.addEventListener('click', () => window.scrollTo(0, 0))
+        if (window.scrollY) element.classList.add('display');
         else if (window.screenY === 0) element.classList.remove('display');
     }
 }

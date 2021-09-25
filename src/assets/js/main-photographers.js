@@ -22,7 +22,6 @@ const displayNavTags = (tags) => {
 const displayPhotographers = (photographers = []) => {
     const section = document.getElementById('section');
     section.classList = "photographers";
-    // const urlToPathImages = new URL('assets/images/Sample_Photos/Photographers_ID_Photos/', location);
     section.innerHTML = `
     <header aria-label="Section header">
         <h1>Nos photographes</h1>

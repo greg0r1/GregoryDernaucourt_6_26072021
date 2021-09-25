@@ -45,7 +45,6 @@ export default class EventService {
     }
 
     static closeModal(selector, elementToRemove) {
-        console.log(selector);
         selector.addEventListener("click", () => elementToRemove.remove())
         elementToRemove.addEventListener("keyup", (e) => {
             if (e.key === 'Escape') {
