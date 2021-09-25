@@ -644,14 +644,21 @@ body {
   margin: 0 0 0 3px;
   color: red;
   background: #fff;
+<<<<<<< HEAD
   width: -webkit-fit-content;
   width: -moz-fit-content;
+=======
+>>>>>>> 064bea9f235900e8b9ee97de72748b8f4c9368f9
   width: fit-content;
   border-radius: 3px;
 }
 .bground .modalContent div.submit {
   display: flex;
+<<<<<<< HEAD
   justify-content: left;
+=======
+  justify-content: center;
+>>>>>>> 064bea9f235900e8b9ee97de72748b8f4c9368f9
   margin: 2rem 0;
 }
 .bground .modalContent div.submit .button {
