@@ -18,8 +18,6 @@
 }
 
 @mixin image {
-    width: 200px;
-    height: 200px;
     overflow: hidden;
     border-radius: 200px;
     display: flex;
@@ -29,9 +27,17 @@
     box-sizing: border-box;
     align-items: center;
 
+    @include desktop-only {
+        width: 200px;
+        height: 200px;
+    }
+
+    @include tablet-only {
+        width: 200px;
+        height: 200px;
+    }
+
     @include mobile-only {
-        width: 120px;
-        height: 120px;
         margin: 0 0 auto 0;
     }
 

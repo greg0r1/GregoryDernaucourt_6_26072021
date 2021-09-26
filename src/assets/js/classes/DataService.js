@@ -1,7 +1,17 @@
-import data from '../../json/photographs-DB.json'
+import data_copy from '../../json/photographs-DB-copy.json'
 
+/**
+ * Handle data
+ *
+ * @export
+ * @class DataService
+ */
 export default class DataService {
 
+    /**
+     * Creates an instance of DataService.
+     * @memberof DataService
+     */
     constructor() {
 
         this.photographers = [];
@@ -10,38 +20,76 @@ export default class DataService {
 
     }
 
+    /**
+     * 
+     *
+     * @memberof DataService
+     */
     loadPhotographers() {
 
-        const dataResponse = data;
-
+        const dataResponse = data_copy;
         this.photographers = dataResponse.photographers;
 
     }
 
+    /**
+     *
+     *
+     * @memberof DataService
+     */
     loadMedias() {
 
-        const dataResponse = data;
+        const dataResponse = data_copy;
         this.medias = dataResponse.media;
+        console.log(this.medias.price)
 
     }
 
+    /**
+     *
+     *
+     * @param {string} [tag=""]
+     * @returns
+     * @memberof DataService
+     */
     getPhotographersByTags(tag = "") {
         if (!tag) return this.photographers;
         return this.photographers.filter(({ tags }) => tags.includes(tag));
     }
 
+    /**
+     *
+     *
+     * @param {*} namePhotographer
+     * @returns
+     * @memberof DataService
+     */
     getPhotographerByName(namePhotographer) {
         return this.photographers.find(obj => {
             return obj.name === namePhotographer
         });
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getPhotographerById(idPhotographer) {
         return this.photographers.find(obj => {
             return obj.id === idPhotographer
         });
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getTotalOfLikes(idPhotographer) {
         const photographerMedias = this.medias.filter(obj => obj.photographerId === idPhotographer);
         var arrayOfLikes = [];
@@ -51,10 +99,24 @@ export default class DataService {
         return arrayOfLikes.reduce((accumulator, currentValue) => accumulator + currentValue)
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getMediasByPhotographerId(idPhotographer) {
         return this.medias.filter(obj => obj.photographerId === idPhotographer);
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getMediasPhotographerByPopularity(idPhotographer) {
         const photographerMedias = this.medias.filter(obj => obj.photographerId === idPhotographer);
         return photographerMedias.sort((a, b) => {
@@ -62,6 +124,13 @@ export default class DataService {
         });
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getMediasPhotographerByDate(idPhotographer) {
         const photographerMedias = this.medias.filter(obj => obj.photographerId === idPhotographer);
         return photographerMedias.sort((a, b) => {
@@ -71,11 +140,24 @@ export default class DataService {
         });
     }
 
+    /**
+     *
+     *
+     * @param {*} idPhotographer
+     * @returns
+     * @memberof DataService
+     */
     getMediasPhotographerByTitle(idPhotographer) {
         const photographerMedias = this.medias.filter(obj => obj.photographerId === idPhotographer);
         return photographerMedias.sort((a, b) => a.title.localeCompare(b.title));
     }
 
+    /**
+     *
+     *
+     * @returns
+     * @memberof DataService
+     */
     getTags() {
         const allTags = this.photographers.reduce(
             (allTags, { tags }) => [...allTags, ...tags], []);

@@ -20,7 +20,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
                 <ul>
                     ${photographer.tags.map((tag) => `
                     <li class="tag">
-                        <a title="${tag}" href="javascript:void(0);" tabindex="0">#${tag}</a>
+                        <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag}</a>
                     </li>
                 `).join("")}
                 </ul>
@@ -37,7 +37,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
         <div class="button">
             <button class="btn">Contactez-moi</button>
         </div>
-        <div class="img" aria-label="Image">
+        <div class="img">
             <img src="./assets/images/Sample_Photos/Photographers_ID_Photos/${photographer.portrait}" alt="${photographer.name}"">
         </div>
         `
@@ -55,7 +55,7 @@ const displayFilterButton = () => {
             aria-haspopup="listbox"
             aria-activedescendant="listbox1-1"
             aria-expanded="true">
-                <div role="option" id="listbox1-1">
+                <div role="option">
                     <a href="javascript:void(0);" role="listbox" id="listbox1-1" tabindex="0">Popularité</a>
                 </div>
                 <span class="fas fa-chevron-down" tabindex="0"></span>

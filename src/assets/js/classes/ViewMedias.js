@@ -15,10 +15,10 @@ export default class ViewMedias {
 
     toString() {
         return `
-            ${this.medias.map(({ image, video, title, likes, id }) => `
+            ${this.medias.map(({ image, video, title, likes, id, alt_text }) => `
             <figure class="content-media">
                 <div class="content-media__media">
-                    ${new MediaFactory({ image, video, id, title }, this.firstNameOfPhotographer).create().toString()}
+                    ${new MediaFactory({ image, video, id, title, alt_text }, this.firstNameOfPhotographer).create().toString()}
                 </div>
                 <figcaption class="content-media__figcaption">
                     <span class="content-media__title">${title}</span>

@@ -2,6 +2,7 @@
 
     background: $color-secondary-bg-medium;
     display: flex;
+    flex-wrap: wrap;
     border-radius: 5px;
     padding: 2rem;
     align-items: center;
@@ -12,7 +13,7 @@
     @include mobile-only {
         background: none;
         padding: 0;
-        justify-content: center;
+        justify-content: space-between;
     }
 
 
@@ -20,6 +21,11 @@
         align-items: flex-start;
         width: auto;
         @include details;
+
+        @include mobile-only {
+            width: 200px;
+            margin: 1rem 0 0 0;
+        }
 
         .title {
             @include title
@@ -52,6 +58,7 @@
             @include mobile-only {
                 margin: 0;
                 padding: 2px 0;
+                width: 220px;
             }
         }
 
@@ -89,7 +96,9 @@
 
     .img {
         margin-left: auto;
-        @include image
+        width: 110px;
+        height: 110px;
+        @include image;
     }
 
     .info {

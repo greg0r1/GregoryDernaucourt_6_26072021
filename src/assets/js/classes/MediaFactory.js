@@ -10,9 +10,9 @@ export default class MediaFactory {
     create() {
 
         if (this.media.video) {
-            return new ViewVideo({ name: this.media.video, id: this.media.id, firstName: this.firstName, title: this.media.title })
+            return new ViewVideo({ name: this.media.video, id: this.media.id, firstName: this.firstName, title: this.media.title, altText: this.media.alt_text })
         } else {
-            return new ViewPicture({ name: this.media.image, id: this.media.id, firstName: this.firstName, title: this.media.title })
+            return new ViewPicture({ name: this.media.image, id: this.media.id, firstName: this.firstName, title: this.media.title, altText: this.media.alt_text })
         }
 
     }

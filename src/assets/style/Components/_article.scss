@@ -11,6 +11,12 @@
     &__img {
         margin: auto;
         @include image;
+
+        @include mobile-only {
+            width: 200px;
+            height: 200px;
+        }
+
     }
 
     a {
