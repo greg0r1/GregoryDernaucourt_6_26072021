@@ -496,8 +496,8 @@ const displayPhotographers = function displayPhotographers1() {
     const section = document.getElementById('section');
     section.classList = "photographers";
     section.innerHTML = "\n    <header aria-label=\"Section header\">\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
-        let { portrait , name , city , country , tagline , price , tags  } = _ref;
-        return "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img src=\"assets/images/Sample_Photos/Photographers_ID_Photos/").concat(portrait, "\" alt=\"Portrait du photographe ").concat(name, "\">\n                </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
+        let { id , portrait , name , city , country , tagline , price , tags  } = _ref;
+        return loader(id, portrait, name) || "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img id=\"").concat(id, "\" src=\"../../assets/images/loader.svg\" style=\"\n                    width: 50px;\n                    height: 50px;\n                \">\n                    </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
         ).join(""), "\n                </ul>\n            </div>\n        </article>\n        ");
     }).join(""), "\n        </div>\n        ");
 }; // Scripts
@@ -515,6 +515,16 @@ const displayPhotographers = function displayPhotographers1() {
         eventCickOnPhotographerProfile(dataService); // On ajoute le tag au titre
         document.title = "Fisheye | ".concat(nameAttributeOfTag.charAt(0).toUpperCase()).concat(nameAttributeOfTag.slice(1));
     });
+}
+function loader(id, portrait, name) {
+    // <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
+    const img = new Image();
+    img.onload = ()=>{
+        document.getElementById(id).src = img.src;
+        document.getElementById(id).style.width = "unset";
+        document.getElementById(id).removeAttribute('style');
+    };
+    img.src = 'assets/images/Sample_Photos/Photographers_ID_Photos/' + portrait;
 }
 /**
  * Fonction pour gérer l'événement clique de chaque fiche

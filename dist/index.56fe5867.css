@@ -100,9 +100,16 @@ body {
   color: #FFF;
   background: #901c1c;
 }
+@media screen and (min-width: 900px) {
+  .filter .dropdown button {
+    padding: 1rem;
+  }
+}
 @media screen and (max-width: 768px) {
   .filter .dropdown button {
     letter-spacing: 2px;
+    padding: 0.5rem;
+    width: 185px;
   }
 }
 .filter .dropdown .btn-group {
@@ -116,7 +123,7 @@ body {
 .filter .dropdown .btn {
   border-radius: 0.25rem;
   background-color: #901c1c;
-  padding: 1rem 1.2rem;
+  padding: 1rem;
 }
 .filter .dropdown .btn,
 .filter .dropdown .dropdown-item {
@@ -245,6 +252,14 @@ body {
     height: 200px;
   }
 }
+.article__img .loader {
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  opacity: 1;
+  background: url(loader.b128fd41.svg) center center no-repeat;
+  box-sizing: content-box;
+}
 .article a {
   width: 100%;
   display: flex;
@@ -254,11 +269,19 @@ body {
 .article .title {
   padding: 2rem 0 0.5rem;
   text-align: center;
-  width: 100%;
   color: #d3573c;
   margin: 0;
-  font-size: 2.2rem;
   font-weight: 400;
+}
+@media screen and (min-width: 900px) {
+  .article .title {
+    font-size: 2.2rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .article .title {
+    font-size: 2.1rem;
+  }
 }
 .article .details {
   width: 100%;
@@ -309,6 +332,7 @@ body {
 * Tag: header
  */
 .tag {
+  display: flex;
   color: #901c1c;
   padding: 1px 5px;
   margin: 2px;
@@ -317,9 +341,18 @@ body {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
+}
+@media screen and (min-width: 900px) {
+  .tag a {
+    font-size: 0.8rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .tag a {
+    font-size: 0.8rem;
+  }
 }
 .photographerHeader {
   background: #fafafa;
@@ -359,14 +392,23 @@ body {
   }
 }
 .photographerHeader .details .title {
-  width: 100%;
   color: #d3573c;
   margin: 0;
-  font-size: 2.2rem;
   font-weight: 400;
 }
-.photographerHeader .details .localisation {
-  font-size: 1.3rem;
+@media screen and (min-width: 900px) {
+  .photographerHeader .details .title {
+    font-size: 2.2rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .photographerHeader .details .title {
+    font-size: 2.1rem;
+  }
+}
+.photographerHeader .details .localisation,
+.photographerHeader .details .tagline {
+  font-size: initial;
 }
 .photographerHeader .details .tagline {
   color: #525252;
@@ -390,7 +432,7 @@ body {
 .photographerHeader .details .tags {
     margin: 0;
     padding: 2px 0;
-    width: 220px;
+    width: 250px;
   }
 }
 .photographerHeader .button {
@@ -416,21 +458,22 @@ body {
   }
 }
 .photographerHeader .button .btn {
-  padding: 1rem 0.5rem;
   font-size: 1rem;
   border: none;
   border-radius: 5px;
   color: #FFF;
   background: #901c1c;
 }
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 900px) {
   .photographerHeader .button .btn {
-    letter-spacing: 2px;
+    padding: 1rem;
   }
 }
 @media screen and (max-width: 768px) {
   .photographerHeader .button .btn {
+    letter-spacing: 2px;
     padding: 0.5rem;
+    width: 185px;
   }
 }
 .photographerHeader .img {
@@ -559,7 +602,7 @@ body {
 @media screen and (max-width: 768px) {
   .medias .container .content-media__media {
     width: auto;
-    height: 210px;
+    height: 200px;
   }
 }
 .medias .container .content-media__media .image,
@@ -616,7 +659,18 @@ body {
 }
 .bground h1 {
   color: initial;
-  margin: 0 0 2rem;
+}
+@media screen and (min-width: 900px) {
+  .bground h1 {
+    margin: 0 0 2rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bground h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: initial;
+  }
 }
 .bground .modalContent {
   position: absolute;
@@ -639,10 +693,21 @@ body {
 .bground .modalContent .close:after {
   position: absolute;
   content: " ";
-  height: 50px;
   width: 4px;
   background-color: #fff;
   right: 25%;
+}
+@media screen and (min-width: 900px) {
+  .bground .modalContent .close:before,
+.bground .modalContent .close:after {
+    height: 50px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent .close:before,
+.bground .modalContent .close:after {
+    height: 30px;
+  }
 }
 .bground .modalContent .close:before {
   transform: rotate(45deg);
@@ -689,19 +754,44 @@ body {
 .bground .modalContent div.submit {
   display: flex;
   justify-content: left;
-  margin: 2rem 0;
+}
+@media screen and (min-width: 900px) {
+  .bground .modalContent div.submit {
+    margin: 2rem 0;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent div.submit {
+    margin: auto;
+  }
 }
 .bground .modalContent div.submit .button {
-  padding: 1rem 4rem;
   font-size: 1rem;
   border: none;
   border-radius: 5px;
   color: #FFF;
   background: #901c1c;
 }
+@media screen and (min-width: 900px) {
+  .bground .modalContent div.submit .button {
+    padding: 1rem 4rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent div.submit .button {
+    margin: auto;
+  }
+}
+@media screen and (min-width: 900px) {
+  .bground .modalContent div.submit .button {
+    padding: 1rem;
+  }
+}
 @media screen and (max-width: 768px) {
   .bground .modalContent div.submit .button {
     letter-spacing: 2px;
+    padding: 0.5rem;
+    width: 185px;
   }
 }
 .bground .modalContent .modal-body {
@@ -715,9 +805,18 @@ body {
   }
 }
 .bground .modalContent label {
-  font-size: 1.5rem;
   color: #525252;
   margin: 0 0 0.1rem 0;
+}
+@media screen and (min-width: 900px) {
+  .bground .modalContent label {
+    font-size: 1.5rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .bground .modalContent label {
+    font-size: 1.1rem;
+  }
 }
 .bground .modalContent .text-control {
   width: auto;
@@ -810,20 +909,20 @@ body {
   }
 }
 .lightbox-bg .lightbox__next {
-  right: 0;
+  right: -100px;
 }
 @media screen and (max-width: 768px) {
   .lightbox-bg .lightbox__next {
-    right: -20px;
+    right: -25%;
   }
 }
 .lightbox-bg .lightbox__prev {
-  left: 0;
+  left: -100px;
   transform: rotate(180deg);
 }
 @media screen and (max-width: 768px) {
   .lightbox-bg .lightbox__prev {
-    left: -20px;
+    left: -25%;
   }
 }
 .lightbox-bg .lightbox__container {
@@ -841,9 +940,10 @@ body {
 }
 .lightbox-bg .lightbox .media {
   display: flex;
+  align-items: center;
+  position: relative;
   margin: auto;
   box-sizing: border-box;
-  overflow: hidden;
   aspect-ratio: 1/1;
 }
 .lightbox-bg .lightbox .media img,

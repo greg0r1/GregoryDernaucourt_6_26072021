@@ -53,11 +53,17 @@
 }
 
 @mixin title {
-    width: 100%;
     color: $color-primary-txt-dark;
     margin: 0;
-    font-size: 2.2rem;
     font-weight: 400;
+
+    @include desktop-only {
+        font-size: 2.2rem;
+    }
+
+    @include mobile-only {
+        font-size: 2.1rem;
+    }
 }
 
 @mixin details {
@@ -81,8 +87,14 @@
     color: #FFF;
     background: $color-primary-bg-dark;
 
+    @include desktop-only {
+        padding: 1rem;
+    }
+
     @include mobile-only {
         letter-spacing: 2px;
+        padding: 0.5rem;
+        width: 185px;
     }
 }
 
@@ -92,10 +104,17 @@
     .close:after {
         position: absolute;
         content: " ";
-        height: 50px;
         width: 4px;
         background-color: #fff;
         right: 25%;
+
+        @include desktop-only {
+            height: 50px;
+        }
+
+        @include mobile-only {
+            height: 30px;
+        }
     }
 
     .close:before {

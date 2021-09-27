@@ -20,7 +20,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
                 <ul>
                     ${photographer.tags.map((tag) => `
                     <li class="tag">
-                        <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag}</a>
+                        <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
                     </li>
                 `).join("")}
                 </ul>

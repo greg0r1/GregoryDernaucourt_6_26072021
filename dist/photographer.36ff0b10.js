@@ -479,7 +479,7 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"Tag: ".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\">#").concat(tag, "</a>\n                    </li>\n                ")
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"Tag: ".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                    </li>\n                ")
     ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\" arial-label=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\"").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
@@ -5565,7 +5565,7 @@ function _interopRequireDefault(obj) {
                 if (evt.key === 'Escape') this.close();
             });
         }
-        element.innerHTML = "\n        <div role=\"dialog\" class=\"lightbox\" aria-label=\"image closeup view\">\n            <button aria-label=\"Close dialog\" class=\"lightbox__close\"></button>\n            <button aria-label=\"Next image\" class=\"lightbox__next\"></button>\n            <button aria-label=\"Previous image\" class=\"lightbox__prev\"></button>\n            <div class=\"lightbox__container\">\n                <figure>\n                    <div class=\"media\">\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                    </div>\n                    <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
+        element.innerHTML = "\n        <div role=\"dialog\" class=\"lightbox\" aria-label=\"image closeup view\">\n            <button aria-label=\"Close dialog\" class=\"lightbox__close\"></button>\n            <div class=\"lightbox__container\">\n            <figure>\n                <div class=\"media\">\n                    <button aria-label=\"Next image\" class=\"lightbox__next\"></button>\n                    <button aria-label=\"Previous image\" class=\"lightbox__prev\"></button>\n                    ".concat(new _MediaFactory.default(current, this.path).create().toString(), "\n                </div>\n                <figcaption>").concat(current.title, "</figcaption>\n                </figure>\n            </div>\n        </div >");
         element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
         element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this));
         element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this));
@@ -5686,7 +5686,7 @@ class ModalForm {
         } else {
             console.info(document.forms[0][i].value);
             if (i === document.forms[0].length - 2) {
-                document.querySelector('.modal-body').innerHTML = '<p style="color:#FFF; text-align:center">Merci</br>votre formulaire a bien été enregistré !';
+                document.querySelector('.modal-body').innerHTML = '<p style="color:#FFF; text-align:center">Merci,</br>votre formulaire a bien été enregistré !';
                 document.body.addEventListener('keyup', (evt)=>{
                     if (evt.key === 'Escape') document.querySelector('.bground').remove();
                 });

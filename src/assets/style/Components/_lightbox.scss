@@ -89,19 +89,19 @@
         }
 
         &__next {
-            right: 0;
+            right: -100px;
 
             @include mobile-only {
-                right: -20px;
+                right: -25%;
             }
         }
 
         &__prev {
-            left: 0;
+            left: -100px;
             transform: rotate(180deg);
 
             @include mobile-only {
-                left: -20px;
+                left: -25%;
             }
         }
 
@@ -120,9 +120,10 @@
 
         .media {
             display: flex;
+            align-items: center;
+            position: relative;
             margin: auto;
             box-sizing: border-box;
-            overflow: hidden;
             aspect-ratio: 1/1;
 
             img,

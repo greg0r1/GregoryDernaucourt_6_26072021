@@ -79,14 +79,14 @@ export default class Lightbox {
         element.innerHTML = `
         <div role="dialog" class="lightbox" aria-label="image closeup view">
             <button aria-label="Close dialog" class="lightbox__close"></button>
-            <button aria-label="Next image" class="lightbox__next"></button>
-            <button aria-label="Previous image" class="lightbox__prev"></button>
             <div class="lightbox__container">
-                <figure>
-                    <div class="media">
+            <figure>
+                <div class="media">
+                    <button aria-label="Next image" class="lightbox__next"></button>
+                    <button aria-label="Previous image" class="lightbox__prev"></button>
                     ${new MediaFactory(current, this.path).create().toString()}
-                    </div>
-                    <figcaption>${current.title}</figcaption>
+                </div>
+                <figcaption>${current.title}</figcaption>
                 </figure>
             </div>
         </div >`

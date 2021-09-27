@@ -31,8 +31,9 @@
             @include title
         }
 
-        .localisation {
-            font-size: 1.3rem;
+        .localisation,
+        .tagline {
+            font-size: initial;
         }
 
         .tagline {
@@ -58,7 +59,7 @@
             @include mobile-only {
                 margin: 0;
                 padding: 2px 0;
-                width: 220px;
+                width: 250px;
             }
         }
 
@@ -85,12 +86,7 @@
         }
 
         .btn {
-            padding: 1rem .5rem;
             @include btn;
-
-            @include mobile-only {
-                padding: 0.5rem;
-            }
         }
     }
 

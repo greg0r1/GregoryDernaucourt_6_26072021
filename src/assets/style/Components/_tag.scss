@@ -3,13 +3,25 @@
  */
 
 .tag {
+    display: flex;
     color: $color-secondary-txt-dark;
     padding: 1px 5px;
     margin: 2px;
     border: 1px solid #cccccc;
     border-radius: 1rem;
     width: fit-content;
-    font-size: .7rem;
     font-weight: 600;
     cursor: pointer;
+
+    @include desktop-only {
+        a {
+            font-size: .8rem;
+        }
+    }
+
+    @include mobile-only {
+        a {
+            font-size: .8rem;
+        }
+    }
 }

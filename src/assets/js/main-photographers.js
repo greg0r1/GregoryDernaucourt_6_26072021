@@ -2,7 +2,6 @@
 import DataService from './classes/DataService';
 import EventService from './classes/EventService';
 import EventScrollToTop from './classes/EventScrollToTop';
-
 const data = new DataService;
 
 // View
@@ -28,12 +27,16 @@ const displayPhotographers = (photographers = []) => {
     </header>
         <div class="container">
 
-        ${photographers.map(({ portrait, name, city, country, tagline, price, tags }) =>
+        ${photographers.map(({ id, portrait, name, city, country, tagline, price, tags }) =>
+        loader(id, portrait, name) ||
         `<article class="article">
             <a class="link-to-photographer" tabindex="0" aria-label="${name}">
                 <div class="article__img">
-                    <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
-                </div>
+                    <img id="${id}" src="../../assets/images/loader.svg" style="
+                    width: 50px;
+                    height: 50px;
+                ">
+                    </div>
                 <h2 class="article__title title">${name}</h2>
             </a>
             <div class="details">
@@ -78,6 +81,17 @@ function eventOnTags(dataService, tag) {
         // On ajoute le tag au titre
         document.title = `Fisheye | ${nameAttributeOfTag.charAt(0).toUpperCase()}${nameAttributeOfTag.slice(1)}`;
     });
+}
+
+function loader(id, portrait, name) {
+    // <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
+    const img = new Image();
+    img.onload = () => {
+        document.getElementById(id).src = img.src;
+        document.getElementById(id).style.width = "unset";
+        document.getElementById(id).removeAttribute('style')
+    };
+    img.src = 'assets/images/Sample_Photos/Photographers_ID_Photos/' + portrait;
 }
 
 /**
