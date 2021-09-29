@@ -93,6 +93,12 @@
             }
 
             .button {
+                width: 185px;
+
+                &:hover {
+                    background: $color-primary-bg-dark !important;
+                    color: #fff !important;
+                }
 
                 @include desktop-only {
                     padding: 1rem 4rem;

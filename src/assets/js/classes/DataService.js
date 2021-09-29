@@ -41,7 +41,6 @@ export default class DataService {
 
         const dataResponse = data_copy;
         this.medias = dataResponse.media;
-        console.log(this.medias.price)
 
     }
 

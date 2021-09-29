@@ -10,7 +10,7 @@ export default class EventService {
     }
 
     static handleTagClick(call) {
-        const array = Array.from(document.getElementsByClassName("tag")).forEach((element) => {
+        const array = Array.from(document.querySelectorAll(".tag a")).forEach((element) => {
             element.addEventListener("click", () => call(element));
         });
     }
@@ -62,6 +62,12 @@ export default class EventService {
     static handleInputsFormClick(call) {
         const array = Array.from(document.getElementsByTagName("input")).forEach((element) => {
             element.addEventListener("input", () => call(element));
+        });
+    }
+
+    static handleLikesClick(call) {
+        const array = Array.from(document.querySelectorAll(".fas.fa-heart")).forEach((element) => {
+            element.addEventListener("click", () => call(element));
         });
     }
 

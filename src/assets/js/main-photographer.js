@@ -20,7 +20,7 @@ const displayPhotographerInfos = (photographer, totalLikes) => {
                 <ul>
                     ${photographer.tags.map((tag) => `
                     <li class="tag">
-                        <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
+                        <a title="${tag}" href="javascript:void(0);">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
                     </li>
                 `).join("")}
                 </ul>
@@ -78,7 +78,7 @@ const displayFilterButton = () => {
 // Scripts
 
 /**
- * Ajoute un event au "click" à chaque "tag"
+ * Add click event on each Tag
  *
  */
 function eventOnTags() {
@@ -91,13 +91,13 @@ function eventOnTags() {
 }
 
 /**
- * Gestionnaire de filtres pour le bouton dropdown
+ * Filters for dropdown button
  *
- * @param {*} element
- * @param {*} dataService
- * @param {*} idFromUrlParams
- * @param {*} firstNameOfPhotographer
- * @param {*} medias
+ * @param {object} element
+ * @param {object} dataService
+ * @param {number} idFromUrlParams
+ * @param {string} firstNameOfPhotographer
+ * @param {object} medias
  */
 function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias) {
     document.querySelector(".medias").innerHTML = '';
@@ -116,9 +116,9 @@ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, fir
 }
 
 /**
- * Ajoute un event sur chaque médias pour la lightbox
+ * Add an event on each media for the lightbox
  *
- * @param {Array} medias
+ * @param {array} medias
  * @param {string} firstNameOfPhotographer
  */
 function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
@@ -139,6 +139,14 @@ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     }))
 }
 
+function eventClickLikes(element) {
+    let value = Number(document.querySelector('.info .likes span:first-child').innerText);
+    document.querySelector('.info .likes span:first-child').innerText = value + 1;
+
+    let valuePreviousSiblingElt = Number(element.previousSibling.innerText);
+    element.previousSibling.innerText = valuePreviousSiblingElt + 1
+}
+
 
 // Controller
 
@@ -154,7 +162,8 @@ const mainPhotographer = async () => {
         const nameOfPhotographer = dataService.getPhotographerById(idFromUrlParams).name;
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
-        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams));
+        const totalLikes = dataService.getTotalOfLikes(idFromUrlParams);
+        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), totalLikes);
 
         // On ajoute les events sur les tags (renvoient sur la page index avec le résultat)
         eventOnTags();
@@ -171,7 +180,11 @@ const mainPhotographer = async () => {
         //On affiche les médias du photographes
         document.querySelector(".medias").appendChild(new ViewMedias(medias, firstNameOfPhotographer).render());
 
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer)//Events sur chaque image pour afficher la lightbox
+        //Events sur chaque image pour afficher la lightbox
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer);
+
+        // Event sur likes
+        EventService.handleLikesClick(element => eventClickLikes(element));
 
         // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
         window.addEventListener('scroll', () => EventScrollToTop.scrollToTop(document.querySelector('.scrollToMainButton')));

@@ -23,22 +23,16 @@
     display: flex;
     justify-content: center;
     align-content: center;
-    flex-shrink: 0;
+    flex-shrink: 1;
     box-sizing: border-box;
     align-items: center;
-
-    @include desktop-only {
-        width: 200px;
-        height: 200px;
-    }
-
-    @include tablet-only {
-        width: 200px;
-        height: 200px;
-    }
+    width: 180px;
+    height: 180px;
 
     @include mobile-only {
         margin: 0 0 auto 0;
+        width: 100px;
+        height: 100px;
     }
 
     img {
@@ -47,7 +41,7 @@
         object-fit: cover;
 
         @include mobile-only {
-            width: -webkit-fill-available;
+            // width: -webkit-fill-available;
         }
     }
 }
@@ -94,7 +88,13 @@
     @include mobile-only {
         letter-spacing: 2px;
         padding: 0.5rem;
-        width: 185px;
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+        background: $color-secondary-bg-dark;
+        color: initial;
     }
 }
 

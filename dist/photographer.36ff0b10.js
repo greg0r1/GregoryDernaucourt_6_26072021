@@ -479,7 +479,7 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"Tag: ".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                    </li>\n                ")
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"".concat(tag, "\" href=\"javascript:void(0);\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                    </li>\n                ")
     ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\" arial-label=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\"").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
@@ -487,7 +487,7 @@ const displayFilterButton = ()=>{
     filterButtonElement.innerHTML = "        \n        <p id=\"listbox1label\" role=\"label\">Trier par</p>\n        <div role=\"listbox\" id=\"listbox1\" class=\"btn-group dropdown show\">\n            <button class=\"btn dropdown-toggle\"\n            id=\"dropdownMenuLink\"\n            aria-labelledby=\"listbox1label\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"listbox\"\n            aria-activedescendant=\"listbox1-1\"\n            aria-expanded=\"true\">\n                <div role=\"option\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-1\" tabindex=\"0\">Popularit\xE9</a>\n                </div>\n                <span class=\"fas fa-chevron-down\" tabindex=\"0\"></span>\n            </button>\n            <div class=\"dropdown-menu\"\n            aria-labelledby=\"dropdownMenuLink\">\n                <div class=\"dropdown-divider\"></div>\n                <div role=\"option id=\"listbox1-2\" class=\"dropdown-item\"\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-2\" tabindex=\"0\">Date</a>\n                </div>\n                <div role=\"option id=\"listbox1-3\" class=\"dropdown-item\">\n                    <a href=\"javascript:void(0);\" role=\"listbox\" id=\"listbox1-3\" tabindex=\"0\">Titre</a>\n                </div>\n            </div>\n        </div>\n    ";
 }; // Scripts
 /**
- * Ajoute un event au "click" à chaque "tag"
+ * Add click event on each Tag
  *
  */ function eventOnTags() {
     // On ajoute l'événement "click" à chaque élément "tag"
@@ -498,13 +498,13 @@ const displayFilterButton = ()=>{
     });
 }
 /**
- * Gestionnaire de filtres pour le bouton dropdown
+ * Filters for dropdown button
  *
- * @param {*} element
- * @param {*} dataService
- * @param {*} idFromUrlParams
- * @param {*} firstNameOfPhotographer
- * @param {*} medias
+ * @param {object} element
+ * @param {object} dataService
+ * @param {number} idFromUrlParams
+ * @param {string} firstNameOfPhotographer
+ * @param {object} medias
  */ function filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias) {
     document.querySelector(".medias").innerHTML = '';
     if (element.textContent.trim() === "Popularité") {
@@ -521,9 +521,9 @@ const displayFilterButton = ()=>{
     }
 }
 /**
- * Ajoute un event sur chaque médias pour la lightbox
+ * Add an event on each media for the lightbox
  *
- * @param {Array} medias
+ * @param {array} medias
  * @param {string} firstNameOfPhotographer
  */ function eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer) {
     const lightbox = new _Lightbox.default(medias, firstNameOfPhotographer);
@@ -544,6 +544,12 @@ const displayFilterButton = ()=>{
             }
         })
     );
+}
+function eventClickLikes(element) {
+    let value = Number(document.querySelector('.info .likes span:first-child').innerText);
+    document.querySelector('.info .likes span:first-child').innerText = value + 1;
+    let valuePreviousSiblingElt = Number(element.previousSibling.innerText);
+    element.previousSibling.innerText = valuePreviousSiblingElt + 1;
 } // Controller
 const mainPhotographer = async ()=>{
     try {
@@ -556,7 +562,8 @@ const mainPhotographer = async ()=>{
         const nameOfPhotographer = dataService.getPhotographerById(idFromUrlParams).name;
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
         const medias = dataService.getMediasByPhotographerId(idFromUrlParams);
-        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), dataService.getTotalOfLikes(idFromUrlParams)); // On ajoute les events sur les tags (renvoient sur la page index avec le résultat)
+        const totalLikes = dataService.getTotalOfLikes(idFromUrlParams);
+        displayPhotographerInfos(dataService.getPhotographerById(idFromUrlParams), totalLikes); // On ajoute les events sur les tags (renvoient sur la page index avec le résultat)
         eventOnTags(); // Event sur bouton contact
         document.querySelector('.photographerHeader .button').addEventListener('click', ()=>new _ModalForm.default(nameOfPhotographer)
         ); //On affiche le bouton de filtre, avec l'event toggle
@@ -566,9 +573,10 @@ const mainPhotographer = async ()=>{
         _EventService.default.handleMediasFilter((element)=>filterMediasOnDropdownButton(element, dataService, idFromUrlParams, firstNameOfPhotographer, medias)
         ); // Gestionnaire de filtres des médias
         //On affiche les médias du photographes
-        document.querySelector(".medias").appendChild(new _ViewMedias.default(medias, firstNameOfPhotographer).render());
-        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); //Events sur chaque image pour afficher la lightbox
-        // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
+        document.querySelector(".medias").appendChild(new _ViewMedias.default(medias, firstNameOfPhotographer).render()); //Events sur chaque image pour afficher la lightbox
+        eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // Event sur likes
+        _EventService.default.handleLikesClick((element)=>eventClickLikes(element)
+        ); // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
         window.addEventListener('scroll', ()=>_EventScrollToTop.default.scrollToTop(document.querySelector('.scrollToMainButton'))
         ); // On ajoute le nom du photographe au titre
         document.title = "Fisheye | ".concat(nameOfPhotographer);
@@ -4891,7 +4899,6 @@ function _interopRequireDefault(obj) {
    */ loadMedias() {
         const dataResponse = _photographsDBCopy.default;
         this.medias = dataResponse.media;
-        console.log(this.medias.price);
     }
     /**
    *
@@ -5289,7 +5296,7 @@ require("core-js/modules/web.dom-collections.for-each.js");
     constructor(){
     }
     static handleTagClick(call) {
-        const array = Array.from(document.getElementsByClassName("tag")).forEach((element)=>{
+        const array = Array.from(document.querySelectorAll(".tag a")).forEach((element)=>{
             element.addEventListener("click", ()=>call(element)
             );
         });
@@ -5340,6 +5347,12 @@ require("core-js/modules/web.dom-collections.for-each.js");
             );
         });
     }
+    static handleLikesClick(call) {
+        const array = Array.from(document.querySelectorAll(".fas.fa-heart")).forEach((element)=>{
+            element.addEventListener("click", ()=>call(element)
+            );
+        });
+    }
 }
 exports.default = EventService;
 
@@ -5376,7 +5389,7 @@ class ViewMedias {
                 id,
                 title,
                 alt_text
-            }, this.firstNameOfPhotographer).create().toString(), "\n                </div>\n                <figcaption class=\"content-media__figcaption\">\n                    <span class=\"content-media__title\">").concat(title, "</span>\n                    <span>").concat(likes, " </span><span class=\"fas fa-heart\"></span>\n                </figcaption>\n            </figure>\n        ");
+            }, this.firstNameOfPhotographer).create().toString(), "\n                </div>\n                <figcaption class=\"content-media__figcaption\">\n                    <span>").concat(title, "</span>\n                    <span class=\"content-media__likesNumber\">").concat(likes, " </span><span class=\"fas fa-heart\"></span>\n                </figcaption>\n            </figure>\n        ");
         }).join(""), "\n    ");
     }
 }
@@ -5470,7 +5483,7 @@ exports.default = void 0;
         this.altText = altText;
     }
     toString() {
-        return "\n        <video tabindex=\"0\" controls id=\"".concat(this.id, "\" class=\"video media\" alt=\"").concat(this.altText, ": ").concat(this.title, "\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
+        return "\n        <video tabindex=\"0\" id=\"".concat(this.id, "\" class=\"video media\" alt=\"").concat(this.altText, ": ").concat(this.title, "\" preload=\"metadata\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
     }
 }
 exports.default = ViewVideo;
@@ -5503,6 +5516,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 require("core-js/modules/es.regexp.to-string.js");
+require("core-js/modules/web.dom-collections.for-each.js");
 var _MediaFactory = _interopRequireDefault(require("./MediaFactory"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -5569,12 +5583,14 @@ function _interopRequireDefault(obj) {
         element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this));
         element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this));
         element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this));
+        element.getElementsByTagName('video').forEach((e)=>e.setAttribute("controls", true)
+        );
         element.setAttribute('height', window.innerHeight);
     }
 }
 exports.default = Lightbox;
 
-},{"core-js/modules/es.regexp.to-string.js":"7sKSf","./MediaFactory":"fAw1k"}],"8nT7Q":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.to-string.js":"7sKSf","core-js/modules/web.dom-collections.for-each.js":"917na","./MediaFactory":"fAw1k"}],"8nT7Q":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

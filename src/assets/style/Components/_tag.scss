@@ -5,13 +5,27 @@
 .tag {
     display: flex;
     color: $color-secondary-txt-dark;
-    padding: 1px 5px;
     margin: 2px;
     border: 1px solid #cccccc;
     border-radius: 1rem;
     width: fit-content;
     font-weight: 600;
     cursor: pointer;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-width: fit-content;
+
+    & a:hover,
+    & a:focus,
+    & a:focus-visible {
+        background: $color-secondary-txt-dark;
+        color: #FFF;
+    }
+
+    a {
+        display: block;
+        padding: 1px 5px;
+    }
 
     @include desktop-only {
         a {
@@ -21,7 +35,9 @@
 
     @include mobile-only {
         a {
-            font-size: .8rem;
+            font-size: .7rem;
         }
     }
+
+
 }

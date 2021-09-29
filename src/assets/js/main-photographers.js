@@ -4,6 +4,7 @@ import EventService from './classes/EventService';
 import EventScrollToTop from './classes/EventScrollToTop';
 const data = new DataService;
 
+
 // View
 const displayNavTags = (tags) => {
     document.querySelector('header').innerHTML += `
@@ -11,7 +12,7 @@ const displayNavTags = (tags) => {
             <ul class="tags">
             ${tags.map((tag) => `
                 <li class="tag">
-                    <a title="Tag: ${tag}" href="index.html?tag=${tag}">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
+                    <a title="${tag}" href="javascript:void(0);" tabindex="0">#${tag.charAt(0).toUpperCase()}${tag.slice(1)}</a>
                 </li>`).join("")}
             </ul>
         </nav>`
@@ -35,7 +36,7 @@ const displayPhotographers = (photographers = []) => {
                     <img id="${id}" src="../../assets/images/loader.svg" style="
                     width: 50px;
                     height: 50px;
-                ">
+                " alt="">
                     </div>
                 <h2 class="article__title title">${name}</h2>
             </a>
@@ -47,8 +48,8 @@ const displayPhotographers = (photographers = []) => {
             <div class="tags">
                 <ul>
                 ${tags.map((tag) => `
-                    <li>
-                        <a class="tag" title="${tag}" href="index.html?tag=${tag}" tabindex="0">#${tag}</a>
+                    <li class="tag">
+                        <a title="${tag}" href="javascript:void(0);" tabindex="0">#${tag}</a>
                     </li>`).join("")}
                 </ul>
             </div>
@@ -61,15 +62,14 @@ const displayPhotographers = (photographers = []) => {
 }
 
 
-
 // Scripts
 
 /**
  * Fonction pour gérer l'événement des tags
  *
- * @param {*} dataService
+ * @param {object} dataService
  */
-function eventOnTags(dataService, tag) {
+function eventOnTags(dataService) {
     // On ajoute l'événement "click" à l'élément "tag"
     EventService.handleTagClick((element) => {
         const nameAttributeOfTag = element.getAttribute('title');
@@ -83,25 +83,29 @@ function eventOnTags(dataService, tag) {
     });
 }
 
+/**
+ * Waiting loaded image
+ *
+ * @param {number} id
+ * @param {string} portrait
+ * @param {string} name
+ */
 function loader(id, portrait, name) {
-    // <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
     const img = new Image();
     img.onload = () => {
         document.getElementById(id).src = img.src;
-        document.getElementById(id).style.width = "unset";
+        document.getElementById(id).alt = 'Portrait du photographe ' + name;
         document.getElementById(id).removeAttribute('style')
     };
     img.src = 'assets/images/Sample_Photos/Photographers_ID_Photos/' + portrait;
 }
 
 /**
- * Fonction pour gérer l'événement clique de chaque fiche
- * de photographess
+ * Add the event to the "click" to each photographers file
  *
- * @param {*} dataService
+ * @param {object} dataService
  */
 function eventCickOnPhotographerProfile(dataService) {
-    // On ajoute l'événement au "click" à chaque fiche de photographes
     EventService.handlePhotographerSelection((element) => {
         const nameOfPhotographer = element.textContent.trim();
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
@@ -112,9 +116,8 @@ function eventCickOnPhotographerProfile(dataService) {
 }
 
 
-
-
 // Controller
+
 const mainPhotographers = async () => {
 
     try {

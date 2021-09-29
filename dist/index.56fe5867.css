@@ -109,8 +109,11 @@ body {
   .filter .dropdown button {
     letter-spacing: 2px;
     padding: 0.5rem;
-    width: 185px;
   }
+}
+.filter .dropdown button:hover, .filter .dropdown button:focus, .filter .dropdown button:focus-visible {
+  background: #db8876;
+  color: initial;
 }
 .filter .dropdown .btn-group {
   margin-left: 1.5rem;
@@ -140,6 +143,13 @@ body {
   font-size: 1rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
+.filter .dropdown .btn:hover, .filter .dropdown .btn:focus, .filter .dropdown .btn:focus-visible,
+.filter .dropdown .dropdown-item:hover,
+.filter .dropdown .dropdown-item:focus,
+.filter .dropdown .dropdown-item:focus-visible {
+  background: #db8876;
+  color: initial;
+}
 .filter .dropdown .dropdown-menu {
   border-radius: 0 0 0.25rem 0.25rem;
   position: absolute;
@@ -158,7 +168,7 @@ body {
 }
 .filter .dropdown .dropdown-item:last-child {
   box-shadow: 0px 4px 5px 0px #00000059;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
 }
 .filter .dropdown .dropdown-item, .filter .dropdown .dropdown-divider {
   display: block;
@@ -191,7 +201,8 @@ body {
 @media screen and (max-width: 768px) {
   #logo {
     width: 50%;
-    padding: 1.5rem 0.5rem;
+    padding: 1.5rem 0.5rem 0;
+    margin: 1rem 0 -0.5rem;
   }
   #logo img {
     width: 100%;
@@ -215,36 +226,23 @@ body {
   display: flex;
   justify-content: center;
   align-content: center;
-  flex-shrink: 0;
+  flex-shrink: 1;
   box-sizing: border-box;
   align-items: center;
-}
-@media screen and (min-width: 900px) {
-  .article__img {
-    width: 200px;
-    height: 200px;
-  }
-}
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  .article__img {
-    width: 200px;
-    height: 200px;
-  }
+  width: 180px;
+  height: 180px;
 }
 @media screen and (max-width: 768px) {
   .article__img {
     margin: 0 0 auto 0;
+    width: 100px;
+    height: 100px;
   }
 }
 .article__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-@media screen and (max-width: 768px) {
-  .article__img img {
-    width: -webkit-fill-available;
-  }
 }
 @media screen and (max-width: 768px) {
   .article__img {
@@ -309,7 +307,6 @@ body {
 }
 .article .tag {
   color: #901c1c;
-  padding: 1px 5px;
   margin: 2px;
   list-style: none;
   border: 1px solid #cccccc;
@@ -334,7 +331,6 @@ body {
 .tag {
   display: flex;
   color: #901c1c;
-  padding: 1px 5px;
   margin: 2px;
   border: 1px solid #cccccc;
   border-radius: 1rem;
@@ -343,6 +339,19 @@ body {
   width: fit-content;
   font-weight: 600;
   cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+.tag a:hover, .tag a:focus, .tag a:focus-visible {
+  background: #901c1c;
+  color: #FFF;
+}
+.tag a {
+  display: block;
+  padding: 1px 5px;
 }
 @media screen and (min-width: 900px) {
   .tag a {
@@ -351,7 +360,7 @@ body {
 }
 @media screen and (max-width: 768px) {
   .tag a {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 }
 .photographerHeader {
@@ -368,7 +377,7 @@ body {
 @media screen and (max-width: 768px) {
   .photographerHeader {
     background: none;
-    padding: 0;
+    padding: 0.5rem;
     justify-content: space-between;
   }
 }
@@ -473,48 +482,36 @@ body {
   .photographerHeader .button .btn {
     letter-spacing: 2px;
     padding: 0.5rem;
-    width: 185px;
   }
+}
+.photographerHeader .button .btn:hover, .photographerHeader .button .btn:focus, .photographerHeader .button .btn:focus-visible {
+  background: #db8876;
+  color: initial;
 }
 .photographerHeader .img {
   margin-left: auto;
-  width: 110px;
-  height: 110px;
   overflow: hidden;
   border-radius: 200px;
   display: flex;
   justify-content: center;
   align-content: center;
-  flex-shrink: 0;
+  flex-shrink: 1;
   box-sizing: border-box;
   align-items: center;
-}
-@media screen and (min-width: 900px) {
-  .photographerHeader .img {
-    width: 200px;
-    height: 200px;
-  }
-}
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  .photographerHeader .img {
-    width: 200px;
-    height: 200px;
-  }
+  width: 180px;
+  height: 180px;
 }
 @media screen and (max-width: 768px) {
   .photographerHeader .img {
     margin: 0 0 auto 0;
+    width: 100px;
+    height: 100px;
   }
 }
 .photographerHeader .img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-@media screen and (max-width: 768px) {
-  .photographerHeader .img img {
-    width: -webkit-fill-available;
-  }
 }
 .photographerHeader .info {
   position: fixed;
@@ -546,6 +543,10 @@ body {
 }
 .photographerHeader .info .likes span {
   margin: 0 0.2rem;
+}
+.photographerHeader .info .likes span:first-child {
+  display: inline-table;
+  width: 40px;
 }
 .medias {
   overflow: hidden;
@@ -640,7 +641,7 @@ body {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
-  background: #d3573c;
+  background: #db8876;
   font-weight: 600;
 }
 .scrollToMainButton a:-webkit-any-link {
@@ -766,11 +767,16 @@ body {
   }
 }
 .bground .modalContent div.submit .button {
+  width: 185px;
   font-size: 1rem;
   border: none;
   border-radius: 5px;
   color: #FFF;
   background: #901c1c;
+}
+.bground .modalContent div.submit .button:hover {
+  background: #901c1c !important;
+  color: #fff !important;
 }
 @media screen and (min-width: 900px) {
   .bground .modalContent div.submit .button {
@@ -791,8 +797,11 @@ body {
   .bground .modalContent div.submit .button {
     letter-spacing: 2px;
     padding: 0.5rem;
-    width: 185px;
   }
+}
+.bground .modalContent div.submit .button:hover, .bground .modalContent div.submit .button:focus, .bground .modalContent div.submit .button:focus-visible {
+  background: #db8876;
+  color: initial;
 }
 .bground .modalContent .modal-body {
   height: 100%;
@@ -995,7 +1004,7 @@ body {
 }
 @media screen and (max-width: 768px) {
   .nav {
-    margin: auto;
+    margin: 1rem 0 0;
   }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {

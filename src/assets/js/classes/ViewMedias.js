@@ -21,8 +21,8 @@ export default class ViewMedias {
                     ${new MediaFactory({ image, video, id, title, alt_text }, this.firstNameOfPhotographer).create().toString()}
                 </div>
                 <figcaption class="content-media__figcaption">
-                    <span class="content-media__title">${title}</span>
-                    <span>${likes} </span><span class="fas fa-heart"></span>
+                    <span>${title}</span>
+                    <span class="content-media__likesNumber">${likes} </span><span class="fas fa-heart"></span>
                 </figcaption>
             </figure>
         `).join("")}

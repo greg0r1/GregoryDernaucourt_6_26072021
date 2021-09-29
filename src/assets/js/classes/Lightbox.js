@@ -94,7 +94,7 @@ export default class Lightbox {
         element.querySelector('.lightbox__next').addEventListener('click', this.next.bind(this))
         element.querySelector('.lightbox__prev').addEventListener('click', this.prev.bind(this))
         element.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this))
-
+        element.getElementsByTagName('video').forEach(e => e.setAttribute("controls", true))
         element.setAttribute('height', window.innerHeight)
 
     }

@@ -488,7 +488,7 @@ function _interopRequireDefault(obj) {
 // Model
 const data = new _DataService.default(); // View
 const displayNavTags = (tags)=>{
-    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\" aria-label=\"Photographer categories\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <li class=\"tag\">\n                    <a title=\"Tag: ".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                </li>")
+    document.querySelector('header').innerHTML += "\n        <nav class=\"nav\" aria-label=\"Photographer categories\">\n            <ul class=\"tags\">\n            ".concat(tags.map((tag)=>"\n                <li class=\"tag\">\n                    <a title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                </li>")
     ).join(""), "\n            </ul>\n        </nav>");
 };
 const displayPhotographers = function displayPhotographers1() {
@@ -497,15 +497,15 @@ const displayPhotographers = function displayPhotographers1() {
     section.classList = "photographers";
     section.innerHTML = "\n    <header aria-label=\"Section header\">\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { id , portrait , name , city , country , tagline , price , tags  } = _ref;
-        return loader(id, portrait, name) || "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img id=\"").concat(id, "\" src=\"../../assets/images/loader.svg\" style=\"\n                    width: 50px;\n                    height: 50px;\n                \">\n                    </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li>\n                        <a class=\"tag\" title=\"".concat(tag, "\" href=\"index.html?tag=").concat(tag, "\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
+        return loader(id, portrait, name) || "<article class=\"article\">\n            <a class=\"link-to-photographer\" tabindex=\"0\" aria-label=\"".concat(name, "\">\n                <div class=\"article__img\">\n                    <img id=\"").concat(id, "\" src=\"../../assets/images/loader.svg\" style=\"\n                    width: 50px;\n                    height: 50px;\n                \" alt=\"\">\n                    </div>\n                <h2 class=\"article__title title\">").concat(name, "</h2>\n            </a>\n            <div class=\"details\">\n                <p class=\"localisation\">").concat(city, ", ").concat(country, "</p>\n                <p class=\"description\">").concat(tagline, "</p>\n                <p class=\"price\">").concat(price, "\u20AC/jour</p>\n            </div>\n            <div class=\"tags\">\n                <ul>\n                ").concat(tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">#").concat(tag, "</a>\n                    </li>")
         ).join(""), "\n                </ul>\n            </div>\n        </article>\n        ");
     }).join(""), "\n        </div>\n        ");
 }; // Scripts
 /**
  * Fonction pour gérer l'événement des tags
  *
- * @param {*} dataService
- */ function eventOnTags(dataService, tag) {
+ * @param {object} dataService
+ */ function eventOnTags(dataService) {
     // On ajoute l'événement "click" à l'élément "tag"
     _EventService.default.handleTagClick((element)=>{
         const nameAttributeOfTag = element.getAttribute('title');
@@ -516,23 +516,26 @@ const displayPhotographers = function displayPhotographers1() {
         document.title = "Fisheye | ".concat(nameAttributeOfTag.charAt(0).toUpperCase()).concat(nameAttributeOfTag.slice(1));
     });
 }
-function loader(id, portrait, name) {
-    // <img src="assets/images/Sample_Photos/Photographers_ID_Photos/${portrait}" alt="Portrait du photographe ${name}">
+/**
+ * Waiting loaded image
+ *
+ * @param {number} id
+ * @param {string} portrait
+ * @param {string} name
+ */ function loader(id, portrait, name) {
     const img = new Image();
     img.onload = ()=>{
         document.getElementById(id).src = img.src;
-        document.getElementById(id).style.width = "unset";
+        document.getElementById(id).alt = 'Portrait du photographe ' + name;
         document.getElementById(id).removeAttribute('style');
     };
     img.src = 'assets/images/Sample_Photos/Photographers_ID_Photos/' + portrait;
 }
 /**
- * Fonction pour gérer l'événement clique de chaque fiche
- * de photographess
+ * Add the event to the "click" to each photographers file
  *
- * @param {*} dataService
+ * @param {object} dataService
  */ function eventCickOnPhotographerProfile(dataService) {
-    // On ajoute l'événement au "click" à chaque fiche de photographes
     _EventService.default.handlePhotographerSelection((element)=>{
         const nameOfPhotographer = element.textContent.trim();
         const firstNameOfPhotographer = nameOfPhotographer.slice(0, nameOfPhotographer.indexOf(' '));
@@ -4748,7 +4751,6 @@ function _interopRequireDefault(obj) {
    */ loadMedias() {
         const dataResponse = _photographsDBCopy.default;
         this.medias = dataResponse.media;
-        console.log(this.medias.price);
     }
     /**
    *
@@ -5159,7 +5161,7 @@ require("core-js/modules/web.dom-collections.for-each.js");
     constructor(){
     }
     static handleTagClick(call) {
-        const array = Array.from(document.getElementsByClassName("tag")).forEach((element)=>{
+        const array = Array.from(document.querySelectorAll(".tag a")).forEach((element)=>{
             element.addEventListener("click", ()=>call(element)
             );
         });
@@ -5207,6 +5209,12 @@ require("core-js/modules/web.dom-collections.for-each.js");
     static handleInputsFormClick(call) {
         const array = Array.from(document.getElementsByTagName("input")).forEach((element)=>{
             element.addEventListener("input", ()=>call(element)
+            );
+        });
+    }
+    static handleLikesClick(call) {
+        const array = Array.from(document.querySelectorAll(".fas.fa-heart")).forEach((element)=>{
+            element.addEventListener("click", ()=>call(element)
             );
         });
     }
