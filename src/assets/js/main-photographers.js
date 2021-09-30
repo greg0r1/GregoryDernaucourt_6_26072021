@@ -2,6 +2,8 @@
 import DataService from './classes/DataService';
 import EventService from './classes/EventService';
 import EventScrollToTop from './classes/EventScrollToTop';
+const svg = new URL('./../images/loader.svg', import.meta.url);
+
 const data = new DataService;
 
 
@@ -33,7 +35,7 @@ const displayPhotographers = (photographers = []) => {
         `<article class="article">
             <a class="link-to-photographer" tabindex="0" aria-label="${name}">
                 <div class="article__img">
-                    <img id="${id}" src="/../../assets/images/loader.svg" style="
+                    <img id="${id}" src="${svg}" style="
                     width: 50px;
                     height: 50px;
                 " alt="">
