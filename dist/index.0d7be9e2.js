@@ -494,7 +494,7 @@ const displayNavTags = (tags)=>{
 };
 const displayPhotographers = function displayPhotographers1() {
     let photographers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    const section = document.getElementById('section');
+    const section = document.querySelector('section');
     section.classList = "photographers";
     section.innerHTML = "\n    <header aria-label=\"Section header\">\n        <h1>Nos photographes</h1>\n    </header>\n        <div class=\"container\">\n\n        ".concat(photographers.map((_ref)=>{
         let { id , portrait , name , city , country , tagline , price , tags  } = _ref;

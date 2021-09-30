@@ -22,7 +22,7 @@ const displayNavTags = (tags) => {
 }
 
 const displayPhotographers = (photographers = []) => {
-    const section = document.getElementById('section');
+    const section = document.querySelector('section');
     section.classList = "photographers";
     section.innerHTML = `
     <header aria-label="Section header">

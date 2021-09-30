@@ -352,14 +352,14 @@ body {
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-.tag a:hover, .tag a:focus, .tag a:focus-visible, .tag a:focus-within {
-  background: #901c1c;
-  color: #FFF;
-}
 .tag a {
   display: block;
   padding: 1px 5px;
   font-size: 0.7rem;
+}
+.tag a:hover, .tag a:focus, .tag a:focus-visible, .tag a:focus-within {
+  background: #901c1c;
+  color: #FFF;
 }
 @media screen and (max-width: 768px) {
   .tag a {
