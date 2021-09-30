@@ -17,7 +17,8 @@
 
     & a:hover,
     & a:focus,
-    & a:focus-visible {
+    & a:focus-visible,
+    & a:focus-within {
         background: $color-secondary-txt-dark;
         color: #FFF;
     }
@@ -25,19 +26,15 @@
     a {
         display: block;
         padding: 1px 5px;
-    }
+        font-size: .7rem;
 
-    @include desktop-only {
-        a {
-            font-size: .8rem;
+        @include mobile-only {
+            font-size: .6rem;
         }
     }
 
-    @include mobile-only {
-        a {
-            font-size: .7rem;
-        }
-    }
+
+
 
 
 }

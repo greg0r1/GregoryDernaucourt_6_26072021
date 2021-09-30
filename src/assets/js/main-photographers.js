@@ -33,7 +33,7 @@ const displayPhotographers = (photographers = []) => {
         `<article class="article">
             <a class="link-to-photographer" tabindex="0" aria-label="${name}">
                 <div class="article__img">
-                    <img id="${id}" src="../../assets/images/loader.svg" style="
+                    <img id="${id}" src="/../../assets/images/loader.svg" style="
                     width: 50px;
                     height: 50px;
                 " alt="">

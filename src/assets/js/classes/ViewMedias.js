@@ -18,7 +18,7 @@ export default class ViewMedias {
             ${this.medias.map(({ image, video, title, likes, id, alt_text }) => `
             <figure class="content-media">
                 <div class="content-media__media">
-                    ${new MediaFactory({ image, video, id, title, alt_text }, this.firstNameOfPhotographer).create().toString()}
+                ${new MediaFactory({ image, video, id, title, alt_text }, this.firstNameOfPhotographer).create().toString()}
                 </div>
                 <figcaption class="content-media__figcaption">
                     <span>${title}</span>

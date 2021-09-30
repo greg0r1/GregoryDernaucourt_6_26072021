@@ -55,6 +55,7 @@
                 .video {
                     width: 100%;
                     height: 100%;
+                    border-radius: 5px;
                 }
 
                 .image {
@@ -77,6 +78,10 @@
                 span:nth-child(2) {
                     margin-left: auto;
                     margin-right: 5px;
+                }
+
+                span.fas.fa-heart {
+                    cursor: pointer;
                 }
             }
         }

@@ -62,7 +62,12 @@
             height: 33px;
             width: 3px;
             margin: 50%;
+
+            @include mobile-only {
+                margin: 0;
+            }
         }
+
 
         &__close:before {
             transform: rotate(45deg);

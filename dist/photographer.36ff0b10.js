@@ -479,7 +479,7 @@ function _interopRequireDefault(obj) {
 // View
 const displayPhotographerInfos = (photographer, totalLikes)=>{
     const headerPhotographerInfosElement = document.querySelector('.photographerHeader');
-    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"".concat(tag, "\" href=\"javascript:void(0);\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                    </li>\n                ")
+    headerPhotographerInfosElement.innerHTML = "\n        <div class=\"details\">\n            <h1 class=\"title\">".concat(photographer.name, "</h1>\n            <p class=\"localisation\">").concat(photographer.country, ", ").concat(photographer.city, "</p>\n            <p class=\"tagline\">").concat(photographer.tagline, "</p>\n            <div class=\"tags\" aria-label=\"Liste de tags concernant le photographe\">\n                <ul>\n                    ").concat(photographer.tags.map((tag)=>"\n                    <li class=\"tag\">\n                        <a title=\"".concat(tag, "\" href=\"javascript:void(0);\" tabindex=\"0\">#").concat(tag.charAt(0).toUpperCase()).concat(tag.slice(1), "</a>\n                    </li>\n                ")
     ).join(""), "\n                </ul>\n            </div>\n            <div class=\"info\">\n                <div class=\"likes\" arial-label=\"likes\">\n                    <span>").concat(totalLikes, "</span><span class=\"fas fa-heart\"></span>\n                </div>\n                <div class=\"price\">\n                    <span>").concat(photographer.price, "\u20AC / jour</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"button\">\n            <button class=\"btn\">Contactez-moi</button>\n        </div>\n        <div class=\"img\">\n            <img src=\"./assets/images/Sample_Photos/Photographers_ID_Photos/").concat(photographer.portrait, "\" alt=\"").concat(photographer.name, "\"\">\n        </div>\n        ");
 };
 const displayFilterButton = ()=>{
@@ -5383,7 +5383,7 @@ class ViewMedias {
     toString() {
         return "\n            ".concat(this.medias.map((_ref)=>{
             let { image , video , title , likes , id , alt_text  } = _ref;
-            return "\n            <figure class=\"content-media\">\n                <div class=\"content-media__media\">\n                    ".concat(new _MediaFactory.default({
+            return "\n            <figure class=\"content-media\">\n                <div class=\"content-media__media\">\n                ".concat(new _MediaFactory.default({
                 image,
                 video,
                 id,
@@ -5483,7 +5483,7 @@ exports.default = void 0;
         this.altText = altText;
     }
     toString() {
-        return "\n        <video tabindex=\"0\" id=\"".concat(this.id, "\" class=\"video media\" alt=\"").concat(this.altText, ": ").concat(this.title, "\" preload=\"metadata\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
+        return "\n        <video tabindex=\"0\" id=\"".concat(this.id, "\" class=\"video media\" alt=\"").concat(this.altText, ": ").concat(this.title, "\" preload=\"metadata\">\n            <source src=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "#t=0.1\" type=\"video/mp4\">\n            <p>Votre navigateur ne supporte pas la vid\xE9o HTML5. Voici \xE0 la place <a href=\"./assets/images/Sample_Photos/").concat(this.firstName, "/").concat(this.name, "\">le lien vers la vid\xE9o</a>.</p>\n        </video>");
     }
 }
 exports.default = ViewVideo;

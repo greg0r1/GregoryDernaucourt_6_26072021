@@ -35,6 +35,9 @@
   text-decoration: none;
   color: inherit;
 }
+:root a:focus {
+  outline: none;
+}
 :root li {
   list-style: none;
 }
@@ -200,12 +203,16 @@ body {
 }
 @media screen and (max-width: 768px) {
   #logo {
-    width: 50%;
     padding: 1.5rem 0.5rem 0;
     margin: 1rem 0 -0.5rem;
   }
+}
+#logo img {
+  width: 150px;
+}
+@media screen and (max-width: 768px) {
   #logo img {
-    width: 100%;
+    width: 120px;
   }
 }
 .article {
@@ -345,22 +352,18 @@ body {
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-.tag a:hover, .tag a:focus, .tag a:focus-visible {
+.tag a:hover, .tag a:focus, .tag a:focus-visible, .tag a:focus-within {
   background: #901c1c;
   color: #FFF;
 }
 .tag a {
   display: block;
   padding: 1px 5px;
-}
-@media screen and (min-width: 900px) {
-  .tag a {
-    font-size: 0.8rem;
-  }
+  font-size: 0.7rem;
 }
 @media screen and (max-width: 768px) {
   .tag a {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
 }
 .photographerHeader {
@@ -610,6 +613,7 @@ body {
 .medias .container .content-media__media .video {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
 }
 .medias .container .content-media__media .image {
   object-fit: cover;
@@ -627,6 +631,9 @@ body {
 .medias .container .content-media__figcaption span:nth-child(2) {
   margin-left: auto;
   margin-right: 5px;
+}
+.medias .container .content-media__figcaption span.fas.fa-heart {
+  cursor: pointer;
 }
 .scrollToMainButton {
   display: none;
@@ -897,6 +904,11 @@ body {
   width: 3px;
   margin: 50%;
 }
+@media screen and (max-width: 768px) {
+  .lightbox-bg .lightbox__close:before, .lightbox-bg .lightbox__close:after {
+    margin: 0;
+  }
+}
 .lightbox-bg .lightbox__close:before {
   transform: rotate(45deg);
 }
@@ -1043,7 +1055,7 @@ body {
     margin-top: 0;
     position: absolute;
     font-size: initial;
-    top: 2rem;
+    top: 2.5rem;
     right: 1rem;
   }
 }
