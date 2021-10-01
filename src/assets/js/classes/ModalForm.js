@@ -95,7 +95,9 @@ export default class ModalForm {
                     document.querySelector('.modal-body').innerHTML = '<p style="color:#FFF; text-align:center">Merci,</br>votre formulaire a bien été enregistré !';
                     document.body.addEventListener('keyup', (evt) => {
                         if (evt.key === 'Escape') {
-                            document.querySelector('.bground').remove()
+                            if (document.querySelector('.bground')) {
+                                document.querySelector('.bground').remove()
+                            }
                         }
                     });
                     break

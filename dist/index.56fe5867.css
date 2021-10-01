@@ -35,9 +35,6 @@
   text-decoration: none;
   color: inherit;
 }
-:root a:focus {
-  outline: none;
-}
 :root li {
   list-style: none;
 }
