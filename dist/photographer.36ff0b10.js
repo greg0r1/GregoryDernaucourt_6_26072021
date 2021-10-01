@@ -576,6 +576,8 @@ const mainPhotographer = async ()=>{
         document.querySelector(".medias").appendChild(new _ViewMedias.default(medias, firstNameOfPhotographer).render()); //Events sur chaque image pour afficher la lightbox
         eventOpenLightboxOnMediasElements(medias, firstNameOfPhotographer); // Event sur likes
         _EventService.default.handleLikesClick((element)=>eventClickLikes(element)
+        );
+        _EventService.default.handleLikesKey((element)=>eventClickLikes(element)
         ); // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
         window.addEventListener('scroll', ()=>_EventScrollToTop.default.scrollToTop(document.querySelector('.scrollToMainButton'))
         ); // On ajoute le nom du photographe au titre
@@ -5353,6 +5355,12 @@ require("core-js/modules/web.dom-collections.for-each.js");
             );
         });
     }
+    static handleLikesKey(call) {
+        const array = Array.from(document.querySelectorAll(".fas.fa-heart")).forEach((element)=>{
+            element.addEventListener("keypress", ()=>call(element)
+            );
+        });
+    }
 }
 exports.default = EventService;
 
@@ -5389,7 +5397,7 @@ class ViewMedias {
                 id,
                 title,
                 alt_text
-            }, this.firstNameOfPhotographer).create().toString(), "\n                </div>\n                <figcaption class=\"content-media__figcaption\">\n                    <span>").concat(title, "</span>\n                    <span class=\"content-media__likesNumber\">").concat(likes, " </span><span class=\"fas fa-heart\"></span>\n                </figcaption>\n            </figure>\n        ");
+            }, this.firstNameOfPhotographer).create().toString(), "\n                </div>\n                <figcaption class=\"content-media__figcaption\">\n                    <span>").concat(title, "</span>\n                    <span class=\"content-media__likesNumber\">").concat(likes, " </span><span class=\"fas fa-heart\" tabindex=\"0\"></span>\n                </figcaption>\n            </figure>\n        ");
         }).join(""), "\n    ");
     }
 }

@@ -71,4 +71,10 @@ export default class EventService {
         });
     }
 
+    static handleLikesKey(call) {
+        const array = Array.from(document.querySelectorAll(".fas.fa-heart")).forEach((element) => {
+            element.addEventListener("keypress", () => call(element));
+        });
+    }
+
 }

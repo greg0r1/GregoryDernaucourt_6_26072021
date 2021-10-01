@@ -185,6 +185,7 @@ const mainPhotographer = async () => {
 
         // Event sur likes
         EventService.handleLikesClick(element => eventClickLikes(element));
+        EventService.handleLikesKey(element => eventClickLikes(element));
 
         // On ajoute un événement au scroll de Window pour afficher un bouton scroll to top
         window.addEventListener('scroll', () => EventScrollToTop.scrollToTop(document.querySelector('.scrollToMainButton')));

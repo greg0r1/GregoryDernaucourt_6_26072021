@@ -22,7 +22,7 @@ export default class ViewMedias {
                 </div>
                 <figcaption class="content-media__figcaption">
                     <span>${title}</span>
-                    <span class="content-media__likesNumber">${likes} </span><span class="fas fa-heart"></span>
+                    <span class="content-media__likesNumber">${likes} </span><span class="fas fa-heart" tabindex="0"></span>
                 </figcaption>
             </figure>
         `).join("")}
